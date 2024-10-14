@@ -4,7 +4,7 @@
 
 import SwiftUI
 
-struct filterButtonView: View {
+struct FilterButtonView: View {
     var buttonText: String = ""
     var action: () -> Void
     var foregroundColor = Color(red: 0/255, green: 150/255, blue: 75/255)
