@@ -13,29 +13,54 @@ struct SearchView: View {
     @State var wishlistToggle = false
     @State var priceRangeToggle = false
     // Price to filter by when searching
-    @State var price: CGFloat = 0
+    @State var price: CGFloat = 100.0
     // Boolean to sort by asc or dsc
     @State var sortAsc = true
     // Dictionary for acceptable conditions when filtering
-    @State var acceptableConditions = ["Like New": false,
-    "Good": false,
-                                       "Moderately Used": false,
-                                       "Well Loved": false]
+    @State var acceptableConditions = ["Like New": true,
+    "Good": true,
+                                       "Moderately Used": true,
+                                       "Well Loved": true]
     @State var applyToggle = false
     // Pretend book objects for testing
-    @State var books = ["Harry Potter", "1984", "Animal Farm", "Brave New World"]
+    @State var books = [Book("Harry Potter", "1234", "Like New", 5.00), Book("1984", "1234", "Well Loved", 3.00), Book("Animal Farm", "1234", "Moderately Used", 6.00), Book("Brave New World", "1234", "Good", 1.00)]
     // Important app colors
     private let lightGreen = Color(red: 230/255, green: 255/255, blue: 220/255)
     private let darkGreen = Color(red: 0/255, green: 125/255, blue: 50/255)
     private let green = Color.green
     private let white = Color.white
     
+    @State var booksToDisplay: [Bool] = []
+    
+    func resetOnConditions() {
+        for i in 0..<booksToDisplay.count {
+            booksToDisplay[i] = true
+        }
+    }
+    
+    func addToDisplay() {
+        for _ in books {
+            booksToDisplay.append(true)
+        }
+    }
+    
     // Function to sort books by asc or dsc
     func sortAscendingDescending() {
         if sortAsc {
-            books.sort(by: >)
+            books.sort(by: { $0.bookTitle > $1.bookTitle })
         } else {
-            books.sort(by: <)
+            books.sort(by:  { $0.bookTitle < $1.bookTitle })
+        }
+    }
+    
+    func sortOnConditions() {
+        for i in 0..<books.count {
+            booksToDisplay[i] = false
+            if acceptableConditions[books[i].bookCondition]! == true {
+                if books[i].bookPrice <= Float(price) {
+                    booksToDisplay[i] = true
+                }
+            }
         }
     }
     
@@ -58,10 +83,16 @@ struct SearchView: View {
                 HStack {
                     // Filter buttons
                     Text("Filter:")
-                    FilterButtonView(buttonText: "Condition", action: {conditionToggle.toggle()}, borderColor: conditionToggle ? green: white)
+                    FilterButtonView(buttonText: "Condition", action: {conditionToggle.toggle(); if conditionToggle == false {
+                        for (key, value) in acceptableConditions {
+                            acceptableConditions[key] = true
+                        }
+                    }}, borderColor: conditionToggle ? green: white)
                     FilterButtonView(buttonText: "GoodReads", action: {goodreadsToggle.toggle()}, borderColor: goodreadsToggle ? green: white)
                     FilterButtonView(buttonText: "Wish List", action: {wishlistToggle.toggle()}, borderColor: wishlistToggle ? green: white)
-                    FilterButtonView(buttonText: "Price Range", action: {priceRangeToggle.toggle()}, borderColor: priceRangeToggle ? green: white)
+                    FilterButtonView(buttonText: "Price Range", action: {priceRangeToggle.toggle(); if priceRangeToggle == false {
+                        price = 100.0
+                    }}, borderColor: priceRangeToggle ? green: white)
                 }.font(.caption).padding([.leading], 10)
                 // Should load condition options if toggled
                 if conditionToggle {
@@ -87,8 +118,8 @@ struct SearchView: View {
                 }.frame(width: 350)
                 HStack {
                     Spacer()
-                    Button("Cancel", action: {})
-                    Button("Apply", action: {})
+                    Button("Cancel", action: { resetOnConditions() })
+                    Button("Apply", action: { sortOnConditions() })
                     }.padding()
             }.frame(width: 395).background(Color.white).clipped().cornerRadius(5).padding(3)
                 .shadow(color: Color.black, radius: 3)
@@ -98,9 +129,15 @@ struct SearchView: View {
                     VStack(alignment: .leading) {
                         // Load each book
                         ForEach(0 ..< books.count) { i in
-                            VStack {
-                                Text("Book: \(books[i])")
-                            }.frame(width: 375, height: 150).background(lightGreen).cornerRadius(20).overlay(RoundedRectangle(cornerRadius: 15).stroke(green, lineWidth: 2)).padding(5)
+                            if booksToDisplay.count > 0 && booksToDisplay[i] == true {
+                                VStack {
+                                    Text("Book: \(books[i].bookTitle)")
+                                    Text("ISBN: \(books[i].bookISBN)")
+                                    Text("Condition: \(books[i].bookCondition)")
+                                    Text(String(format: "Price: %.2f", books[i].bookPrice))
+                                    
+                                }.frame(width: 375, height: 150).background(lightGreen).cornerRadius(20).overlay(RoundedRectangle(cornerRadius: 15).stroke(green, lineWidth: 2)).padding(5)
+                            }
                         }
                     }
                 }.defaultScrollAnchor(.top)
@@ -113,7 +150,7 @@ struct SearchView: View {
             HStack {
                 Text("").frame(width: 450, height: 75).background(darkGreen)
             }
-        }.onAppear() { sortAscendingDescending() }
+        }.onAppear() { books.sort(by: { $0.bookTitle < $1.bookTitle }); addToDisplay()}
     }
 }
 
