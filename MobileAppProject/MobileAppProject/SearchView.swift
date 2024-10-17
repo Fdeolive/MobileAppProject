@@ -15,7 +15,7 @@ struct SearchView: View {
     // Price to filter by when searching
     @State var price: CGFloat = 100.0
     // Boolean to sort by asc or dsc
-    @State var sortAsc = true
+    @State var sortAsc = false
     // Dictionary for acceptable conditions when filtering
     @State var acceptableConditions = ["Like New": true,
     "Good": true,
@@ -36,6 +36,10 @@ struct SearchView: View {
         for i in 0..<booksToDisplay.count {
             booksToDisplay[i] = true
         }
+        conditionToggle = false
+        goodreadsToggle = false
+        wishlistToggle = false
+        priceRangeToggle = false
     }
     
     func addToDisplay() {
@@ -63,6 +67,7 @@ struct SearchView: View {
             }
         }
     }
+    
     
     var body: some View {
         VStack {
@@ -131,13 +136,21 @@ struct SearchView: View {
                         ForEach(0 ..< books.count) { i in
                             if booksToDisplay.count > 0 && booksToDisplay[i] == true {
                                 VStack {
-                                    Text("Book: \(books[i].bookTitle)")
-                                    Text("ISBN: \(books[i].bookISBN)")
-                                    Text("Condition: \(books[i].bookCondition)")
-                                    Text(String(format: "Price: %.2f", books[i].bookPrice))
-                                    
-                                }.frame(width: 375, height: 150).background(lightGreen).cornerRadius(20).overlay(RoundedRectangle(cornerRadius: 15).stroke(green, lineWidth: 2)).padding(5)
-                            }
+                                    //HStack {
+                                    //AsyncImage(url: URL(string:  "https://m.media-amazon.com/images/I/71+6Ws61MXL._AC_UF1000,1000_QL80_.jpg")) {image in image.resizable()} placeholder: {
+                                    //Rectangle()
+                                    //}
+                                    //}
+                                    VStack (alignment: .leading) {
+                                        Text("Title: \(books[i].bookTitle)")
+                                        Text("ISBN: \(books[i].bookISBN)")
+                                        Text("Condition: \(books[i].bookCondition)")
+                                        Text(String(format: "Price: %.2f", books[i].bookPrice))
+                                    }.padding().font(.callout)
+                                    Spacer()
+                                //}.padding()
+                            }.frame(width: 375, height: 150).background(lightGreen).cornerRadius(20).overlay(RoundedRectangle(cornerRadius: 15).stroke(green, lineWidth: 2)).padding(5)
+                        }
                         }
                     }
                 }.defaultScrollAnchor(.top)
