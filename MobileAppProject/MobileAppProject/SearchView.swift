@@ -23,7 +23,7 @@ struct SearchView: View {
                                        "Well Loved": true]
     @State var applyToggle = false
     // Pretend book objects for testing
-    @State var books = [Book("Harry Potter", "1234", "Like New", 5.00), Book("1984", "1234", "Well Loved", 3.00), Book("Animal Farm", "1234", "Moderately Used", 6.00), Book("Brave New World", "1234", "Good", 1.00)]
+    @State var books = [Book("Harry Potter", "1234", "Like New", 5.00, ""), Book("1984", "1234", "Well Loved", 3.00, ""), Book("Animal Farm", "1234", "Moderately Used", 6.00, ""), Book("Brave New World", "1234", "Good", 1.00, "")]
     // Important app colors
     private let lightGreen = Color(red: 230/255, green: 255/255, blue: 220/255)
     private let darkGreen = Color(red: 0/255, green: 125/255, blue: 50/255)
@@ -136,11 +136,10 @@ struct SearchView: View {
                         ForEach(0 ..< books.count) { i in
                             if booksToDisplay.count > 0 && booksToDisplay[i] == true {
                                 VStack {
-                                    //HStack {
-                                    //AsyncImage(url: URL(string:  "https://m.media-amazon.com/images/I/71+6Ws61MXL._AC_UF1000,1000_QL80_.jpg")) {image in image.resizable()} placeholder: {
-                                    //Rectangle()
-                                    //}
-                                    //}
+                                    HStack {
+                                        AsyncImage(url: URL(string:  "https://m.media-amazon.com/images/I/71+6Ws61MXL._AC_UF1000,1000_QL80_.jpg")) {image in image.resizable().aspectRatio(contentMode: .fit)} placeholder: {
+                                    Rectangle()
+                                    }
                                     VStack (alignment: .leading) {
                                         Text("Title: \(books[i].bookTitle)")
                                         Text("ISBN: \(books[i].bookISBN)")
@@ -148,7 +147,7 @@ struct SearchView: View {
                                         Text(String(format: "Price: %.2f", books[i].bookPrice))
                                     }.padding().font(.callout)
                                     Spacer()
-                                //}.padding()
+                                }.padding()
                             }.frame(width: 375, height: 150).background(lightGreen).cornerRadius(20).overlay(RoundedRectangle(cornerRadius: 15).stroke(green, lineWidth: 2)).padding(5)
                         }
                         }
