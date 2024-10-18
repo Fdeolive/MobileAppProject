@@ -36,6 +36,10 @@ struct SearchView: View {
         for i in 0..<booksToDisplay.count {
             booksToDisplay[i] = true
         }
+        for (key, condition) in acceptableConditions {
+            acceptableConditions[key] = true
+        }
+        price = 100
         conditionToggle = false
         goodreadsToggle = false
         wishlistToggle = false
@@ -62,7 +66,9 @@ struct SearchView: View {
             booksToDisplay[i] = false
             if acceptableConditions[books[i].bookCondition]! == true {
                 if books[i].bookPrice <= Float(price) {
-                    booksToDisplay[i] = true
+                    if books[i].bookTitle == searchingFor || searchingFor == "" {
+                        booksToDisplay[i] = true
+                    }
                 }
             }
         }
@@ -73,10 +79,11 @@ struct SearchView: View {
         VStack {
             // Should be done in Main View
             Text("Search For A Book").frame(width: 450).padding([.bottom]).background(darkGreen).foregroundColor(white).bold().font(.title2)
-            
             // Search bar
-            TextField("Enter Title, Author, GoodReads Score...", text: $searchingFor).padding(10).background(lightGreen).cornerRadius(25).overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.green, lineWidth: 2)).padding([.leading, .trailing], 30).padding([.top, .bottom], 10)
-            
+            ZStack {
+                TextField("Enter Title, Author, GoodReads Score...", text: $searchingFor).padding(10).background(lightGreen).cornerRadius(25).overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.green, lineWidth: 2)).padding([.leading, .trailing], 30).padding([.top, .bottom], 10)
+                Button("", systemImage: "magnifyingglass", action: { sortOnConditions() }).foregroundColor(green).padding([.leading], 310)
+            }
             VStack {
                 
                 HStack {
@@ -116,7 +123,7 @@ struct SearchView: View {
                     if priceRangeToggle {
                         Slider(value: $price,
                                    in: 0...100,
-                                   step: 5.0
+                                   step: 1.0
                         ).padding([.top], 20)
                         Text("\(Int(price)) $").padding([.top], 20)
                         }
