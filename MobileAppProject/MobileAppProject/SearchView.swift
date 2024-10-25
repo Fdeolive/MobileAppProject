@@ -36,7 +36,7 @@ struct SearchView: View {
         for i in 0..<booksToDisplay.count {
             booksToDisplay[i] = true
         }
-        for (key, condition) in acceptableConditions {
+        for (key, _) in acceptableConditions {
             acceptableConditions[key] = true
         }
         price = 100
@@ -90,7 +90,7 @@ struct SearchView: View {
                         // Filter buttons
                         Text("Filter:")
                         FilterButtonView(buttonText: "Condition", action: {conditionToggle.toggle(); if conditionToggle == false {
-                            for (key, value) in acceptableConditions {
+                            for (key, _) in acceptableConditions {
                                 acceptableConditions[key] = true
                             }
                         }}, borderColor: conditionToggle ? green: white)
@@ -136,24 +136,30 @@ struct SearchView: View {
                     ScrollView(showsIndicators: false) {
                         VStack(alignment: .leading) {
                             // Load each book
-                            ForEach(0 ..< books.count) { i in
-                                if booksToDisplay.count > 0 && booksToDisplay[i] == true {
+                            ForEach(Array(books.enumerated()), id: \.element.bookISBN) { index, book in
+                                if booksToDisplay.count > 0 && booksToDisplay[index] == true {
                                     VStack {
                                         HStack {
-                                            AsyncImage(url: URL(string:  "https://m.media-amazon.com/images/I/71+6Ws61MXL._AC_UF1000,1000_QL80_.jpg")) {image in image.resizable().aspectRatio(contentMode: .fit)} placeholder: {
+                                            AsyncImage(url: URL(string: "https://m.media-amazon.com/images/I/71+6Ws61MXL._AC_UF1000,1000_QL80_.jpg")) { image in
+                                                image.resizable().aspectRatio(contentMode: .fit)
+                                            } placeholder: {
                                                 Rectangle()
                                             }
-                                            VStack (alignment: .leading) {
-                                                Text("Title: \(books[i].bookTitle)")
-                                                Text("ISBN: \(books[i].bookISBN)")
-                                                Text("Condition: \(books[i].bookCondition)")
-                                                Text(String(format: "Price: %.2f", books[i].bookPrice))
+                                            VStack(alignment: .leading) {
+                                                Text("Title: \(book.bookTitle)")
+                                                Text("ISBN: \(book.bookISBN)")
+                                                Text("Condition: \(book.bookCondition)")
+                                                Text(String(format: "Price: %.2f", book.bookPrice))
                                             }.padding().font(.callout)
                                             Spacer()
                                         }.padding()
-                                    }.frame(width: geometry.size.width - 25, height: geometry.size.height / 5).background(lightGreen).cornerRadius(20).overlay(RoundedRectangle(cornerRadius: 15).stroke(green, lineWidth: 2)).padding(5)
+                                    }.frame(width: geometry.size.width - 25, height: geometry.size.height / 5)
+                                     .background(lightGreen).cornerRadius(20)
+                                     .overlay(RoundedRectangle(cornerRadius: 15).stroke(green, lineWidth: 2))
+                                     .padding(5)
                                 }
                             }
+
                         }
                     }.defaultScrollAnchor(.top)
                 }

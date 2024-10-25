@@ -6,62 +6,69 @@
 //
 
 import SwiftUI
+import Firebase
+import FirebaseAuth
 
 struct ContentView: View {
-   @State private var email = ""
-    @State private var password = ""
-    @State private var wrongEmail = 0
-    @State private var wrongPass = 0
-    @State private var showLoginScreen = false
+    @State private var email = ""
+        @State private var password = ""
+        @State private var wrongEmail = 0
+        @State private var wrongPass = 0
     
     var body: some View {
         
-        NavigationView {
+        NavigationStack {
             // Login Page UI
             ZStack {
                 // Dark green
                 Color.green.ignoresSafeArea()
-                //Lighter green for layer
-                Circle()
-                    .scale(1.7)
-                    .foregroundColor(.white.opacity(0.15))
                 
-                // White fireground
+                Rectangle().trim(from: 0.0, to: 0.5).frame(width: 1000, height: 1000)
+                    .foregroundColor(.white)
+                
+                // White foreground
                 Circle()
-                    .scale(1.35)
+                    .frame(width: 700.0, height: 800)
                     .foregroundColor(.white)
                 
                 VStack {
-                    Text("Welcome to Book Hunter").font(.largeTitle).bold()
-                        .padding()
-                    
-                    HStack {
-                        
-                        // TODO: setup functionality so that if user is on login screen, the login text will be blue and underlined, and register text will be grey
-                        Text("Login").padding().underline() .foregroundColor(.blue).padding()
-                        
-                        Text("Register").padding()
-                    }
+                    Text("Welcome to \n Book Hunter").font(.largeTitle).bold()
+                        .padding().offset(y: -75)
                     
                     HStack {
                         Image(systemName: "envelope").foregroundColor(.black.opacity(0.5))
-                        TextField("Email Address", text: $email)}.padding().frame(width: 300, height: 50).background(Color.black.opacity(0.05)).cornerRadius(10).border(.red,   width: CGFloat(wrongEmail))
+                        TextField("Email Address", text: $email)}.padding().frame(width: 300, height: 50).background(Color.black.opacity(0.05)).cornerRadius(10).border(.red,   width: CGFloat(wrongEmail)).offset(y: -25)
                     
                     HStack{
                         Image(systemName: "lock").foregroundColor(.black.opacity(0.5))
                         SecureField("Password", text: $password)
                         Image(systemName: "eye").foregroundColor(.black.opacity(0.5))}.padding().frame(width: 300, height: 50).background(Color.black.opacity(0.05)).cornerRadius(10).border(.red, width: CGFloat(wrongPass))
                     
-                    
+                        // Login Button, brings user to HomeView
                         Button("Login"){
-                            
-                        }.foregroundColor(.white).bold().frame(width: 300, height: 50).background(Color.green).cornerRadius(10)
-                    }
+                            login()
+                        }.foregroundColor(.white).bold().frame(width: 300, height: 50).background(Color.green).cornerRadius(10).offset(y: 25)
+                }
                 
-            }
-            .navigationBarHidden(true)
+                /// Register Button
+                NavigationLink("Need to create an account?\n Register here!", destination: RegisterView())
+                    .offset(y: 225)
+                    .foregroundColor(.black)
+                    .bold()
+            }.navigationBarHidden(true)
         }
     }
+    
+    // Login User Function
+    func login() {
+        Auth.auth().signIn(withEmail: email, password: password) { result, error in
+            // unwrapped error
+            if let error = error {
+                        print(error.localizedDescription)
+                    }
+        }
+    }
+    
 }
 
 #Preview {

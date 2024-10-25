@@ -29,18 +29,15 @@ struct HomeView: View {
                         }.tag(1)
                     }.toolbarBackground(darkGreen, for: .tabBar).toolbarBackground(.visible, for: .tabBar)
                 }.tint(.white)
-            }.onChange(of: currentTab) { currentTab in
+            }.onChange(of: currentTab) {
                 if currentTab == 0 {
                     pageTitle = "Your Shelves"
-                }
-                if currentTab == 1 {
+                } else if currentTab == 1 {
                     pageTitle = "Search For A Book"
                     showIsbnButton = true
-                }
-                if currentTab != 1 {
+                } else {
                     showIsbnButton = false
                 }
-                
             }
             if showIsbnButton {
                 VStack {
