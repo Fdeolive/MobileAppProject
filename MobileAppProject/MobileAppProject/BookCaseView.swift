@@ -13,7 +13,7 @@ struct BookCaseView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading) {
-                ShelfView(shelfTitle: "t1", books: ["1.1","1.2","1.3", "1.4", "1.5","1.6","1.7"])
+                ShelfView(shelfTitle: "t1", books: [Book("Harry Potter", "1234", "Like New", 5.00, "HP"), Book("Fablehaven", "1234", "Like New", 9.00, "FablehavenCover")])
                 ShelfView(shelfTitle: "t2")
                 ShelfView(shelfTitle: "t3")
             }
