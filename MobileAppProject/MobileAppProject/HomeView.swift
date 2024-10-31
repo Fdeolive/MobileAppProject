@@ -18,7 +18,7 @@ struct HomeView: View {
     var body: some View {
         GeometryReader { geometry in ZStack() {
             VStack {
-                Text(pageTitle).frame(width: geometry.size.width, height: geometry.size.height / 25).padding([.bottom]).background(darkGreen).font(.title).foregroundColor(Color.white).bold().padding([.bottom])
+                Text(pageTitle).frame(width: geometry.size.width, height: geometry.size.height / 25).padding([.bottom]).background(darkGreen).font(.title).foregroundColor(Color.white).bold().padding([.bottom], 5)
                 TabView(selection: $currentTab) {
                     Group () {
                         BookCaseView().tabItem() {
@@ -27,6 +27,9 @@ struct HomeView: View {
                         SearchView().tabItem() {
                             Image(systemName:"magnifyingglass")
                         }.tag(1)
+                        NotificationsView().tabItem() {
+                            Image(systemName:"bell")
+                        }.tag(2)
                     }.toolbarBackground(darkGreen, for: .tabBar).toolbarBackground(.visible, for: .tabBar)
                 }.tint(.white)
             }.onChange(of: currentTab) {
@@ -35,6 +38,9 @@ struct HomeView: View {
                 } else if currentTab == 1 {
                     pageTitle = "Search For A Book"
                     showIsbnButton = true
+                } else if currentTab == 2 {
+                    pageTitle = "Notifications"
+                    showIsbnButton = false
                 } else {
                     showIsbnButton = false
                 }
