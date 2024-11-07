@@ -11,11 +11,13 @@ import SwiftUI
 
 struct BookCaseView: View {
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading) {
-                ShelfView(shelfTitle: "t1", books: [Book("Harry Potter", "1234", "Like New", 5.00, "HP"), Book("Fablehaven", "1234", "Like New", 9.00, "FablehavenCover")])
-                ShelfView(shelfTitle: "t2")
-                ShelfView(shelfTitle: "t3")
+        NavigationStack{
+            ScrollView {
+                VStack(alignment: .leading) {
+                    ShelfView(shelfTitle: "t1", books: [Book("Harry Potter", "1234", "Like New", 5.00, "HP"), Book("Fablehaven", "1234", "Like New", 9.00, "FablehavenCover")])
+                    ShelfView(shelfTitle: "t2")
+                    ShelfView(shelfTitle: "t3")
+                }
             }
         }
     }
