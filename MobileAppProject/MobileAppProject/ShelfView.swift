@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct ShelfView: View {
-    @State private var showResults = false
+    @State private var showShelf = false
     
     //Todo: should it have at state
     var shelfTitle: String = ""
@@ -18,14 +18,14 @@ struct ShelfView: View {
     var body: some View {
         NavigationStack{
             VStack(spacing: 0){
-                ShelfTitleButtonView(buttonText: "\(shelfTitle)", action: {print("title button"); showResults = true})
+                ShelfTitleButtonView(buttonText: "\(shelfTitle)", action: {print("title button"); showShelf = true})
                 ScrollView(.horizontal){
                     HStack{
                         ForEach(0..<books.count){book in
                             BookButtonView(buttonText: books[book].bookTitle, image: books[book].bookImage, action: {print("but")})
                         }
                     }.padding()
-                }.navigationDestination(isPresented: $showResults) { IndividualShelfView(shelfTitle: shelfTitle, books: books) }
+                }.navigationDestination(isPresented: $showShelf) { IndividualShelfView(shelfTitle: shelfTitle, books: books) }
                 Spacer()
             }
         }
