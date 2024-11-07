@@ -2,43 +2,59 @@
 //  IndividualShelfView.swift
 //  MobileAppProject
 //
-//  Created by user264275 on 10/31/24.
-//
+//  Diplays individual shelves and Allows user to add books
+//  User can also tap books to get book info
+//  No yet set up completely
 
 import SwiftUI
 
 struct IndividualShelfView: View {
     var shelfTitle: String = ""
-    //var books = ["b1","b2","b3"]
     @State var books = [Book("Harry Potter", "1234", "Like New", 5.00, "HP"), Book("1984", "1234", "Well Loved", 3.00, ""), Book("Animal Farm", "1234", "Moderately Used", 6.00, ""), Book("Brave New World", "1234", "Good", 1.00, "")]
     var body: some View {
         
         VStack(spacing: 0){
-            Text(shelfTitle).padding()
-                .font(.title)
-                .frame(width: UIScreen.main.bounds.width * 0.7, height: 35, alignment: .leading)
-                .foregroundColor(Color.white)
-                .background(.green)
-                .cornerRadius(10)
-            ScrollView(.horizontal){
-                /*HStack{
-                    ForEach(books, id: \.self){book in
-                        BookButtonView(buttonText: "\(book)", action: {print("but")})
-                    }
-                }.padding()*/
-                VStack{
+            ZStack{ //Puts add book button next to shelf title
+                Text(shelfTitle).padding()
+                    .font(.title)
+                    .frame(width: UIScreen.main.bounds.width * 0.7, height: 35, alignment: .leading)
+                    .foregroundColor(Color.white)
+                    .background(.green)
+                    .cornerRadius(10)
+                Button("+",action: {})
+                    .font(.title)
+                    .bold()
+                    .foregroundColor(Color.green)
+                    .frame(width: 25, height: 25)
+                    .background(.white)
+                    .cornerRadius(25 / 2)
+                    .offset(x: UIScreen.main.bounds.width * 0.30)
+            }
+            ScrollView(){
+                VStack(spacing: 5){
                     ForEach(0..<books.count){book in
-                        HStack{
+                        HStack(spacing: 20){
+                            Spacer()
+                            //Evenly shows all books in rows of three
                             if (book % 3 == 0){
-                                BookButtonView(buttonText: books[book].bookTitle, image: books[book].bookImage, action: {print("but")})
+                                ThickBookButtonView(buttonText: books[book].bookTitle, image: books[book].bookImage, action: {print("but")})
                                 if (book + 1 < books.count){
-                                    BookButtonView(buttonText: books[book+1].bookTitle, image: books[book+1].bookImage, action: {print("but")})
+                                    ThickBookButtonView(buttonText: books[book+1].bookTitle, image: books[book+1].bookImage, action: {print("but")})
+                                }else{
+                                    Rectangle()  //filler so last books starts on right side
+                                        .frame(width: 90, height: 100)
+                                        .foregroundColor(Color.white)
                                 }
                                 if (book + 2 < books.count){
-                                    BookButtonView(buttonText: books[book+2].bookTitle, image: books[book+2].bookImage, action: {print("but")})
+                                    ThickBookButtonView(buttonText: books[book+2].bookTitle, image: books[book+2].bookImage, action: {print("but")})
+                                }else{
+                                    Rectangle()  //filler so last book starts on right side
+                                        .frame(width: 90, height: 100)
+                                        .foregroundColor(Color.white)
                                 }
+                                Spacer()
                             }
-                        }.padding()
+                        }
                     }
                 }.padding()
             }
@@ -48,5 +64,5 @@ struct IndividualShelfView: View {
 }
 
 #Preview {
-    IndividualShelfView(shelfTitle: "title", books: [Book("Harry Potter", "1234", "Like New", 5.00, "HP"), Book("1984", "1234", "Well Loved", 3.00, ""), Book("Animal Farm", "1234", "Moderately Used", 6.00, ""), Book("Brave New World", "1234", "Good", 1.00, "")])
+    IndividualShelfView(shelfTitle: "Shelf Title", books: [Book("Harry Potter", "1234", "Like New", 5.00, "HP"), Book("1984", "1234", "Well Loved", 3.00, ""), Book("Animal Farm", "1234", "Moderately Used", 6.00, ""), Book("Brave New World", "1234", "Good", 1.00, ""), Book("Fablehaven", "1234", "Like New", 9.00, "FablehavenCover"), Book("Fablehaven", "1234", "Like New", 9.00, "FablehavenCover"),Book("Fablehaven", "1234", "Like New", 9.00, "FablehavenCover")])
 }

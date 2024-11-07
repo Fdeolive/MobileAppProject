@@ -1,16 +1,14 @@
 //
-//  BookButtonView.swift
-//  BookCaseDesign
+//  ThickBookButtonView.swift
+//  MobileAppProject
 //
-//  Book button.  Display the book as an image or if no image available by title.
-//  If no image makes the button thicker to acomade short text
-//
-//  Potential Todo: make bokk adjust to fit all titles
-//Todo Integrate BookClass
+//  Creates a button for books (see BookButtonView)
+//  Is used to make all books same size whereas BookButtonView only make title only
+//  no image books wider
 
 import SwiftUI
 
-struct BookButtonView: View {
+struct ThickBookButtonView: View {
     var buttonText: String = ""
     var image: String = ""
     var action: () -> Void
@@ -23,12 +21,12 @@ struct BookButtonView: View {
                     .background(.gray)
                     .font(.system(size: 20, weight: .semibold))
             }else{
-                Image(image).resizable().aspectRatio(contentMode: .fit).frame(width: 68, height: 100).background(.gray)
+                Image(image).resizable().aspectRatio(contentMode: .fit).frame(width: 90, height: 100).background(.gray)
             }
         }
     }
 }
 
 #Preview {
-    BookButtonView(buttonText: "Word", image: "HP", action:{})
+    ThickBookButtonView(buttonText: "Word", image: "HP", action:{})
 }

@@ -2,7 +2,8 @@
 //  ShelfView.swift
 //  BookCaseDesign
 //
-//  Created by user264275 on 10/17/24.
+//  Displays a shelf title as a button to access that shelf
+//  Displays books on the shelf as a horizontal scroll of buttons that allow more book info
 //
 
 import SwiftUI
@@ -20,11 +21,6 @@ struct ShelfView: View {
             //Text(shelfTitle).font(.title)
             ShelfTitleButtonView(buttonText: "\(shelfTitle)", action: {print("title button")})
             ScrollView(.horizontal){
-                /*HStack{
-                    ForEach(books, id: \.self){book in
-                        BookButtonView(buttonText: "\(book)", action: {print("but")})
-                    }
-                }.padding()*/
                 HStack{
                     ForEach(0..<books.count){book in
                         BookButtonView(buttonText: books[book].bookTitle, image: books[book].bookImage, action: {print("but")})
