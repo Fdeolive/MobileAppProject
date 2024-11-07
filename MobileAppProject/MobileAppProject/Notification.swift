@@ -8,16 +8,22 @@
 import SwiftUICore
 import SwiftUI
 
-class Notification {
+class Notification: ObservableObject {
     
-    var notificationTitle = ""
-    var notifcationSummary = ""
-    var notificationId = 0
+    @Published var notificationTitle = ""
+    @Published var notifcationSummary = ""
+    @Published var notificationId = 0
     
     init(_ notificationTitle: String, _ notificationSummary: String, _ notificationId: Int) {
         self.notificationTitle = notificationTitle
         self.notifcationSummary = notificationSummary
         self.notificationId = notificationId
         
+    }
+    
+    func setNotification(_ notification: Notification) {
+        self.notificationId = notification.notificationId
+        self.notificationTitle = notification.notificationTitle
+        self.notifcationSummary = notification.notifcationSummary
     }
 }

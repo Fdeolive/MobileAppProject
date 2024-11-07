@@ -22,7 +22,7 @@ struct HomeView: View {
                 TabView(selection: $currentTab) {
                     Group () {
                         BookCaseView().tabItem() {
-                            Image(systemName: "book").foregroundStyle(Color.white)
+                            Image(systemName: "book")
                         }.tag(0)
                         SearchView().tabItem() {
                             Image(systemName:"magnifyingglass")
@@ -30,7 +30,7 @@ struct HomeView: View {
                         NotificationsView().tabItem() {
                             Image(systemName:"bell")
                         }.tag(2)
-                    }.toolbarBackground(darkGreen, for: .tabBar).toolbarBackground(.visible, for: .tabBar)
+                    }.toolbarBackground(darkGreen, for: .tabBar).toolbarBackground(.visible, for: .tabBar).toolbarColorScheme(.dark, for:.tabBar)
                 }.tint(.white)
             }.onChange(of: currentTab) {
                 if currentTab == 0 {
@@ -57,5 +57,5 @@ struct HomeView: View {
 }
 
 #Preview {
-    HomeView()
+    HomeView().environmentObject(Notification("NA","NA",-1))
 }
