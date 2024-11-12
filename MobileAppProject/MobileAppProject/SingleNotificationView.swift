@@ -26,7 +26,7 @@ struct SingleNotificationView: View {
                 }.padding([.leading],25)
                 
                 HStack {
-                    Text(currentNotification.notifcationSummary)
+                    Text(currentNotification.notificationSummary)
                     Spacer()
                 }.padding([.leading], 25).padding([.top], 10)
                 Spacer()
