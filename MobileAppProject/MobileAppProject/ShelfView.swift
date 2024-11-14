@@ -16,18 +16,17 @@ struct ShelfView: View {
     @State var books = [Book("Harry Potter", "1234", "Like New", 5.00, "HP"), Book("1984", "1234", "Well Loved", 3.00, ""), Book("Animal Farm", "1234", "Moderately Used", 6.00, ""), Book("Brave New World", "1234", "Good", 1.00, "")]
     
     var body: some View {
-        NavigationStack{
-            VStack(spacing: 0){
-                ShelfTitleButtonView(buttonText: "\(shelfTitle)", action: {print("title button"); showShelf = true})
-                ScrollView(.horizontal){
-                    HStack{
-                        ForEach(0..<books.count){book in
-                            BookButtonView(buttonText: books[book].bookTitle, image: books[book].bookImage, action: {print("but")})
-                        }
-                    }.padding()
-                }.navigationDestination(isPresented: $showShelf) { IndividualShelfView(shelfTitle: shelfTitle, books: books) }
-                Spacer()
-            }
+
+        VStack(spacing: 0){
+            ShelfTitleButtonView(buttonText: "\(shelfTitle)", action: {print("title button"); showShelf = true})
+            ScrollView(.horizontal){
+                HStack{
+                    ForEach(0..<books.count){book in
+                        BookButtonView(buttonText: books[book].bookTitle, image: books[book].bookImage, action: {print("but")})
+                    }
+                }.padding()
+            }.navigationDestination(isPresented: $showShelf) { IndividualShelfView(shelfTitle: shelfTitle, books: books) }
+            Spacer()
         }
     }
 }
