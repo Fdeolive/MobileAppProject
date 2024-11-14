@@ -10,6 +10,8 @@ import SwiftUI
 
 struct ShelfView: View {
     @State private var showShelf = false
+    @State private var showBook = false
+    @State var bookDisplayed = Book("Harry Potter", "1234", "Like New", 5.00, "HP")
     
     //Todo: should it have at state
     var shelfTitle: String = ""
@@ -22,12 +24,20 @@ struct ShelfView: View {
             ScrollView(.horizontal){
                 HStack{
                     ForEach(0..<books.count){book in
-                        BookButtonView(buttonText: books[book].bookTitle, image: books[book].bookImage, action: {print("but")})
+                        BookButtonView(
+                            buttonText: books[book].bookTitle,
+                            image: books[book].bookImage,
+                            action: {
+                                print("but")
+                                showBook = true
+                                bookDisplayed = books[book]
+                            }
+                        )
                     }
                 }.padding()
             }.navigationDestination(isPresented: $showShelf) { IndividualShelfView(shelfTitle: shelfTitle, books: books) }
             Spacer()
-        }
+        }.navigationDestination(isPresented: $showBook) { IndividualBookView(book: bookDisplayed)}
     }
 }
 
