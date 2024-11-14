@@ -14,8 +14,6 @@ struct SearchBarView: View {
     var buttonWidth: CGFloat = 75
     var buttonFontLarge = false
     var body: some View {
-        VStack {
-            GeometryReader { geometry in
                 ZStack {
                     TextField(searchText, text: searchingValue)
                         .padding(10)
@@ -28,8 +26,8 @@ struct SearchBarView: View {
                         .padding([.leading, .trailing], 30)
                         .padding([.top, .bottom], 10)
                     Button("", systemImage: "magnifyingglass", action: action).foregroundColor(Color.green).padding([.leading], (UIScreen.main.bounds.width - 90))//310)
-                }
-            }
+                
+            
         }
     }
 }
