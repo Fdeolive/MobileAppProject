@@ -15,16 +15,17 @@ struct ShelfTitleButtonView: View {
 
     var body: some View {
         //GeometryReader { metrics in
-                Button(action: action) {
-                    Text(buttonText).padding()
-                        .font(.title)
-                        .frame(width: UIScreen.main.bounds.width * 0.7/*metrics.size.width * 0.90225*/, height: 35, alignment: .leading)
-                        .foregroundColor(Color.white)
-                        .background(.green)
-                    //.overlay(RoundedRectangle
-                    // .stroke(Color.black, lineWidth: 2))
-                        .cornerRadius(10)
-                }
+        Button(action: action) {
+            ZStack{
+                Text(buttonText).padding()
+                    .font(.title)
+                    .frame(width: UIScreen.main.bounds.width * 0.7, height: 35, alignment: .leading)
+                    .foregroundColor(Color.white)
+                    .background(.green)
+                    .cornerRadius(10)
+                Image(systemName: "arrowshape.right.fill").foregroundColor(Color.white).padding([.leading], (UIScreen.main.bounds.width * 0.6))
+            }
+        }
 
         //}
     }
