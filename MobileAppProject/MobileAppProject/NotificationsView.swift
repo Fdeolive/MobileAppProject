@@ -37,8 +37,11 @@ struct NotificationsView: View {
             print("error getting doc")
         }
     }
+    
 
     @EnvironmentObject var currentNotification: Notification
+    
+    @State var deleteMode = false
     
     @State var notificationList = [Notification("New Book Release!", "...", 0), Notification("John Added to His Wishlist", "...", 5), Notification("John Added to His Wishlist", "...", 2), Notification("Daniel Added to His Wishlist", "...", 3)]
     private let darkerGreen = Color(red: 0/255, green: 150/255, blue: 25/255)
@@ -53,14 +56,23 @@ struct NotificationsView: View {
                     } else {
                         HStack {
                             Spacer()
-                            Button("Edit", action: { callGetNotifications() }).font(.title).padding([.trailing]).foregroundStyle(darkerGreen)
+                            Button("Edit", action: { deleteMode.toggle() }).font(.title).padding([.trailing]).foregroundStyle(darkerGreen)
                         }
                         ScrollView(showsIndicators: false) {
                             VStack {
                                 ForEach(notificationList, id: \.self.notificationId) { notification in
                                     VStack {
+                                            HStack {
+                                                Spacer()
+                                                // TODO: Make better delete
+                                                if deleteMode {
+                                                    Button(action: {}) {
+                                                        Image(systemName: "minus.circle").padding([.trailing], 10).font(.title).foregroundStyle(Color.red)
+                                                    }
+                                                }
+                                        }
                                         HStack {
-                                            Text(notification.notificationTitle).font(.title2).padding([.leading], 25).padding([.bottom], 15).padding([.top])
+                                            Text(notification.notificationTitle).font(.title2).padding([.leading], 25).padding([.bottom], 15)
                                             Spacer()
                                         }
                                         HStack {

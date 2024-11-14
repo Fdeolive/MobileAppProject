@@ -15,8 +15,8 @@ struct SearchBarView: View {
     var buttonFontLarge = false
     var body: some View {
         ZStack {
-            TextField(searchText, text: searchingValue).padding(10).background(backgroundColor).cornerRadius(25).overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.green, lineWidth: 2)).padding([.leading, .trailing], 30).padding([.top, .bottom], 10)
-            Button("", systemImage: "magnifyingglass", action: action).foregroundColor(Color.green).padding([.leading], 310)
+                TextField(searchText, text: searchingValue).padding(10).background(backgroundColor).cornerRadius(25).overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.green, lineWidth: 2)).padding([.leading, .trailing], 30).padding([.top, .bottom], 10)
+                Button("", systemImage: "magnifyingglass", action: action).foregroundColor(Color.green).padding([.leading], 10)
         }
     }
 }

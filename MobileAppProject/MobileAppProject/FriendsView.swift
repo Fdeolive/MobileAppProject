@@ -41,24 +41,39 @@ struct FriendsView: View {
     }
     
     @State var searchingFor = ""
-    @State var friendsList: [String] = ["dpoulin", "username"]
+    @State var friendsList: [String] = []
     
     private let lightGreen = Color(red: 230/255, green: 255/255, blue: 220/255)
     var body: some View {
         GeometryReader { geometry in VStack {
-            VStack {
-                SearchBarView(searchText: "Search Friends", searchingValue: $searchingFor, action: { })
-            }
+                HStack {
+                    SearchBarView(searchText: "Search Friends", searchingValue: $searchingFor, action: { })
+                    Button(action: {}) {
+                        Image(systemName: "person.badge.plus.fill").foregroundStyle(Color.green).font(.title2)
+                    }.padding(10)
+                }
+            
+    
             VStack {
                 ForEach(friendsList, id: \.self) { friendId in
-                    VStack {
-                        Button(friendId, action: {  })
-                    }.frame(width: geometry.size.width - 25, height: geometry.size.height / 7.5)
-                        .background(lightGreen).cornerRadius(20)
-                        .overlay(RoundedRectangle(cornerRadius: 15).stroke(Color.green, lineWidth: 2))
-                        .padding(5)
+                    Button(action: {}) {
+                        VStack {
+                            HStack {
+                                
+                                Text(friendId).font(.title).foregroundStyle(Color.black).padding()
+                                Spacer()
+                            }
+                        }.frame(width: geometry.size.width - 50, height: geometry.size.height / 7.5)
+                            .background(lightGreen).cornerRadius(20)
+                            .overlay(RoundedRectangle(cornerRadius: 15).stroke(Color.green, lineWidth: 2))
+                            .padding(5)
+                    }
                 }
             }
+        }.onAppear() {
+            // Change from on appear to when app is loaded load in friends
+            //callGetFriends()
+            friendsList = ["dpoulin", "username"]
         }
         }
     }

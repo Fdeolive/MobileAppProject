@@ -30,18 +30,26 @@ struct HomeView: View {
                         NotificationsView().tabItem() {
                             Image(systemName:"bell")
                         }.tag(2)
+                        FriendsView().tabItem() {
+                            Image(systemName: "person.2.fill")
+                        }.tag(3)
                     }.toolbarBackground(darkGreen, for: .tabBar).toolbarBackground(.visible, for: .tabBar).toolbarColorScheme(.dark, for:.tabBar)
                 }.tint(.white)
             }.onChange(of: currentTab) {
-                if currentTab == 0 {
+                switch currentTab {
+                case 0:
                     pageTitle = "Your Shelves"
-                } else if currentTab == 1 {
+                    showIsbnButton = false
+                case 1:
                     pageTitle = "Search For A Book"
                     showIsbnButton = true
-                } else if currentTab == 2 {
-                    pageTitle = "Notifications"
+                case 2:
+                    pageTitle = "Notfications"
                     showIsbnButton = false
-                } else {
+                case 3:
+                    pageTitle = "Friends"
+                    showIsbnButton = false
+                default:
                     showIsbnButton = false
                 }
             }
