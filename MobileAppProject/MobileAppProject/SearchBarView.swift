@@ -14,21 +14,24 @@ struct SearchBarView: View {
     var buttonWidth: CGFloat = 75
     var buttonFontLarge = false
     var body: some View {
-                ZStack {
-                    TextField(searchText, text: searchingValue)
-                        .padding(10)
-                        .background(backgroundColor)
-                        .cornerRadius(25)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 20)
-                                .stroke(Color.green, lineWidth: 2)
-                        )
-                        .padding([.leading, .trailing], 30)
-                        .padding([.top, .bottom], 10)
-                    Button("", systemImage: "magnifyingglass", action: action).foregroundColor(Color.green).padding([.leading], (UIScreen.main.bounds.width - 90))//310)
-                
+        HStack {
+            TextField(searchText, text: searchingValue)
+                .padding(10)
+                .padding(.leading, 15)
+                .overlay(
+                    Image(systemName: "magnifyingglass").foregroundColor(Color.green).frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)).padding(.leading, 10)
+                .background(backgroundColor)
+                .cornerRadius(25)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 20)
+                        .stroke(Color.green, lineWidth: 2)
+                )
+                .padding([.leading, .trailing], 25)
+                .padding([.top, .bottom], 10)
+            
             
         }
     }
 }
+
 

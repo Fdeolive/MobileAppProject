@@ -21,7 +21,7 @@ struct NotificationsView: View {
     }
     
     let db = Firestore.firestore()
-
+    
     func getNotifications() async {
         let docRef = db.collection("user").document("cking")
         do {
@@ -38,7 +38,7 @@ struct NotificationsView: View {
         }
     }
     
-
+    
     @EnvironmentObject var currentNotification: Notification
     
     @State var deleteMode = false
@@ -62,14 +62,14 @@ struct NotificationsView: View {
                             VStack {
                                 ForEach(notificationList, id: \.self.notificationId) { notification in
                                     VStack {
-                                            HStack {
-                                                Spacer()
-                                                // TODO: Make better delete
-                                                if deleteMode {
-                                                    Button(action: {}) {
-                                                        Image(systemName: "minus.circle").padding([.trailing], 10).font(.title).foregroundStyle(Color.red)
-                                                    }
+                                        HStack {
+                                            Spacer()
+                                            // TODO: Make better delete
+                                            if deleteMode {
+                                                Button(action: {}) {
+                                                    Image(systemName: "minus.circle").padding([.trailing], 10).font(.title).foregroundStyle(Color.red)
                                                 }
+                                            }
                                         }
                                         HStack {
                                             Text(notification.notificationTitle).font(.title2).padding([.leading], 25).padding([.bottom], 15)
