@@ -54,4 +54,5 @@ class NotificationStore: ObservableObject {
             allNotifications.append(Notification("Welcome to Book Hunting", "Explore the app and all it's features!"))
         }
     }
+
 }

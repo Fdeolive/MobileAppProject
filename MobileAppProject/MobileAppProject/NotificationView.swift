@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct NotificationView: View {
+    @EnvironmentObject var notificationStore: NotificationStore
     @State var notification = Notification("NA", "NA")
     @State private var showNotification = false
     private let lighterGreen = Color(red: 240/255, green: 255/255, blue: 240/255)
