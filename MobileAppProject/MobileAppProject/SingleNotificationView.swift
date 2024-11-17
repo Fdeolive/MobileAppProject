@@ -10,16 +10,12 @@ import SwiftUI
 struct SingleNotificationView: View {
     
     private let lighterGreen = Color(red: 220/255, green: 255/255, blue: 220/255)
-    @EnvironmentObject var currentNotification: Notification
+    @State var currentNotification: Notification
     
     
     var body: some View {
         GeometryReader { geometry in VStack {
             VStack {
-                HStack {
-                    Spacer()
-                    Button("", systemImage: "clear", action: { currentNotification.notificationId = -1 }).foregroundColor(Color.black).font(.title)
-                }.padding(25)
                 HStack {
                     Text(currentNotification.notificationTitle).font(.title)
                     Spacer()
@@ -38,5 +34,5 @@ struct SingleNotificationView: View {
 }
 
 #Preview {
-    SingleNotificationView().environmentObject(Notification("NA", "NA", -1))
+    SingleNotificationView(currentNotification: Notification("NA", "NA"))
 }
