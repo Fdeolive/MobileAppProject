@@ -54,5 +54,19 @@ class NotificationStore: ObservableObject {
             allNotifications.append(Notification("Welcome to Book Hunting", "Explore the app and all it's features!"))
         }
     }
+    
+    @discardableResult
+    func saveChanges() -> Bool {
+        do {
+            let encoder = JSONEncoder()
+            let data = try encoder.encode(allNotifications)
+            try data.write(to: notificationArchiveURL, options: [.atomic])
+            print("Saved data to \(notificationArchiveURL)")
+            return true
+        } catch let encodingError {
+            print("Error encoding allItems: \(encodingError)")
+            return false
+        }
+    }
 
 }

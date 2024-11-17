@@ -11,23 +11,24 @@ struct RootView: View {
     
     @EnvironmentObject var notificationStore: NotificationStore
     @Environment(\.scenePhase) var scenePhase
-    @State private var startFlag = true
+    @State private var startFlag = false
     var body: some View {
         VStack() {
             if startFlag {
                 HomeView()
             } else {
                 // StartView(startFlag: $startFlag)
-                ContentView()
+                //ContentView()
+                Button("click to start", action: {startFlag.toggle()})
             }
         }
-        .onChange(of: scenePhase) { newScenePhase in
-            if newScenePhase == .active {
+        .onChange(of: scenePhase) { newPhase in
+            if newPhase == .active {
                 print("HomeView is active")
-            } else if newScenePhase == .inactive {
+            } else if newPhase == .inactive {
                 notificationStore.saveChanges()
                 print("HomeView is inactive")
-            } else if newScenePhase == .background {
+            } else if newPhase == .background {
                 print("HomeView is background")
             }
         }
