@@ -28,7 +28,7 @@ struct NotificationsView: View {
             let document = try await docRef.getDocument()
             if let notifications = document.get("notifications") as? [String:[String:String]] {
                 for (id, value) in notifications {
-                    notificationList.append(Notification(value["notificationTitle"]!, value["notificationSummary"]!))
+                    notificationStore.allNotifications.append(Notification(value["notificationTitle"]!, value["notificationSummary"]!))
                 }
             } else {
                 print("nope")
@@ -41,7 +41,7 @@ struct NotificationsView: View {
     
     
     @State var deleteMode = false
-    
+    @EnvironmentObject var notificationStore: NotificationStore
     @State var notificationList = [Notification("New Book Release!", "..."), Notification("John Added to His Wishlist", "..."), Notification("John Added to His Wishlist", "..."), Notification("Daniel Added to His Wishlist", "...")]
     private let darkerGreen = Color(red: 0/255, green: 150/255, blue: 25/255)
     private let lighterGreen = Color(red: 240/255, green: 255/255, blue: 240/255)
@@ -52,11 +52,11 @@ struct NotificationsView: View {
                 VStack {
                         HStack {
                             Spacer()
-                            Button("Edit", action: { deleteMode.toggle() }).font(.title).padding([.trailing]).foregroundStyle(darkerGreen)
+                            Button("Edit", action: { callGetNotifications() }).font(.title).padding([.trailing]).foregroundStyle(darkerGreen)
                         }
                         ScrollView(showsIndicators: false) {
                             VStack {
-                                ForEach(notificationList, id: \.self.notificationId) { notification in
+                                ForEach(notificationStore.allNotifications, id: \.self.notificationId) { notification in
                                     NotificationView(notification: notification)
                                 }
                             }
@@ -68,5 +68,5 @@ struct NotificationsView: View {
 }
 
 #Preview {
-    NotificationsView()
+    NotificationsView().environmentObject(NotificationStore())
 }

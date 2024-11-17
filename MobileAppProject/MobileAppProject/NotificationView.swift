@@ -24,11 +24,11 @@ struct NotificationView: View {
                 Spacer()
                 Button("Click to View Notification", action: { showNotification.toggle()
                 }).padding([.trailing], 25).foregroundStyle(Color.gray)
-            }.navigationDestination(isPresented: $showNotification) { SingleNotificationView(currentNotification: notification) }
+            }
         }.frame(width: 300, height: 100)
             .background(lighterGreen).cornerRadius(20)
             .overlay(RoundedRectangle(cornerRadius: 15).stroke(Color.green, lineWidth: 2))
-            .padding(5)
+        .padding(5).navigationDestination(isPresented: $showNotification) { SingleNotificationView(currentNotification: notification) }
     }
 }
 

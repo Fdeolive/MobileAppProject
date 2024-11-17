@@ -26,7 +26,7 @@ func load<T: Decodable>(_ url: URL) -> T {
 
 class NotificationStore: ObservableObject {
     @Published var allNotifications: [Notification]
-    let loadFromFile = false
+    let loadFromFile = true
     let bundlesFilename = "notification-init.json"
     
     let notificationArchiveURL: URL = {
