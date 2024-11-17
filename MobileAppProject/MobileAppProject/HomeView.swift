@@ -67,6 +67,6 @@ struct HomeView: View {
 }
 
 #Preview {
-    HomeView().environmentObject(Notification("NA","NA", -1))
+    HomeView()
 }
 

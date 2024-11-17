@@ -8,16 +8,16 @@
 import SwiftUICore
 import SwiftUI
 
-class Notification: ObservableObject {
+class Notification: Identifiable, Codable {
     
-    @Published var notificationTitle = ""
-    @Published var notificationSummary = ""
-    @Published var notificationId = 0
+    var notificationTitle = ""
+    var notificationSummary = ""
+    var notificationId: UUID
     
-    init(_ notificationTitle: String, _ notificationSummary: String, _ notificationId: Int) {
+    init(_ notificationTitle: String, _ notificationSummary: String) {
         self.notificationTitle = notificationTitle
         self.notificationSummary = notificationSummary
-        self.notificationId = notificationId
+        self.notificationId = UUID()
         
     }
     
