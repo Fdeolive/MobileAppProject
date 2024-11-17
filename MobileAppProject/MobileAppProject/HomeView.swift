@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct HomeView: View {
-    @EnvironmentObject var notificationStore: NotificationStore
-    @Environment(\.scenePhase) var scenePhase
     
     @State var pageTitle: String = "Your Shelves"
     @State private var currentTab = 0
@@ -18,8 +16,7 @@ struct HomeView: View {
     
     
     var body: some View {
-        VStack() {
-            NavigationStack{
+        NavigationStack{
                 GeometryReader { geometry in ZStack() {
                     VStack {
                         Text(pageTitle).frame(width: geometry.size.width, height: geometry.size.height / 25).padding([.bottom]).background(darkGreen).font(.title).foregroundColor(Color.white).bold().padding([.bottom], 5)
@@ -66,17 +63,6 @@ struct HomeView: View {
                 }
                 }
             }
-        }
-        .onChange(of: scenePhase) { newScenePhase in
-            if newScenePhase == .active {
-                print("HomeView is active")
-            } else if newScenePhase == .inactive {
-                notificationStore.saveChanges()
-                print("HomeView is inactive")
-            } else if newScenePhase == .background {
-                print("HomeView is background")
-            }
-        }
     }
 }
 
