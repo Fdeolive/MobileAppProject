@@ -36,5 +36,5 @@ struct RootView: View {
 }
 
 #Preview {
-    RootView()
+    RootView().environmentObject(NotificationStore())
 }

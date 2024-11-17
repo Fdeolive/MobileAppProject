@@ -27,6 +27,7 @@ struct NotificationsView: View {
         do {
             let document = try await docRef.getDocument()
             if let notifications = document.get("notifications") as? [String:[String:String]] {
+                notificationStore.allNotifications.removeAll()
                 for (id, value) in notifications {
                     notificationStore.allNotifications.append(Notification(value["notificationTitle"]!, value["notificationSummary"]!))
                 }
