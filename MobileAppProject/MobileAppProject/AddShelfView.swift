@@ -49,10 +49,15 @@ struct AddShelfView: View {
     func addShelf() async {
         let docRef = db.collection("user").document("DavidsTest")
         do {
-          try await docRef.updateData([
-            "Shelves": shelfList + [shelfTitle]
-          ])
-          print("Document successfully updated")
+            if (!shelfList.contains(shelfTitle)){
+                shelfList = shelfList + [shelfTitle]
+                try await docRef.updateData([
+                    "Shelves": shelfList// + [shelfTitle]
+                ])
+                print("Document successfully updated")
+            }else{
+                print("repeat")
+            }
         } catch {
           print("Error updating document: \(error)")
         }
