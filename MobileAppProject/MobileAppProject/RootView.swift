@@ -9,9 +9,20 @@ import SwiftUI
 
 struct RootView: View {
     
+    func connectDB() {
+        Task {
+            do {
+                await DBNotificationConnect().getNotifications(notificationStore: notificationStore)
+            }
+        }
+    }
+    
     @EnvironmentObject var notificationStore: NotificationStore
     @Environment(\.scenePhase) var scenePhase
     @State private var startFlag = false
+    @State var loadingData = false
+    
+    
     var body: some View {
         VStack() {
             if startFlag {
@@ -20,6 +31,10 @@ struct RootView: View {
                 // StartView(startFlag: $startFlag)
                 //ContentView()
                 Button("click to start", action: {startFlag.toggle()})
+            }
+        }.onChange(of: startFlag) { newStartFlag in
+            if newStartFlag {
+                connectDB()
             }
         }
         .onChange(of: scenePhase) { newPhase in

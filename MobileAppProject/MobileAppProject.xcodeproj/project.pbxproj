@@ -10,9 +10,11 @@
 		7153D4782CE3CB8B00BF0C71 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 7153D4772CE3CB8B00BF0C71 /* FirebaseAuth */; };
 		7153D47A2CE3CB8B00BF0C71 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 7153D4792CE3CB8B00BF0C71 /* FirebaseCore */; };
 		7153D47C2CE3CB8B00BF0C71 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 7153D47B2CE3CB8B00BF0C71 /* FirebaseFirestore */; };
+		719180082CEB97560045E85B /* DeleteNotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 719180072CEB97560045E85B /* DeleteNotificationView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		719180072CEB97560045E85B /* DeleteNotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteNotificationView.swift; sourceTree = "<group>"; };
 		71FF9E462CC14F7100A21815 /* MobileAppProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MobileAppProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -41,6 +43,7 @@
 		71FF9E3D2CC14F7100A21815 = {
 			isa = PBXGroup;
 			children = (
+				719180072CEB97560045E85B /* DeleteNotificationView.swift */,
 				71FF9E482CC14F7100A21815 /* MobileAppProject */,
 				71FF9E472CC14F7100A21815 /* Products */,
 			);
@@ -134,6 +137,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				719180082CEB97560045E85B /* DeleteNotificationView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

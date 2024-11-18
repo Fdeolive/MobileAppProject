@@ -51,7 +51,6 @@ class NotificationStore: ObservableObject {
             }
         }else {
             allNotifications = []
-            allNotifications.append(Notification("Welcome to Book Hunting", "Explore the app and all it's features!"))
         }
     }
     
@@ -62,10 +61,17 @@ class NotificationStore: ObservableObject {
             let data = try encoder.encode(allNotifications)
             try data.write(to: notificationArchiveURL, options: [.atomic])
             print("Saved data to \(notificationArchiveURL)")
+            print(allNotifications)
             return true
         } catch let encodingError {
             print("Error encoding allItems: \(encodingError)")
             return false
+        }
+    }
+    
+    func delete(notification: Notification!) {
+        if let idx = allNotifications.firstIndex(where: {$0.notificationId == notification.notificationId}) {
+            allNotifications.remove(at: idx)
         }
     }
 
