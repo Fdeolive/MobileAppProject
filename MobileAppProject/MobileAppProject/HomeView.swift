@@ -31,7 +31,7 @@ struct HomeView: View {
                                 NotificationView().tabItem() {
                                     Image(systemName:"bell")
                                 }.tag(2)
-                                FriendsView().tabItem() {
+                                FriendView().tabItem() {
                                     Image(systemName: "person.2.fill")
                                 }.tag(3)
                             }.toolbarBackground(darkGreen, for: .tabBar).toolbarBackground(.visible, for: .tabBar).toolbarColorScheme(.dark, for:.tabBar)
