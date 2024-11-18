@@ -1,9 +1,7 @@
-//
-//  Notification.swift
-//  MobileAppProject
-//
-//  Created by user267577 on 10/29/24.
-//
+// Notification Object
+// Notification.swift
+// MobileAppProject
+// Carson J. King
 
 import SwiftUICore
 import SwiftUI
@@ -12,6 +10,7 @@ class Notification: Identifiable, Codable {
     
     var notificationTitle = ""
     var notificationSummary = ""
+    // Auto generated unique ID for notification
     var notificationId: UUID
     
     init(_ notificationTitle: String, _ notificationSummary: String) {
@@ -19,11 +18,5 @@ class Notification: Identifiable, Codable {
         self.notificationSummary = notificationSummary
         self.notificationId = UUID()
         
-    }
-    
-    func setNotification(_ notification: Notification) {
-        self.notificationTitle = notification.notificationTitle
-        self.notificationSummary = notification.notificationSummary
-        self.notificationId = notification.notificationId
     }
 }

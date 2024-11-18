@@ -28,7 +28,7 @@ struct HomeView: View {
                                 SearchView().tabItem() {
                                     Image(systemName:"magnifyingglass")
                                 }.tag(1)
-                                NotificationsView().tabItem() {
+                                NotificationView().tabItem() {
                                     Image(systemName:"bell")
                                 }.tag(2)
                                 FriendsView().tabItem() {

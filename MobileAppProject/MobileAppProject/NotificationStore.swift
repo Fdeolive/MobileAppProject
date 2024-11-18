@@ -1,12 +1,11 @@
-//
-//  NotificationStore.swift
-//  MobileAppProject
-//
-//  Created by user267577 on 11/17/24.
-//
+// Class for storing notifications and for reading from the device
+// NotificationStore.swift
+// MobileAppProject
+// Carson J. King
 
 import Foundation
 
+// Load function/from saved json file
 func load<T: Decodable>(_ url: URL) -> T {
     let data: Data
     do {
@@ -26,15 +25,21 @@ func load<T: Decodable>(_ url: URL) -> T {
 
 class NotificationStore: ObservableObject {
     @Published var allNotifications: [Notification]
+    // Setting to true turns on loading persisted data
+    // NOTE: Will cause preview to crash/only works in simulator
+    // Reset to false to play around in preview!
     let loadFromFile = false//true
     let bundlesFilename = "notification-init.json"
     
+    // Path to json file
     let notificationArchiveURL: URL = {
         let documentsDirectories = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         let documentDirectory = documentsDirectories.first!
         return documentDirectory.appendingPathComponent("notifications.json")
     } ()
     
+    // Load saved data if loadFromFile
+    // Else load no data and start with empty list of notifications
     init() {
         if loadFromFile {
             let fileManager = FileManager.default
@@ -54,6 +59,7 @@ class NotificationStore: ObservableObject {
         }
     }
     
+    // Save changes to json file
     @discardableResult
     func saveChanges() -> Bool {
         do {
@@ -69,10 +75,11 @@ class NotificationStore: ObservableObject {
         }
     }
     
+    // Function to delete notifications from the NotificationStore
     func delete(notification: Notification!) {
         if let idx = allNotifications.firstIndex(where: {$0.notificationId == notification.notificationId}) {
             allNotifications.remove(at: idx)
         }
     }
-
+    
 }

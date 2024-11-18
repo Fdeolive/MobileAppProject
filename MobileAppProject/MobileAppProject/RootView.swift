@@ -1,14 +1,21 @@
-//
-//  RootView.swift
-//  MobileAppProject
-//
-//  Created by user267577 on 11/17/24.
+// Root View for app
+// RootView.swift
+// MobileAppProject
 //
 
 import SwiftUI
 
 struct RootView: View {
     
+    @EnvironmentObject var notificationStore: NotificationStore
+    // For persistence
+    @Environment(\.scenePhase) var scenePhase
+    @State private var startFlag = false
+    @State var loadingData = false
+    
+    // Function to read in all Firebase notifications on start up
+    // Can also be used to retrieve other data like friends/shelves/etc
+    // Feel free to add another await to do this
     func connectDB() {
         Task {
             do {
@@ -16,12 +23,6 @@ struct RootView: View {
             }
         }
     }
-    
-    @EnvironmentObject var notificationStore: NotificationStore
-    @Environment(\.scenePhase) var scenePhase
-    @State private var startFlag = false
-    @State var loadingData = false
-    
     
     var body: some View {
         VStack() {
