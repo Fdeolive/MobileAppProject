@@ -19,13 +19,14 @@ struct AddShelfView: View {
         }
     }
     
-    let db = Firestore.firestore()
+
 
     func getShelves() async {
-        let docRef = db.collection("user").document("cking")
+        let docRef = db.collection("user").document("DavidsTest")
         do {
             let document = try await docRef.getDocument()
-            if let shelves = document.get("friends") as? [String] {
+            if let shelves = document.get("Shelves") as? [String] {
+                shelfList = []
                 for shelf in shelves {
                     shelfList.append(shelf)
                 }
@@ -36,6 +37,27 @@ struct AddShelfView: View {
             print("error getting doc")
         }
     }
+    
+    func callAddShelf() {
+        Task {
+            do {
+                await addShelf()
+            }
+        }
+    }
+
+    func addShelf() async {
+        let docRef = db.collection("user").document("DavidsTest")
+        do {
+          try await docRef.updateData([
+            "Shelves": shelfList + [shelfTitle]
+          ])
+          print("Document successfully updated")
+        } catch {
+          print("Error updating document: \(error)")
+        }
+    }
+    let db = Firestore.firestore()
     @State var shelfList: [String] = []
     @State private var shelfTitle = ""
     var body: some View {
@@ -46,7 +68,7 @@ struct AddShelfView: View {
                 .background(Color.black.opacity(0.05))
                 .cornerRadius(10)
                 .offset(y: -15)
-            Button(action: {addShelf(shelfTitle: shelfTitle)}){
+            Button(action: {callAddShelf()}){
                 Text("Add Shelf")
             }.padding()
             .frame(width: UIScreen.main.bounds.width * 0.7, height: 50)
@@ -55,17 +77,16 @@ struct AddShelfView: View {
             .foregroundStyle(.black)
             .disabled(shelfTitle.count < 1)
             Button(action: {callGetShelves(); print(shelfList)}){
-                Text("Add Shelf")
+                Text("Show Shelves")
             }.padding()
             .frame(width: UIScreen.main.bounds.width * 0.7, height: 50)
             .background(Color.green)
             .cornerRadius(10)
             .foregroundStyle(.black)
-            .disabled(shelfTitle.count < 1)
-        }
-    }
-    func addShelf(shelfTitle: String){
-        print(shelfTitle)
+            if (shelfList.count > 0){
+                Text("\(shelfList)")
+            }
+        }.onAppear(){callGetShelves()}
     }
 }
 
