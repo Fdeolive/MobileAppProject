@@ -6,7 +6,7 @@
 //
 //Good source of firebase info \/
 //https://firebase.google.com/docs/firestore/manage-data/add-data#swift_9
-
+//TODO Change Shelves to what Fernanda has for firebase
 import SwiftUI
 import FirebaseCore
 import FirebaseFirestore
@@ -28,7 +28,7 @@ struct AddShelfView: View {
         let docRef = db.collection("user").document("DavidsTest")
         do {
             let document = try await docRef.getDocument()
-            if let shelves = document.get("Shelves") as? [String] {
+            if let shelves = document.get("bookShelves") as? [String] {
                 shelfList = []
                 for shelf in shelves {
                     shelfList.append(shelf)
@@ -57,7 +57,7 @@ struct AddShelfView: View {
             if (!shelfList.contains(shelfTitle)){
                 shelfList = shelfList + [shelfTitle]
                 try await docRef.updateData([
-                    "Shelves": shelfList// + [shelfTitle]
+                    "bookShelves": shelfList// + [shelfTitle]
                 ])
                 print("Document successfully updated")
             }else{
