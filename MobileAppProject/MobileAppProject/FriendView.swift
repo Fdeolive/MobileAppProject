@@ -47,9 +47,7 @@ struct FriendView: View {
                         .foregroundStyle(Color.green)
                     }
                     if addFriend {
-                        VStack {
-                            FriendAddView()
-                        }
+                        FriendAddView()
                     }
                     List {
                         ForEach(searchResults, id: \.self) { username in
@@ -75,5 +73,5 @@ struct FriendView: View {
 }
 
 #Preview {
-    FriendView().environmentObject(FriendStore())
+    FriendView().environmentObject(FriendStore()).environmentObject(FoundUser())
 }

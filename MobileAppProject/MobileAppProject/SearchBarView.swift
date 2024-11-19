@@ -16,6 +16,7 @@ struct SearchBarView: View {
     var body: some View {
         HStack {
             TextField(searchText, text: searchingValue)
+                .autocapitalization(.none)
                 .padding(10)
                 .padding(.leading, 15)
                 .overlay(

@@ -27,7 +27,9 @@ struct DBNotificationConnect {
                         }
                     }
                     if alreadyInStore == false {
-                        notificationStore.allNotifications.append(Notification(value["notificationTitle"]!, value["notificationSummary"]!))
+                        DispatchQueue.main.async {
+                            notificationStore.allNotifications.append(Notification(value["notificationTitle"]!, value["notificationSummary"]!))
+                        }
                     }
                 }
             } else {

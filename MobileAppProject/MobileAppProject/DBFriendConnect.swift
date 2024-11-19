@@ -28,7 +28,8 @@ struct DBFriendConnect {
                         }
                     }
                     if alreadyInStore == false {
-                        friendStore.allFriends.append(Friend(friendOne))
+                        DispatchQueue.main.async {                        friendStore.allFriends.append(Friend(friendOne))
+                        }
                     }
                 }
             } else {
@@ -47,6 +48,40 @@ struct DBFriendConnect {
     // Function for deleting notifications from Firebase
     func deleteFriend(friend: Friend) async {
         
+    }
+    
+    
+    func findUserToFriend(friendStore: FriendStore, foundUser: FoundUser, friendSearch: String) async {
+        let colRef =  db.collection("user").whereField("username", isEqualTo: friendSearch)
+        do {
+            let documents = try await colRef.getDocuments()
+            if documents.documents.count > 0 {
+                var alreadyFriends = false
+                for friend in friendStore.allFriends {
+                    if friend.friendUsername == friendSearch {
+                        alreadyFriends = true
+                    }
+                }
+                if alreadyFriends {
+                    DispatchQueue.main.async {
+                        foundUser.userStatus = 3
+                        foundUser.username = friendSearch
+                    }
+                } else {
+                    DispatchQueue.main.async {
+                        foundUser.userStatus = 2
+                        foundUser.username = friendSearch
+                    }
+                }
+            } else {
+                DispatchQueue.main.async {
+                    foundUser.userStatus = 1
+                }
+            }
+            print("Doc retrieved successfully")
+        } catch {
+            print("Error getting documents")
+        }
     }
 }
 

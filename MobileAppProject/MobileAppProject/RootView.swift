@@ -56,4 +56,5 @@ struct RootView: View {
 
 #Preview {
     RootView().environmentObject(NotificationStore()).environmentObject(FriendStore())
+        .environmentObject(FoundUser())
 }
