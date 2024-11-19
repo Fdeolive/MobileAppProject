@@ -28,7 +28,7 @@ class NotificationStore: ObservableObject {
     // Setting to true turns on loading persisted data
     // NOTE: Will cause preview to crash/only works in simulator
     // Reset to false to play around in preview!
-    let loadFromFile = true
+    let loadFromFile = false//true
     let bundlesFilename = "notification-init.json"
     
     // Path to json file

@@ -11,6 +11,7 @@ import FirebaseFirestore
 
 
 struct FriendView: View {
+    @EnvironmentObject var friendStore: FriendStore
     @State var friendsList: [String] = ["john", "Joe", "Derrick"]
     @State private var searchText = ""
     @State var addFriend = false
@@ -20,10 +21,14 @@ struct FriendView: View {
     // Function to  filter friendsList
     // NOTE: From the internet!
     var searchResults: [String] {
+        var friendList: [String] = []
+        for friend in friendStore.allFriends {
+            friendList.append(friend.friendUsername)
+        }
         if searchText.isEmpty {
-            return friendsList
+            return friendList
         } else {
-            return friendsList.filter { $0.localizedCaseInsensitiveContains(searchText)}
+            return friendList.filter { $0.localizedCaseInsensitiveContains(searchText)}
         }
     }
     
@@ -70,5 +75,5 @@ struct FriendView: View {
 }
 
 #Preview {
-    FriendView()
+    FriendView().environmentObject(FriendStore())
 }

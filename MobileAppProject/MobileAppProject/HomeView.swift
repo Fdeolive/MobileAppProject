@@ -67,6 +67,6 @@ struct HomeView: View {
 }
 
 #Preview {
-    HomeView().environmentObject(NotificationStore())
+    HomeView().environmentObject(NotificationStore()).environmentObject(FriendStore())
 }
 
