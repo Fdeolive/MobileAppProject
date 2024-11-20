@@ -52,7 +52,7 @@ struct FriendView: View {
                     List {
                         ForEach(searchResults, id: \.self) { username in
                             NavigationLink {
-                                FriendIndividualView()
+                                FriendIndividualView(friendUsername: username)
                             } label: {
                                 Text(username)
                             }

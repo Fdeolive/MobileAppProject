@@ -33,7 +33,8 @@ struct HomeView: View {
                                 FriendView().tabItem() {
                                     Image(systemName: "person.2.fill")
                                 }.tag(3)
-                            }.toolbarBackground(darkGreen, for: .tabBar).toolbarBackground(.visible, for: .tabBar).toolbarColorScheme(.dark, for:.tabBar)
+                                }
+                            .toolbarBackground(darkGreen, for: .tabBar).toolbarBackground(.visible, for: .tabBar).toolbarColorScheme(.dark, for:.tabBar)
                         }
                     }.onChange(of: currentTab) {
                         switch currentTab {

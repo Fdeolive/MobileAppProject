@@ -19,16 +19,21 @@ struct DBFriendConnect {
         let docRef = db.collection("user").document("cking")
         do {
             let document = try await docRef.getDocument()
-            if let friends = document.get("friends") as? [String] {
-                for friendOne in friends {
+            if let friends = document.get("friends") as? [String:Bool] {
+                for (id, value) in friends {
                     var alreadyInStore = false
                     for friendTwo in friendStore.allFriends {
-                        if "\(friendTwo.friendUsername)" == friendOne {
+                        if "\(friendTwo.friendUsername)" == id {
                             alreadyInStore = true
                         }
                     }
                     if alreadyInStore == false {
-                        DispatchQueue.main.async {                        friendStore.allFriends.append(Friend(friendOne))
+                        DispatchQueue.main.async {
+                            if value {
+                                friendStore.allFriends.append(Friend(id, 2))
+                            } else {
+                                friendStore.allFriends.append(Friend(id, 1))
+                            }
                         }
                     }
                 }
@@ -41,8 +46,19 @@ struct DBFriendConnect {
     }
     
     // Function for updating/adding notifications to Firebase
-    func updateFriends(friendStore: FriendStore) async {
-        
+    func updateFriendStatus(friendUsername: String, friendStatus: Int) async {
+        do {
+            if friendStatus == 1 {
+                try await db.collection("user").document("cking").updateData(["friends.\(friendUsername)": false])
+            } else if friendStatus == 2 {
+                try await db.collection("user").document("cking").updateData(["friends.\(friendUsername)": true])
+            } else {
+                try await db.collection("user").document("cking").updateData(["friends.\(friendUsername)": FieldValue.delete()])
+            }
+            print("Doc updated successfully")
+        } catch {
+            print("Error updating doc")
+        }
     }
     
     // Function for deleting notifications from Firebase

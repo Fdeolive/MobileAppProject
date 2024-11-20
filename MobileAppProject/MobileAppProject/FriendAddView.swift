@@ -45,7 +45,7 @@ struct FriendAddView: View {
                     List {
                         VStack {
                             NavigationLink {
-                                FriendIndividualView()
+                                FriendIndividualView(friendUsername: foundUser.username)
                             } label: {
                                 Text(foundUser.username)
                             }
