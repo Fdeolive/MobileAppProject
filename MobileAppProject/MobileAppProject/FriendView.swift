@@ -18,17 +18,25 @@ struct FriendView: View {
     private let lightGreen = Color(red: 230/255, green: 255/255, blue: 220/255)
     private let lighterGreen = Color(red: 240/255, green: 255/255, blue: 240/255)
     
+    func getFriends() {
+        Task {
+            do {
+                await DBFriendConnect().getFriends(friendStore: friendStore)
+            }
+        }
+    }
+    
     // Function to  filter friendsList
     // NOTE: From the internet!
-    var searchResults: [String] {
-        var friendList: [String] = []
+    var searchResults: [String:Int] {
+        var friendList: [String:Int] = [:]
         for friend in friendStore.allFriends {
-            friendList.append(friend.friendUsername)
+            friendList[friend.friendUsername] = friend.friendStatus
         }
         if searchText.isEmpty {
             return friendList
         } else {
-            return friendList.filter { $0.localizedCaseInsensitiveContains(searchText)}
+            return friendList.filter({ $0.key.localizedCaseInsensitiveContains(searchText)})
         }
     }
     
@@ -50,11 +58,25 @@ struct FriendView: View {
                         FriendAddView()
                     }
                     List {
-                        ForEach(searchResults, id: \.self) { username in
+                        ForEach(searchResults.sorted(by: >), id: \.key) { key, value in
                             NavigationLink {
-                                FriendIndividualView(friendUsername: username)
+                                FriendIndividualView(friendUsername: key)
                             } label: {
-                                Text(username)
+                                HStack {
+                                    VStack {
+                                        Spacer()
+                                        Text(key).font(.title)
+                                        Spacer()
+                                    }
+                                    Spacer()
+                                    VStack {
+                                        if value == 1 {
+                                            Spacer()
+                                            Text("Pending").font(.title3).padding(.bottom, 10).foregroundStyle(Color.gray)
+                                        }
+                                    }
+                                }
+                                
                             }
                         }
                         .listRowSeparator(.hidden)
@@ -68,6 +90,8 @@ struct FriendView: View {
                     .scrollContentBackground(.hidden)
                 }
             }
+        }.onAppear {
+            getFriends()
         }
     }
 }

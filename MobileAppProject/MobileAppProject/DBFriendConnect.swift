@@ -24,6 +24,11 @@ struct DBFriendConnect {
                     var alreadyInStore = false
                     for friendTwo in friendStore.allFriends {
                         if "\(friendTwo.friendUsername)" == id {
+                            if value {
+                                friendTwo.friendStatus = 2
+                            } else {
+                                friendTwo.friendStatus = 1
+                            }
                             alreadyInStore = true
                         }
                     }
@@ -49,11 +54,18 @@ struct DBFriendConnect {
     func updateFriendStatus(friendUsername: String, friendStatus: Int) async {
         do {
             if friendStatus == 1 {
-                try await db.collection("user").document("cking").updateData(["friends.\(friendUsername)": false])
+                let document = try await db.collection("user").document("\(friendUsername)").getDocument()
+                if document.get("friends.\("cking")") as? Bool ?? true == false {
+                    try await db.collection("user").document("cking").updateData(["friends.\(friendUsername)": true])
+                    try await db.collection("user").document("\(friendUsername)").updateData(["friends.\("cking")": true])
+                } else {
+                    try await db.collection("user").document("cking").updateData(["friends.\(friendUsername)": false])
+                }
             } else if friendStatus == 2 {
                 try await db.collection("user").document("cking").updateData(["friends.\(friendUsername)": true])
             } else {
                 try await db.collection("user").document("cking").updateData(["friends.\(friendUsername)": FieldValue.delete()])
+                try await db.collection("user").document(friendUsername).updateData(["friends.\("cking")": FieldValue.delete()])
             }
             print("Doc updated successfully")
         } catch {
