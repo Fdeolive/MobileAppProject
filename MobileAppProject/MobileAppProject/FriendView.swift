@@ -85,13 +85,14 @@ struct FriendView: View {
                             .overlay(RoundedRectangle(cornerRadius: 15)
                                 .stroke(Color.green, lineWidth: 2)))
                     }
+                    .refreshable {
+                        getFriends()
+                    }
                     .environment(\.defaultMinListRowHeight, 100)
                     .listRowSpacing(10.0)
                     .scrollContentBackground(.hidden)
                 }
             }
-        }.onAppear {
-            getFriends()
         }
     }
 }

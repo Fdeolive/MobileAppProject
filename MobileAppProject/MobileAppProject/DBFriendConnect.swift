@@ -60,6 +60,9 @@ struct DBFriendConnect {
                     try await db.collection("user").document("\(friendUsername)").updateData(["friends.\("cking")": true])
                 } else {
                     try await db.collection("user").document("cking").updateData(["friends.\(friendUsername)": false])
+                    // Technically not unique
+                    let newNotification = Notification("cking wants to be your friend", "hi")
+                    try await db.collection("user").document("\(friendUsername)").updateData(["notifications.\(newNotification.notificationId).notificationTitle": newNotification.notificationTitle,"notifications.\(newNotification.notificationId).notificationSummary": newNotification.notificationSummary])
                 }
             } else if friendStatus == 2 {
                 try await db.collection("user").document("cking").updateData(["friends.\(friendUsername)": true])
