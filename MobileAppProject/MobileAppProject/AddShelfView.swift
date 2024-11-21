@@ -6,7 +6,7 @@
 //
 //Good source of firebase info \/
 //https://firebase.google.com/docs/firestore/manage-data/add-data#swift_9
-//TODO Change Shelves to what Fernanda has for firebase
+
 import SwiftUI
 import FirebaseCore
 import FirebaseFirestore
@@ -52,13 +52,16 @@ struct AddShelfView: View {
     //Calls callGetShelves to update from firebase.  Checks that shelfTitle is not in list
     //If not in list it adds it to the firebase and updates the local list
     func addShelf() async {
-        let docRef = db.collection("user").document("DavidsTest")
+        let docRef = db.collection("user").document("DavidsTest")//.collection("wishlist").document("Hp")
+        
         do {
             if (!shelfList.contains(shelfTitle)){
                 shelfList = shelfList + [shelfTitle]
                 try await docRef.updateData([
                     "bookShelves": shelfList// + [shelfTitle]
                 ])
+                let shelfCollectionRef = db.collection("user").document("DavidsTest").collection("\(shelfTitle)").document("Book")
+                try await shelfCollectionRef.setData(["Title": "bookname"])
                 print("Document successfully updated")
             }else{
                 print("repeat")
@@ -67,6 +70,7 @@ struct AddShelfView: View {
           print("Error updating document: \(error)")
         }
     }
+    
     let db = Firestore.firestore()
     @State var shelfList: [String] = []  //Holds shelves from firebase
     @State private var shelfTitle = ""  //holds entered title
