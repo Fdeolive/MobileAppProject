@@ -11,19 +11,32 @@ import FirebaseFirestore
 
 
 struct FriendView: View {
+    @EnvironmentObject var friendStore: FriendStore
     @State var friendsList: [String] = ["john", "Joe", "Derrick"]
     @State private var searchText = ""
     @State var addFriend = false
     private let lightGreen = Color(red: 230/255, green: 255/255, blue: 220/255)
     private let lighterGreen = Color(red: 240/255, green: 255/255, blue: 240/255)
     
+    func getFriends() {
+        Task {
+            do {
+                await DBFriendConnect().getFriends(friendStore: friendStore)
+            }
+        }
+    }
+    
     // Function to  filter friendsList
     // NOTE: From the internet!
-    var searchResults: [String] {
+    var searchResults: [String:Int] {
+        var friendList: [String:Int] = [:]
+        for friend in friendStore.allFriends {
+            friendList[friend.friendUsername] = friend.friendStatus
+        }
         if searchText.isEmpty {
-            return friendsList
+            return friendList
         } else {
-            return friendsList.filter { $0.localizedCaseInsensitiveContains(searchText)}
+            return friendList.filter({ $0.key.localizedCaseInsensitiveContains(searchText)})
         }
     }
     
@@ -42,16 +55,28 @@ struct FriendView: View {
                         .foregroundStyle(Color.green)
                     }
                     if addFriend {
-                        VStack {
-                            FriendAddView()
-                        }
+                        FriendAddView()
                     }
                     List {
-                        ForEach(searchResults, id: \.self) { username in
+                        ForEach(searchResults.sorted(by: >), id: \.key) { key, value in
                             NavigationLink {
-                                FriendIndividualView()
+                                FriendIndividualView(friendUsername: key)
                             } label: {
-                                Text(username)
+                                HStack {
+                                    VStack {
+                                        Spacer()
+                                        Text(key).font(.title)
+                                        Spacer()
+                                    }
+                                    Spacer()
+                                    VStack {
+                                        if value == 1 {
+                                            Spacer()
+                                            Text("Pending").font(.title3).padding(.bottom, 10).foregroundStyle(Color.gray)
+                                        }
+                                    }
+                                }
+                                
                             }
                         }
                         .listRowSeparator(.hidden)
@@ -59,6 +84,9 @@ struct FriendView: View {
                             .fill(lighterGreen)
                             .overlay(RoundedRectangle(cornerRadius: 15)
                                 .stroke(Color.green, lineWidth: 2)))
+                    }
+                    .refreshable {
+                        getFriends()
                     }
                     .environment(\.defaultMinListRowHeight, 100)
                     .listRowSpacing(10.0)
@@ -70,5 +98,5 @@ struct FriendView: View {
 }
 
 #Preview {
-    FriendView()
+    FriendView().environmentObject(FriendStore()).environmentObject(FoundUser())
 }

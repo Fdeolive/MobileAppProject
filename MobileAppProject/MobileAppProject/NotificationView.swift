@@ -16,11 +16,19 @@ struct NotificationView: View {
     private let darkerGreen = Color(red: 0/255, green: 150/255, blue: 25/255)
     private let lighterGreen = Color(red: 240/255, green: 255/255, blue: 240/255)
     
+    func callGetNotifications() {
+        Task {
+            do {
+                await DBNotificationConnect().getNotifications(notificationStore: notificationStore)
+            }
+        }
+    }
+    
     // Call async methods from separate file
     func callUpdateNotifications() {
         Task {
             do {
-                await DBNotificationConnect().updateNotfications(notificationStore: notificationStore)
+                await DBNotificationConnect().updateNotifications(notificationStore: notificationStore)
             }
         }
     }
@@ -78,6 +86,9 @@ struct NotificationView: View {
                             .fill(lighterGreen)
                             .overlay(RoundedRectangle(cornerRadius: 15)
                                 .stroke(Color.green, lineWidth: 2)))
+                    }
+                    .refreshable {
+                        callGetNotifications()
                     }
                     .environment(\.defaultMinListRowHeight, 100)
                     .listRowSpacing(10.0)

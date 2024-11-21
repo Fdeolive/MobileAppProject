@@ -22,8 +22,7 @@ struct HomeView: View {
                         Text(pageTitle).frame(width: geometry.size.width, height: geometry.size.height / 25).padding([.bottom]).background(darkGreen).font(.title).foregroundColor(Color.white).bold().padding([.bottom], 5)
                         TabView(selection: $currentTab) {
                             Group () {
-                                BookCaseView().tabItem() {
-                                    Image(systemName: "book")
+                                BookCaseView().tabItem() { Image(systemName: "book")
                                 }.tag(0)
                                 SearchView().tabItem() {
                                     Image(systemName:"magnifyingglass")
@@ -34,7 +33,8 @@ struct HomeView: View {
                                 FriendView().tabItem() {
                                     Image(systemName: "person.2.fill")
                                 }.tag(3)
-                            }.toolbarBackground(darkGreen, for: .tabBar).toolbarBackground(.visible, for: .tabBar).toolbarColorScheme(.dark, for:.tabBar)
+                                }
+                            .toolbarBackground(darkGreen, for: .tabBar).toolbarBackground(.visible, for: .tabBar).toolbarColorScheme(.dark, for:.tabBar)
                         }
                     }.onChange(of: currentTab) {
                         switch currentTab {
@@ -67,6 +67,6 @@ struct HomeView: View {
 }
 
 #Preview {
-    HomeView().environmentObject(NotificationStore())
+    HomeView().environmentObject(NotificationStore()).environmentObject(FriendStore()).environmentObject(FoundUser())
 }
 

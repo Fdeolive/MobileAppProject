@@ -28,7 +28,7 @@ struct MobileAppProjectApp: App {
     var body: some Scene {
         WindowGroup {
             //ContentView()
-            RootView().environmentObject(NotificationStore())
+            RootView().environmentObject(NotificationStore()).environmentObject(FriendStore())
         }
     }
 }

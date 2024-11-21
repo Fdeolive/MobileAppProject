@@ -8,6 +8,7 @@ import SwiftUI
 struct RootView: View {
     
     @EnvironmentObject var notificationStore: NotificationStore
+    @EnvironmentObject var friendStore: FriendStore
     // For persistence
     @Environment(\.scenePhase) var scenePhase
     @State private var startFlag = false
@@ -20,6 +21,7 @@ struct RootView: View {
         Task {
             do {
                 await DBNotificationConnect().getNotifications(notificationStore: notificationStore)
+                await DBFriendConnect().getFriends(friendStore: friendStore)
             }
         }
     }
@@ -43,6 +45,7 @@ struct RootView: View {
                 print("HomeView is active")
             } else if newPhase == .inactive {
                 notificationStore.saveChanges()
+                friendStore.saveChanges()
                 print("HomeView is inactive")
             } else if newPhase == .background {
                 print("HomeView is background")
@@ -52,5 +55,6 @@ struct RootView: View {
 }
 
 #Preview {
-    RootView().environmentObject(NotificationStore())
+    RootView().environmentObject(NotificationStore()).environmentObject(FriendStore())
+        .environmentObject(FoundUser())
 }
