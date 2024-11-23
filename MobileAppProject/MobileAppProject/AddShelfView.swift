@@ -82,38 +82,42 @@ struct AddShelfView: View {
     
     func removeShelf() async {
         let docRef = db.collection("user").document("DavidsTest")
-        shelfList = shelfList.filter{ $0 != pickerTitle}
+        shelfList = shelfList.filter{ $0 != shelfToRemove}
         do {
             try await docRef.updateData([
                 "bookShelves": shelfList
             ])
-            let docList = try await db.collection("user").document("DavidsTest").collection(pickerTitle).getDocuments()
-            let collectionRef = db.collection("user").document("DavidsTest").collection(pickerTitle)
+            let docList = try await db.collection("user").document("DavidsTest").collection(shelfToRemove).getDocuments()
+            let collectionRef = db.collection("user").document("DavidsTest").collection(shelfToRemove)
             for doc in docList.documents {
                 print("\(doc.documentID)")
-                try await db.collection("user").document("DavidsTest").collection(pickerTitle).document(doc.documentID).delete()
+                try await db.collection("user").document("DavidsTest").collection(shelfToRemove).document(doc.documentID).delete()
             }
         } catch {
             print("Error updating document: \(error)")
         }
-        pickerTitle = "Default"
+        shelfToRemove = "\\Default"
     }
     
     let db = Firestore.firestore()
     @State var shelfList: [String] = []  //Holds shelves from firebase
     @State private var shelfTitle = ""  //holds entered title
-    @State private var pickerTitle = "Default"
+    @State private var shelfToRemove = "//Default"
     @State private var num_default_shelves = 2
     @State private var colors = ["Red", "Green", "Blue"]
     //@State private var shelfList = ["Wishlist"]
     var body: some View {
         VStack{
             TextField("Enter Title", text: $shelfTitle)
+                .onChange(of: shelfTitle) {
+                    shelfTitle = String(shelfTitle.prefix(50)).replacingOccurrences(of: "\\", with: "")//.filter{ !"9\"".contains($0) }
+                }
                 .padding()
                 .frame(width: UIScreen.main.bounds.width * 0.7, height: 50)
                 .background(Color.black.opacity(0.05))
                 .cornerRadius(10)
                 .offset(y: -15)
+                .textInputAutocapitalization(.never)
             Button(action: {callAddShelf()}){  //calls funtion to add title to firebase.  Only active if input and not in list already
                 Text("Add Shelf")
             }.padding()
@@ -125,7 +129,7 @@ struct AddShelfView: View {
             Button(action: {
                 //callGetShelves()
                 print(shelfList)
-                print(pickerTitle)
+                print(shelfToRemove)
             }
             ){
                 Text("Show Shelves")
@@ -140,7 +144,7 @@ struct AddShelfView: View {
             if (shelfList.count > num_default_shelves){
                 HStack{
                     Text("Shelf to Remove")
-                    Picker(selection: $pickerTitle, label: EmptyView()) {
+                    Picker(selection: $shelfToRemove, label: EmptyView()) {
                         ForEach(num_default_shelves...shelfList.count-1, id: \.self) {title in
                             Text(shelfList[title]).tag(shelfList[title])
                         }
@@ -154,7 +158,7 @@ struct AddShelfView: View {
             .background(Color.green)
             .cornerRadius(10)
             .foregroundStyle(.black)
-            .disabled(pickerTitle == "Default")
+            .disabled(shelfToRemove == "\\Default")
             
         }.onAppear(){callGetShelves()}
     }
