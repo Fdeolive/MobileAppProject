@@ -9,6 +9,7 @@ struct RootView: View {
     
     @EnvironmentObject var notificationStore: NotificationStore
     @EnvironmentObject var friendStore: FriendStore
+    @EnvironmentObject var loading: Loading
     // For persistence
     @Environment(\.scenePhase) var scenePhase
     @State private var startFlag = false
@@ -22,6 +23,7 @@ struct RootView: View {
             do {
                 await DBNotificationConnect().getNotifications(username: "cking", notificationStore: notificationStore)
                 await DBFriendConnect().getFriends(username: "cking", friendStore: friendStore)
+                loading.isLoading = false
             }
         }
     }
@@ -29,7 +31,11 @@ struct RootView: View {
     var body: some View {
         VStack() {
             if startFlag {
-                HomeView()
+                if loading.isLoading == false {
+                    HomeView()
+                } else {
+                    LoadingView()
+                }
             } else {
                 // StartView(startFlag: $startFlag)
                 //ContentView()
@@ -54,5 +60,5 @@ struct RootView: View {
 
 #Preview {
     RootView().environmentObject(NotificationStore()).environmentObject(FriendStore())
-        .environmentObject(FoundUser())
+        .environmentObject(FoundUser()).environmentObject(Loading())
 }
