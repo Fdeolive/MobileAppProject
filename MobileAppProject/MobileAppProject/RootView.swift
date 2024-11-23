@@ -20,8 +20,8 @@ struct RootView: View {
     func connectDB() {
         Task {
             do {
-                await DBNotificationConnect().getNotifications(notificationStore: notificationStore)
-                await DBFriendConnect().getFriends(friendStore: friendStore)
+                await DBNotificationConnect().getNotifications(username: "cking", notificationStore: notificationStore)
+                await DBFriendConnect().getFriends(username: "cking", friendStore: friendStore)
             }
         }
     }

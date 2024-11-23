@@ -21,7 +21,7 @@ struct FriendView: View {
     func getFriends() {
         Task {
             do {
-                await DBFriendConnect().getFriends(friendStore: friendStore)
+                await DBFriendConnect().getFriends(username: "cking", friendStore: friendStore)
             }
         }
     }

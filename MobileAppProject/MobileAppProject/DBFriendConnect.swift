@@ -15,22 +15,22 @@ struct DBFriendConnect {
     
     // Function to read all notifications from Firebase into the NotificationStore
     // NOTE: Only reads in notifications that the NotificationStore doesn't already have
-    func getFriends(friendStore: FriendStore) async {
+    func getFriends(username: String, friendStore: FriendStore) async {
         DispatchQueue.main.async {
             friendStore.allFriends = []
         }
-        let docRef = db.collection("user").document("cking")
+        let docRef = db.collection("user").document("\(username)")
         do {
             let document = try await docRef.getDocument()
             if let friends = document.get("friends") as? [String:Bool] {
                 for (id, value) in friends {
-                        DispatchQueue.main.async {
-                            if value {
-                                friendStore.allFriends.append(Friend(id, 2))
-                            } else {
-                                friendStore.allFriends.append(Friend(id, 1))
-                            }
+                    DispatchQueue.main.async {
+                        if value {
+                            friendStore.allFriends.append(Friend(id, 2))
+                        } else {
+                            friendStore.allFriends.append(Friend(id, 1))
                         }
+                    }
                 }
             } else {
                 print("Nope")
@@ -41,37 +41,30 @@ struct DBFriendConnect {
     }
     
     // Function for updating/adding notifications to Firebase
-    func updateFriendStatus(friendUsername: String, friendStatus: Int) async {
+    func updateFriendStatus(username: String, friendUsername: String, friendStatus: Int) async {
         do {
             if friendStatus == 1 {
                 let document = try await db.collection("user").document("\(friendUsername)").getDocument()
-                if document.get("friends.\("cking")") as? Bool ?? true == false {
-                    try await db.collection("user").document("cking").updateData(["friends.\(friendUsername)": true])
-                    try await db.collection("user").document("\(friendUsername)").updateData(["friends.\("cking")": true])
+                if document.get("friends.\(username)") as? Bool ?? true == false {
+                    try await db.collection("user").document("\(username)").updateData(["friends.\(friendUsername)": true])
+                    try await db.collection("user").document("\(friendUsername)").updateData(["friends.\(username)": true])
                 } else {
-                    try await db.collection("user").document("cking").updateData(["friends.\(friendUsername)": false])
+                    try await db.collection("user").document("\(username)").updateData(["friends.\(friendUsername)": false])
                     // Technically not unique
-                    let newNotification = Notification("cking wants to be your friend", "hi")
+                    let newNotification = Notification("\(username) wants to be your friend", "hi")
                     try await db.collection("user").document("\(friendUsername)").updateData(["notifications.\(newNotification.notificationId).notificationTitle": newNotification.notificationTitle,"notifications.\(newNotification.notificationId).notificationSummary": newNotification.notificationSummary])
                 }
             } else if friendStatus == 2 {
-                try await db.collection("user").document("cking").updateData(["friends.\(friendUsername)": true])
+                try await db.collection("user").document("\(username)").updateData(["friends.\(friendUsername)": true])
             } else {
-                try await db.collection("user").document("cking").updateData(["friends.\(friendUsername)": FieldValue.delete()])
-                try await db.collection("user").document(friendUsername).updateData(["friends.\("cking")": FieldValue.delete()])
+                try await db.collection("user").document("\(username)").updateData(["friends.\(friendUsername)": FieldValue.delete()])
+                try await db.collection("user").document(friendUsername).updateData(["friends.\("\(username)")": FieldValue.delete()])
             }
             print("Doc updated successfully")
         } catch {
             print("Error updating doc")
         }
     }
-    
-    
-    // Function for deleting notifications from Firebase
-    func deleteFriend(friend: Friend) async {
-        
-    }
-    
     
     func findUserToFriend(friendStore: FriendStore, foundUser: FoundUser, friendSearch: String) async {
         let colRef =  db.collection("user").whereField("username", isEqualTo: friendSearch)

@@ -19,7 +19,7 @@ struct NotificationView: View {
     func callGetNotifications() {
         Task {
             do {
-                await DBNotificationConnect().getNotifications(notificationStore: notificationStore)
+                await DBNotificationConnect().getNotifications(username: "cking", notificationStore: notificationStore)
             }
         }
     }
@@ -28,7 +28,7 @@ struct NotificationView: View {
     func callUpdateNotifications() {
         Task {
             do {
-                await DBNotificationConnect().updateNotifications(notificationStore: notificationStore)
+                await DBNotificationConnect().updateNotifications(username: "cking", notificationStore: notificationStore)
             }
         }
     }
@@ -36,7 +36,7 @@ struct NotificationView: View {
     func callDeleteNotification(notification: Notification) {
         Task {
             do {
-                await DBNotificationConnect().deleteNotification(notification: notification)
+                await DBNotificationConnect().deleteNotification(username: "cking", notification: notification)
             }
         }
     }

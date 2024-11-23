@@ -34,7 +34,7 @@ struct FriendIndividualView: View {
         }
         Task {
             do {
-                await DBFriendConnect().updateFriendStatus(friendUsername: friendUsername, friendStatus:  friendStatus)
+                await DBFriendConnect().updateFriendStatus(username: "cking", friendUsername: friendUsername, friendStatus:  friendStatus)
             }
         }
     }
