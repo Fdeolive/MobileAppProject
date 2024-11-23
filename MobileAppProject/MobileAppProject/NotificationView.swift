@@ -48,7 +48,7 @@ struct NotificationView: View {
                     Spacer()
                     Button("Add Notification (Testing)") {
                         // Update notificationStore
-                        notificationStore.allNotifications.append(Notification("TestNotification", "This is for testing"))
+                        notificationStore.allNotifications.append(Notification("dpoulin added to their wishlist", "Harry Potter and the Goblet of Fire was added to dpoulin's wishlist. Go check it out!"))
                         // Update firebase
                         callUpdateNotifications()
                     }
