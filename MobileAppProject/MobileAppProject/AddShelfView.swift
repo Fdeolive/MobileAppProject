@@ -34,10 +34,10 @@ struct AddShelfView: View {
                     shelfList.append(shelf)
                 }
             } else {
-                print("nope")
+                print("Error: getting shelves")
             }
         } catch {
-            print("error getting doc")
+            print("Error: getting doc for shelves")
         }
     }
     
@@ -58,22 +58,49 @@ struct AddShelfView: View {
             if (!shelfList.contains(shelfTitle)){
                 shelfList = shelfList + [shelfTitle]
                 try await docRef.updateData([
-                    "bookShelves": shelfList// + [shelfTitle]
+                    "bookShelves": shelfList
                 ])
                 let shelfCollectionRef = db.collection("user").document("DavidsTest").collection("\(shelfTitle)").document("Book")
                 try await shelfCollectionRef.setData(["Title": "bookname"])
                 print("Document successfully updated")
             }else{
-                print("repeat")
+                print("Shelf is a repeat")
             }
         } catch {
           print("Error updating document: \(error)")
         }
     }
     
+    
+    func callRemoveShelf() {
+        Task {
+            do {
+                await removeShelf()
+            }
+        }
+    }
+    
+    func removeShelf() async {
+        let docRef = db.collection("user").document("DavidsTest")
+        shelfList = shelfList.filter{ $0 != pickerTitle}
+        do {
+            try await docRef.updateData([
+                "bookShelves": shelfList
+            ])
+            let shelfCollectionRef = db.collection("user").document("DavidsTest").collection("\(shelfTitle)").document("Book")//Needswork
+        } catch {
+            print("Error updating document: \(error)")
+        }
+        pickerTitle = "Default"
+    }
+    
     let db = Firestore.firestore()
     @State var shelfList: [String] = []  //Holds shelves from firebase
     @State private var shelfTitle = ""  //holds entered title
+    @State private var pickerTitle = "Default"
+    @State private var num_default_shelves = 2
+    @State private var colors = ["Red", "Green", "Blue"]
+    //@State private var shelfList = ["Wishlist"]
     var body: some View {
         VStack{
             TextField("Enter Title", text: $shelfTitle)
@@ -90,7 +117,12 @@ struct AddShelfView: View {
             .cornerRadius(10)
             .foregroundStyle(.black)
             .disabled(shelfTitle.count < 1 || shelfList.contains(shelfTitle))
-            Button(action: {callGetShelves(); print(shelfList)}){
+            Button(action: {
+                //callGetShelves()
+                print(shelfList)
+                print(pickerTitle)
+            }
+            ){
                 Text("Show Shelves")
             }.padding()
             .frame(width: UIScreen.main.bounds.width * 0.7, height: 50)
@@ -100,6 +132,25 @@ struct AddShelfView: View {
             if (shelfList.count > 0){
                 Text("\(shelfList)")
             }
+            if (shelfList.count > num_default_shelves){
+                HStack{
+                    Text("Shelf to Remove")
+                    Picker(selection: $pickerTitle, label: EmptyView()) {
+                        ForEach(num_default_shelves...shelfList.count-1, id: \.self) {title in
+                            Text(shelfList[title]).tag(shelfList[title])
+                        }
+                    }
+                }
+            }
+            Button(action: {print("deleteButton"); callRemoveShelf()}){
+                Text("Remove Shelf")
+            }.padding()
+            .frame(width: UIScreen.main.bounds.width * 0.7, height: 50)
+            .background(Color.green)
+            .cornerRadius(10)
+            .foregroundStyle(.black)
+            .disabled(pickerTitle == "Default")
+            
         }.onAppear(){callGetShelves()}
     }
 }
@@ -107,3 +158,5 @@ struct AddShelfView: View {
 #Preview {
     AddShelfView()
 }
+
+
