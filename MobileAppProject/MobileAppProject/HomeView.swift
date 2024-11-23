@@ -35,7 +35,7 @@ struct HomeView: View {
                                 Image(systemName: "bell.fill")
                             }.padding(25)
                         }
-                    }.frame(width: geometry.size.width, height: 60).background(darkGreen).font(.title).foregroundColor(Color.white).bold()
+                    }.frame(width: geometry.size.width, height: 60).background(darkGreen).font(.title).foregroundColor(Color.white).bold().padding(.bottom)
                     TabView(selection: $currentTab) {
                         Group () {
                             BookCaseView().tabItem() { Image(systemName: "book")

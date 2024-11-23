@@ -17,7 +17,7 @@ class FriendStore: ObservableObject {
     // Load saved data if loadFromFile
     // Else load no data and start with empty list of notifications
     init() {
-        allFriends = []
+        allFriends = [Friend("Joe", 1), Friend("John", 2), Friend("Sam", 2)]
     }
     
     // Function to delete notifications from the NotificationStore

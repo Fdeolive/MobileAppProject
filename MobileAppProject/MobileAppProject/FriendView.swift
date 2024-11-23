@@ -16,7 +16,7 @@ struct FriendView: View {
     @State private var searchText = ""
     @State var addFriend = false
     private let lightGreen = Color(red: 230/255, green: 255/255, blue: 220/255)
-    private let lighterGreen = Color(red: 240/255, green: 255/255, blue: 240/255)
+    private let lighterGreen = Color(red: 225/255, green: 255/255, blue: 230/255)
     
     func getFriends() {
         Task {
@@ -58,7 +58,7 @@ struct FriendView: View {
                         FriendAddView()
                     }
                     List {
-                        ForEach(searchResults.sorted(by: >), id: \.key) { key, value in
+                        ForEach(searchResults.sorted(by: <), id: \.key) { key, value in
                             NavigationLink {
                                 FriendIndividualView(friendUsername: key)
                             } label: {
@@ -72,24 +72,20 @@ struct FriendView: View {
                                     VStack {
                                         if value == 1 {
                                             Spacer()
-                                            Text("Pending").font(.title3).padding(.bottom, 10).foregroundStyle(Color.gray)
+                                            Text("Pending").font(.title3).foregroundStyle(Color.gray)
                                         }
                                     }
                                 }
-                                
                             }
                         }
-                        .listRowSeparator(.hidden)
-                        .listRowBackground(RoundedRectangle(cornerRadius: 20)
-                            .fill(lighterGreen)
-                            .overlay(RoundedRectangle(cornerRadius: 15)
-                                .stroke(Color.green, lineWidth: 2)))
+                        .padding()
+                        .background(lighterGreen)
+                        .listRowSeparatorTint(Color.green)
+                        .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
                     }
                     .refreshable {
                         getFriends()
                     }
-                    .environment(\.defaultMinListRowHeight, 100)
-                    .listRowSpacing(10.0)
                     .scrollContentBackground(.hidden)
                 }
             }
