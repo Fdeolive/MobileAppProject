@@ -16,23 +16,14 @@ struct DBFriendConnect {
     // Function to read all notifications from Firebase into the NotificationStore
     // NOTE: Only reads in notifications that the NotificationStore doesn't already have
     func getFriends(friendStore: FriendStore) async {
+        DispatchQueue.main.async {
+            friendStore.allFriends = []
+        }
         let docRef = db.collection("user").document("cking")
         do {
             let document = try await docRef.getDocument()
             if let friends = document.get("friends") as? [String:Bool] {
                 for (id, value) in friends {
-                    var alreadyInStore = false
-                    for friendTwo in friendStore.allFriends {
-                        if "\(friendTwo.friendUsername)" == id {
-                            if value {
-                                friendTwo.friendStatus = 2
-                            } else {
-                                friendTwo.friendStatus = 1
-                            }
-                            alreadyInStore = true
-                        }
-                    }
-                    if alreadyInStore == false {
                         DispatchQueue.main.async {
                             if value {
                                 friendStore.allFriends.append(Friend(id, 2))
@@ -40,7 +31,6 @@ struct DBFriendConnect {
                                 friendStore.allFriends.append(Friend(id, 1))
                             }
                         }
-                    }
                 }
             } else {
                 print("Nope")
@@ -75,6 +65,7 @@ struct DBFriendConnect {
             print("Error updating doc")
         }
     }
+    
     
     // Function for deleting notifications from Firebase
     func deleteFriend(friend: Friend) async {

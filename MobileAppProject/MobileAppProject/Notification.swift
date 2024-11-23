@@ -13,10 +13,10 @@ class Notification: Identifiable, Codable {
     // Auto generated unique ID for notification
     var notificationId: UUID
     
-    init(_ notificationTitle: String, _ notificationSummary: String) {
+    init(_ notificationTitle: String, _ notificationSummary: String, _ notificationId: UUID = UUID()) {
         self.notificationTitle = notificationTitle
         self.notificationSummary = notificationSummary
-        self.notificationId = UUID()
+        self.notificationId = notificationId
         
     }
 }

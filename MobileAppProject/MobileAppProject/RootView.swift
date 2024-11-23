@@ -44,8 +44,6 @@ struct RootView: View {
             if newPhase == .active {
                 print("HomeView is active")
             } else if newPhase == .inactive {
-                notificationStore.saveChanges()
-                friendStore.saveChanges()
                 print("HomeView is inactive")
             } else if newPhase == .background {
                 print("HomeView is background")
