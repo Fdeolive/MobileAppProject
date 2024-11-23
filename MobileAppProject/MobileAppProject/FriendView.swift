@@ -46,7 +46,7 @@ struct FriendView: View {
                 VStack {
                     HStack {
                         SearchBarView(searchText: "Search", searchingValue: $searchText, action: {})
-                        Button(action: { addFriend.toggle()}) {
+                        Button(action: { withAnimation(.easeInOut(duration: 0.30)) {addFriend.toggle()} }) {
                             Image(systemName: "person.badge.plus.fill")
                                 .font(.title)
                                 .padding(.trailing, 35)
@@ -55,7 +55,7 @@ struct FriendView: View {
                         .foregroundStyle(Color.green)
                     }
                     if addFriend {
-                        FriendAddView()
+                        FriendAddView().frame(height: 250).transition(.opacity)
                     }
                     List {
                         ForEach(searchResults.sorted(by: <), id: \.key) { key, value in

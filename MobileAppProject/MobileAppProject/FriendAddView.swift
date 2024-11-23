@@ -13,7 +13,7 @@ struct FriendAddView: View {
     @State private var searchText = ""
     @State var userExists = false
     @State var findUser = ""
-    private let lighterGreen = Color(red: 240/255, green: 255/255, blue: 240/255)
+    private let lighterGreen = Color(red: 225/255, green: 255/255, blue: 230/255)
     @EnvironmentObject var foundUser: FoundUser
     
     func calladdFriend() {
@@ -26,7 +26,7 @@ struct FriendAddView: View {
     
     var body: some View {
         NavigationView {
-            VStack {
+            VStack (spacing: 0){
                 HStack {
                     SearchBarView(searchText: "Find for a friend", searchingValue: $searchText, action: {})
                     Button("Find") {
@@ -41,37 +41,37 @@ struct FriendAddView: View {
                         .stroke(Color.green, lineWidth: 2)).padding(.trailing, 20)
                 }
                 if foundUser.userStatus == 2 && findUser != "" {
-                    Text("User found")
+                    Text("User found").padding(.top).bold()
                     List {
                         VStack {
                             NavigationLink {
                                 FriendIndividualView(friendUsername: foundUser.username)
                             } label: {
-                                Text(foundUser.username)
+                                Text(foundUser.username).font(.title)
                             }
                         }
-                        .listRowSeparator(.hidden)
-                        .listRowBackground(RoundedRectangle(cornerRadius: 20)
-                            .fill(lighterGreen)
-                            .overlay(RoundedRectangle(cornerRadius: 15)
-                                .stroke(Color.green, lineWidth: 2)))
+                        .padding()
+                        .background(lighterGreen)
+                        .listRowSeparatorTint(Color.green)
+                        .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
+                        
+                        
                     }
                     .scrollDisabled(true)
-                    .environment(\.defaultMinListRowHeight, 100)
                     .scrollContentBackground(.hidden)
                     Spacer()
                 } else if foundUser.userStatus == 3 && searchText != "" && findUser != "" {
-                    Text("You are already friends with \(foundUser.username)")
+                    Text("You are already friends with \(foundUser.username)").padding(.top).bold()
                     Spacer()
                 } else if foundUser.userStatus == 1 && searchText != "" && findUser != "" {
-                    Text("The user you are searching for does not exist")
+                    Text("The user you are searching for does not exist").padding(.top).bold()
                     Spacer()
                 } else {
-                    Text("Search for a friend to add")
+                    Text("Search for a friend to add").padding(.top).bold()
                     Spacer()
                 }
             }
-            .frame(height: 250)
+            .frame(height: 225)
             .padding(10)
             .background(Color.white)
             .clipped()
