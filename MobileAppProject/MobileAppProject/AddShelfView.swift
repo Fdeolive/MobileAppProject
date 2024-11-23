@@ -87,7 +87,12 @@ struct AddShelfView: View {
             try await docRef.updateData([
                 "bookShelves": shelfList
             ])
-            let shelfCollectionRef = db.collection("user").document("DavidsTest").collection("\(shelfTitle)").document("Book")//Needswork
+            let docList = try await db.collection("user").document("DavidsTest").collection(pickerTitle).getDocuments()
+            let collectionRef = db.collection("user").document("DavidsTest").collection(pickerTitle)
+            for doc in docList.documents {
+                print("\(doc.documentID)")
+                try await db.collection("user").document("DavidsTest").collection(pickerTitle).document(doc.documentID).delete()
+            }
         } catch {
             print("Error updating document: \(error)")
         }
