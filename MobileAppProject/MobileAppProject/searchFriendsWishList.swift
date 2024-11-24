@@ -36,39 +36,66 @@ struct searchFriends: View{
     @State private var selectedPrice = 0
     let priceOptions =  [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
     
-    @State private var selectedConition = "None"
+    @State private var selectedCondition = "None"
     let conditonOptions = ["None","Worn in","Littly Used","Like New"]
     
-    
-    func FriendsWishList(condtion: String, price: Int, bookTitle: String) async
+    func sendingFriendsNotification(friendID: Array<String>, bookTitle: String, price: Int, condition: String) async
     {
+        for friendId in friendID
+        {
+            let id = UUID().uuidString
+            
+            do {
+                try await
+                
+                
+                    db.collection("user").document(friendId).updateData(["notifications.\(id).notificationTitle": "Wishlist book found","notifications.\(id).notificationSummary":" \(collectionName) found \(bookTitles) for the price: \(price) in the conditon:\(condition)" ])
+                    print("Notification added successfully")
+                
+              
+            }catch
+            {
+                print("Error sending notification")
+            }
+        }
+    }
+    func FriendsWishList(condition: Int, price: Int, bookTitle: String) async
+    {
+       
+        
         let docRef = db.collection("user").document(collectionName)
         do{
             let document = try await docRef.getDocument()
             if let friendList = document.get("friends") as? [String] {
                 self.friendsList = Array(friendList)
             }
-            
+            print(price)
             for friend in friendsList
             {
                 let docRef = db.collection("user").document(friend).collection("wishlist")
                 do {
                     
-                    let docquery = try await docRef.whereField("title", isEqualTo: bookTitle).getDocuments()
+                    let docqueryCompound = docRef
+                        .whereField("title", isEqualTo: bookTitle)
+                        .whereField("price", isEqualTo: price)
+                        .whereField("condition", isEqualTo: condition)
                     
+                    
+                    
+                    
+                    
+                    let docquery = try await docqueryCompound.getDocuments()
                         if (docquery.documents.count != 0)
                         {
                             inFriendsList.append(friend)
                         }
                        
-
                 } catch {
-                    print("Error getting document: \(error)")
+                    print("Error querying friends' \(error)")
                     
                 }
             }
             print(inFriendsList)
-            
         }
         catch {
             print("Error getting document:")
@@ -91,7 +118,7 @@ struct searchFriends: View{
             }
             HStack{
                 Text("Current Condition")
-                Picker("Condition", selection: $selectedConition) {
+                Picker("Condition", selection: $selectedCondition) {
                     ForEach(conditonOptions, id: \.self) {
                         Text(String($0))
                     }
@@ -100,10 +127,14 @@ struct searchFriends: View{
             }
             Button("Search")
             {
+                
+                var conditionValue = 4
+                var conditionMap = ["None": 4,"Worn in": 3 ,"Littly Used": 2,"Like New": 1]
+                conditionValue = conditionMap[selectedCondition] ?? 4
                 Task
                 {
                     await
-                    FriendsWishList(condtion: selectedConition, price: selectedPrice, bookTitle:bookTitles)
+                    FriendsWishList(condition: conditionValue, price: selectedPrice, bookTitle:bookTitles)
                     
                     printFriends = true
                 }
@@ -143,7 +174,14 @@ struct searchFriends: View{
                     
                     Button("Notify")
                     {
-                        var notification=Notification("Wishlist Book Found!","\(collectionName) found \(bookTitles) with condition: \(selectedConition) at the price of \(selectedPrice)")
+                    
+                           Task
+                            {
+                                await
+                                sendingFriendsNotification(friendID:friendsList, bookTitle: bookTitles, price: selectedPrice, condition: selectedCondition)
+                            }
+                            
+                        
                        
                     }
                     
