@@ -77,17 +77,26 @@ struct searchFriends: View{
                     
                     let docqueryCompound = docRef
                         .whereField("title", isEqualTo: bookTitle)
-                        .whereField("price", isEqualTo: price)
-                        .whereField("condition", isEqualTo: condition)
-                    
-                    
-                    
-                    
-                    
+          
                     let docquery = try await docqueryCompound.getDocuments()
+                    
                         if (docquery.documents.count != 0)
-                        {
-                            inFriendsList.append(friend)
+                    {
+                            
+                            for docs in docquery.documents
+                            {
+                                var priceSelected = docs.get("price") ?? 9
+                                var conditionSelected=docs.get("condition") ?? 9
+                                print(conditionSelected)
+                                if(priceSelected as! Int >= price && conditionSelected as! Int >= condition)
+                                {
+                                    inFriendsList.append(friend)
+                                }
+                            }
+                           
+                                        
+                                
+                            
                         }
                        
                 } catch {
