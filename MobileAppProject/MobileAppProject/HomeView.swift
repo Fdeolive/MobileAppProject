@@ -4,8 +4,13 @@
 //
 
 import SwiftUI
+import Firebase
+import FirebaseCore
+import FirebaseAuth
 
 struct HomeView: View {
+    
+    var user: User?
     
     @State var pageTitle: String = "Shelves"
     @State private var currentTab = 0
@@ -62,7 +67,7 @@ struct HomeView: View {
                             }
                             .tag(3)
                             // TODO: Insert Profile view here
-                            FriendView().tabItem() {
+                            ProfileView().tabItem() {
                                 Image(systemName: "person.fill")
                             }
                             .tag(4)

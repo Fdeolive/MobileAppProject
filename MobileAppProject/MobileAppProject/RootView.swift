@@ -17,6 +17,7 @@ struct RootView: View {
     @State private var startFlag = false
     @State var loadingData = false
     
+    
     // Function to connect DB and load data for the app
     func connectDB() {
         Task {

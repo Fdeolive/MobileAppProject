@@ -1,5 +1,5 @@
 {
-  "originHash" : "7af2e429872fa441dc9c875647d14be83fb2ab103f3afc5fd50387588f339d50",
+  "originHash" : "60688388ad74f8cfed94a0279f577e09e472399d0c2a5c669b12d795316e6cec",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -31,7 +31,7 @@
     {
       "identity" : "firebase-ios-sdk",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/firebase/firebase-ios-sdk",
+      "location" : "https://github.com/firebase/firebase-ios-sdk.git",
       "state" : {
         "revision" : "8328630971a8fdd8072b36bb22bef732eb15e1f0",
         "version" : "11.4.0"
@@ -89,6 +89,15 @@
       "state" : {
         "revision" : "2d12673670417654f08f5f90fdd62926dc3a2648",
         "version" : "100.0.0"
+      }
+    },
+    {
+      "identity" : "keychainwrapper",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/jrendel/KeychainWrapper.git",
+      "state" : {
+        "revision" : "185a3165346a03767101c4f62e9a545a0fe0530f",
+        "version" : "4.0.1"
       }
     },
     {

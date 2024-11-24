@@ -97,11 +97,6 @@ struct ProfileView: View {
                             }
                             .buttonStyle(ProfileButtonStyle())
                             
-                            Button("Change Email") {
-                                showChangeEmailView = true
-                            }
-                            .buttonStyle(ProfileButtonStyle())
-                            
                             Button("Change Username") {
                                 showChangeUsernameView = true
                             }
@@ -120,9 +115,6 @@ struct ProfileView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center) // Center horizontally and vertically
                 .navigationDestination(isPresented: $showChangePasswordView) {
                     ChangePasswordView()
-                }
-                .navigationDestination(isPresented: $showChangeEmailView) {
-                    ChangeEmailView()
                 }
                 .navigationDestination(isPresented: $showChangeUsernameView) {
                     ChangeUsernameView()
