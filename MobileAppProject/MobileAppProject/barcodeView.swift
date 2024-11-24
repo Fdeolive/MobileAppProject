@@ -109,7 +109,7 @@ struct isbnSearch: View {
                                     .padding()
                                     
                                      
-                                    let modifiedText  = fixingimageLink(urlBook: (String(eBook.volumeInfo.imageLinks.smallThumbnail))
+                                    let modifiedText  = fixingimageLink(urlBook: String(eBook.volumeInfo.imageLinks.smallThumbnail))
                                                                         
                                     Spacer(minLength: 50)
                                     
