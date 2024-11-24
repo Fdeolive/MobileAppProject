@@ -7,22 +7,23 @@ import SwiftUI
 
 struct RootView: View {
     
+    // App users notifications and friends
     @EnvironmentObject var notificationStore: NotificationStore
     @EnvironmentObject var friendStore: FriendStore
+    // Object to know whether the loading of data for the app is done or not
     @EnvironmentObject var loading: Loading
     // For persistence
     @Environment(\.scenePhase) var scenePhase
     @State private var startFlag = false
     @State var loadingData = false
     
-    // Function to read in all Firebase notifications on start up
-    // Can also be used to retrieve other data like friends/shelves/etc
-    // Feel free to add another await to do this
+    // Function to connect DB and load data for the app
     func connectDB() {
         Task {
             do {
-                await DBNotificationConnect().getNotifications(username: "cking", notificationStore: notificationStore)
-                await DBFriendConnect().getFriends(username: "cking", friendStore: friendStore)
+                await DBNotificationConnect(username: "cking").getNotifications(notificationStore: notificationStore)
+                await DBFriendConnect(username: "cking").getFriends(friendStore: friendStore)
+                // Await functions are done so loading is false
                 loading.isLoading = false
             }
         }
@@ -30,7 +31,9 @@ struct RootView: View {
     
     var body: some View {
         VStack() {
+            // Bridge gap between login/register and HomeView of app
             if startFlag {
+                // If the app is done loading show the HomeView
                 if loading.isLoading == false {
                     HomeView()
                 } else {
@@ -41,12 +44,15 @@ struct RootView: View {
                 //ContentView()
                 Button("click to start", action: {startFlag.toggle()})
             }
-        }.onChange(of: startFlag) { newStartFlag in
+        }
+        .onChange(of: startFlag) { newStartFlag in
+            // Start retrieving app data
             if newStartFlag {
                 connectDB()
             }
         }
         .onChange(of: scenePhase) { newPhase in
+            // For persistence
             if newPhase == .active {
                 print("HomeView is active")
             } else if newPhase == .inactive {
@@ -59,6 +65,9 @@ struct RootView: View {
 }
 
 #Preview {
-    RootView().environmentObject(NotificationStore()).environmentObject(FriendStore())
-        .environmentObject(FoundUser()).environmentObject(Loading())
+    RootView()
+        .environmentObject(NotificationStore())
+        .environmentObject(FriendStore())
+        .environmentObject(FoundUser())
+        .environmentObject(Loading())
 }

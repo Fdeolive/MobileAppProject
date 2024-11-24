@@ -1,9 +1,7 @@
-//
-//  Friend.swift
-//  MobileAppProject
-//
-//  Created by user267577 on 11/19/24.
-//
+// Object to represent a friend
+// Friend.swift
+// MobileAppProject
+// Carson J. King
 
 import SwiftUICore
 import SwiftUI

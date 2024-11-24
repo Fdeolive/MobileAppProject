@@ -8,38 +8,13 @@ import FirebaseCore
 import FirebaseFirestore
 
 struct NotificationView: View {
-    // Stores notifications in a list/handles persistence
+    
     @EnvironmentObject var notificationStore: NotificationStore
-    // For deletion of notifications
+    // Alert for deleting notifications
     @State private var showingAlert = false
     @State var currentNotification: Notification!
     private let darkerGreen = Color(red: 0/255, green: 150/255, blue: 25/255)
     private let lighterGreen = Color(red: 240/255, green: 255/255, blue: 240/255)
-    
-    func callGetNotifications() {
-        Task {
-            do {
-                await DBNotificationConnect().getNotifications(username: "cking", notificationStore: notificationStore)
-            }
-        }
-    }
-    
-    // Call async methods from separate file
-    func callUpdateNotifications() {
-        Task {
-            do {
-                await DBNotificationConnect().updateNotifications(username: "cking", notificationStore: notificationStore)
-            }
-        }
-    }
-    
-    func callDeleteNotification(notification: Notification) {
-        Task {
-            do {
-                await DBNotificationConnect().deleteNotification(username: "cking", notification: notification)
-            }
-        }
-    }
     
     var body: some View {
         NavigationView {
@@ -47,10 +22,10 @@ struct NotificationView: View {
                 HStack {
                     Spacer()
                     Button("Add Notification (Testing)") {
-                        // Update notificationStore
+                        // TODO: Delete
                         notificationStore.allNotifications.append(Notification("dpoulin added to their wishlist", "Harry Potter and the Goblet of Fire was added to dpoulin's wishlist. Go check it out!"))
-                        // Update firebase
-                        callUpdateNotifications()
+                        DBNotificationConnect(username: "cking")
+                            .callUpdateNotifications(notificationStore: notificationStore)
                     }
                     .font(.title)
                     .padding([.trailing])
@@ -88,7 +63,7 @@ struct NotificationView: View {
                                 .stroke(Color.green, lineWidth: 2)))
                     }
                     .refreshable {
-                        callGetNotifications()
+                        DBNotificationConnect(username: "cking").callGetNotifications(notificationStore: notificationStore)
                     }
                     .environment(\.defaultMinListRowHeight, 100)
                     .listRowSpacing(10.0)
@@ -98,7 +73,7 @@ struct NotificationView: View {
                             // Update notificationStore
                             notificationStore.delete(notification: currentNotification)
                             // Update Firebase
-                            callDeleteNotification(notification: currentNotification)
+                            DBNotificationConnect(username: "cking").callDeleteNotification(notification: currentNotification)
                         }
                         Button("Cancel", role: .cancel) { }
                     }
@@ -110,5 +85,6 @@ struct NotificationView: View {
 }
 
 #Preview {
-    NotificationView().environmentObject(NotificationStore())
+    NotificationView()
+        .environmentObject(NotificationStore())
 }

@@ -1,9 +1,7 @@
-//
-//  FriendView.swift
-//  MobileAppProject
-//
-//  Created by user267577 on 11/9/24.
-//
+// View for friends page
+// FriendView.swift
+// MobileAppProject
+// Carson J. King
 
 import SwiftUI
 import FirebaseCore
@@ -11,32 +9,25 @@ import FirebaseFirestore
 
 
 struct FriendView: View {
+    
     @EnvironmentObject var friendStore: FriendStore
-    @State var friendsList: [String] = ["john", "Joe", "Derrick"]
-    @State private var searchText = ""
+    @State private var searchEntry = ""
     @State var addFriend = false
     private let lightGreen = Color(red: 230/255, green: 255/255, blue: 220/255)
     private let lighterGreen = Color(red: 225/255, green: 255/255, blue: 230/255)
     
-    func getFriends() {
-        Task {
-            do {
-                await DBFriendConnect().getFriends(username: "cking", friendStore: friendStore)
-            }
-        }
-    }
     
-    // Function to  filter friendsList
-    // NOTE: From the internet!
+    // function to filter friends based on search
     var searchResults: [String:Int] {
+        // Store the friend username and status of the friendship
         var friendList: [String:Int] = [:]
         for friend in friendStore.allFriends {
             friendList[friend.friendUsername] = friend.friendStatus
         }
-        if searchText.isEmpty {
+        if searchEntry.isEmpty {
             return friendList
         } else {
-            return friendList.filter({ $0.key.localizedCaseInsensitiveContains(searchText)})
+            return friendList.filter({ $0.key.localizedCaseInsensitiveContains(searchEntry)})
         }
     }
     
@@ -45,7 +36,7 @@ struct FriendView: View {
             GeometryReader { geometry in
                 VStack {
                     HStack {
-                        SearchBarView(searchText: "Search", searchingValue: $searchText, action: {})
+                        SearchBarView(searchText: "Search", searchingValue: $searchEntry, action: {})
                         Button(action: { withAnimation(.easeInOut(duration: 0.30)) {addFriend.toggle()} }) {
                             Image(systemName: "person.badge.plus.fill")
                                 .font(.title)
@@ -55,9 +46,12 @@ struct FriendView: View {
                         .foregroundStyle(Color.green)
                     }
                     if addFriend {
-                        FriendAddView().frame(height: 250).transition(.opacity)
+                        FriendAddView()
+                            .frame(height: 250)
+                            .transition(.opacity)
                     }
                     List {
+                        // Display each friend alphabetically
                         ForEach(searchResults.sorted(by: <), id: \.key) { key, value in
                             NavigationLink {
                                 FriendIndividualView(friendUsername: key)
@@ -65,14 +59,17 @@ struct FriendView: View {
                                 HStack {
                                     VStack {
                                         Spacer()
-                                        Text(key).font(.title)
+                                        Text(key)
+                                            .font(.title)
                                         Spacer()
                                     }
                                     Spacer()
                                     VStack {
                                         if value == 1 {
                                             Spacer()
-                                            Text("Pending").font(.title3).foregroundStyle(Color.gray)
+                                            Text("Pending")
+                                                .font(.title3)
+                                                .foregroundStyle(Color.gray)
                                         }
                                     }
                                 }
@@ -84,7 +81,7 @@ struct FriendView: View {
                         .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
                     }
                     .refreshable {
-                        getFriends()
+                        DBFriendConnect(username: "cking").callGetFriends(friendStore: friendStore)
                     }
                     .scrollContentBackground(.hidden)
                 }
@@ -94,5 +91,7 @@ struct FriendView: View {
 }
 
 #Preview {
-    FriendView().environmentObject(FriendStore()).environmentObject(FoundUser())
+    FriendView()
+        .environmentObject(FriendStore())
+        .environmentObject(FoundUser())
 }

@@ -1,8 +1,6 @@
-//
-//  HomeView.swift
-//  MobileAppProject
-//
-//  Created by user267577 on 10/22/24.
+// The home view for the app
+// HomeView.swift
+// MobileAppProject
 //
 
 import SwiftUI
@@ -14,13 +12,16 @@ struct HomeView: View {
     @State var showIsbnButton = false
     private let darkGreen = Color(red: 50/255, green: 150/255, blue: 50/255)
     
-    
     var body: some View {
         NavigationStack{
             GeometryReader { geometry in ZStack() {
                 VStack(spacing: 0) {
+                    // Creates black bar at top of screen
                     VStack {
-                    }.frame(width: geometry.size.width, height: 5).background(Color.black)
+                    }
+                    .frame(width: geometry.size.width, height: 5)
+                    .background(Color.black)
+                    // Page title and notification button
                     ZStack {
                         HStack {
                             Spacer()
@@ -33,30 +34,51 @@ struct HomeView: View {
                                 NotificationView()
                             } label: {
                                 Image(systemName: "bell.fill")
-                            }.padding(25)
+                            }
+                            .padding(25)
                         }
-                    }.frame(width: geometry.size.width, height: 60).background(darkGreen).font(.title).foregroundColor(Color.white).bold().padding(.bottom)
+                    }
+                    .frame(width: geometry.size.width, height: 60)
+                    .background(darkGreen)
+                    .font(.title)
+                    .foregroundColor(Color.white)
+                    .bold()
+                    .padding(.bottom)
                     TabView(selection: $currentTab) {
                         Group () {
                             BookCaseView().tabItem() { Image(systemName: "book")
-                            }.tag(0)
+                            }
+                            .tag(0)
                             fixingShelfView().tabItem() {
                                 Image(systemName: "magnifyingglass")
-                            }.tag(1)
+                            }
+                            .tag(1)
                             barCodeView().tabItem() {
                                 Image(systemName: "barcode.viewfinder")
-                            }.tag(2)
+                            }
+                            .tag(2)
                             FriendView().tabItem() {
                                 Image(systemName: "person.2.fill")
-                            }.tag(3)
+                            }
+                            .tag(3)
+                            // TODO: Insert Profile view here
                             FriendView().tabItem() {
                                 Image(systemName: "person.fill")
-                            }.tag(4)                                }
-                        .toolbarBackground(darkGreen, for: .tabBar).toolbarBackground(.visible, for: .tabBar).toolbarColorScheme(.dark, for:.tabBar)
+                            }
+                            .tag(4)
+                        }
+                        .toolbarBackground(darkGreen, for: .tabBar)
+                        .toolbarBackground(.visible, for: .tabBar)
+                        .toolbarColorScheme(.dark, for: .tabBar)
                     }
+                    // Creates black bar at bottom of screen
                     VStack {
-                    }.frame(width: geometry.size.width, height: 5).background(Color.black)
-                }.onChange(of: currentTab) {
+                    }
+                    .frame(width: geometry.size.width, height: 5)
+                    .background(Color.black)
+                }
+                .onChange(of: currentTab) {
+                    // Update the page title based on the current tab shown
                     switch currentTab {
                     case 0:
                         pageTitle = "Shelves"
@@ -77,10 +99,18 @@ struct HomeView: View {
                         showIsbnButton = false
                     }
                 }
+                // Show isbn button on search view
                 if showIsbnButton {
                     VStack {
                         Spacer()
-                        Button("Go To ISBN Scanner", action: { currentTab = 2}).padding(10).bold().font(.title3).frame(width: geometry.size.width - 75).background(darkGreen).foregroundStyle(Color.white).cornerRadius(10).padding([.bottom], 65)
+                        Button("Go To ISBN Scanner", action: { currentTab = 2 })
+                            .padding(10)
+                            .bold()
+                            .font(.title3)
+                            .frame(width: geometry.size.width - 75).background(darkGreen)
+                            .foregroundStyle(Color.white)
+                            .cornerRadius(10)
+                            .padding([.bottom], 65)
                     }
                 }
             }
@@ -90,6 +120,8 @@ struct HomeView: View {
 }
 
 #Preview {
-    HomeView().environmentObject(NotificationStore()).environmentObject(FriendStore()).environmentObject(FoundUser())
+    HomeView()
+        .environmentObject(NotificationStore())
+        .environmentObject(FriendStore())
+        .environmentObject(FoundUser())
 }
-

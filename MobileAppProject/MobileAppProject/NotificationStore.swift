@@ -1,4 +1,4 @@
-// Class for storing notifications and for reading from the device
+// Class for storing notifications
 // NotificationStore.swift
 // MobileAppProject
 // Carson J. King
@@ -7,14 +7,7 @@ import Foundation
 
 class NotificationStore: ObservableObject {
     @Published var allNotifications: [Notification]
-    // Setting to true turns on loading persisted data
-    // NOTE: Will cause preview to crash/only works in simulator
-    // Reset to false to play around in preview!
     
-    // Path to json file
-    
-    // Load saved data if loadFromFile
-    // Else load no data and start with empty list of notifications
     init() {
         allNotifications = []
     }
@@ -25,5 +18,4 @@ class NotificationStore: ObservableObject {
             allNotifications.remove(at: idx)
         }
     }
-    
 }

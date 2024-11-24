@@ -8,12 +8,41 @@ import FirebaseCore
 import FirebaseFirestore
 
 struct DBNotificationConnect {
+    
     // Get db
     let db = Firestore.firestore()
+    private var username = ""
+    
+    init(username: String) {
+        self.username = username
+    }
+    // Call async methods
+    func callGetNotifications(notificationStore: NotificationStore) {
+        Task {
+            do {
+                await getNotifications(notificationStore: notificationStore)
+            }
+        }
+    }
+    
+    func callUpdateNotifications(notificationStore: NotificationStore) {
+        Task {
+            do {
+                await updateNotifications(notificationStore: notificationStore)
+            }
+        }
+    }
+    
+    func callDeleteNotification(notification: Notification) {
+        Task {
+            do {
+                await deleteNotification(notification: notification)
+            }
+        }
+    }
     
     // Function to read all notifications from Firebase into the NotificationStore
-    // NOTE: Only reads in notifications that the NotificationStore doesn't already have
-    func getNotifications(username: String, notificationStore: NotificationStore) async {
+    func getNotifications(notificationStore: NotificationStore) async {
         DispatchQueue.main.async {
             notificationStore.allNotifications = []
         }
@@ -27,16 +56,16 @@ struct DBNotificationConnect {
                     }
                 }
             } else {
-                print("Nope")
+                print("Nil found")
             }
-            print("Docs recieved")
+            print("Documents recieved")
         } catch {
             print("Error retrieving document")
         }
     }
     
     // Function for updating/adding notifications to Firebase
-    func updateNotifications(username: String, notificationStore: NotificationStore) async {
+    func updateNotifications(notificationStore: NotificationStore) async {
         let docRef = db.collection("user").document("\(username)")
         do {
             let document = try await docRef.getDocument()
@@ -48,22 +77,23 @@ struct DBNotificationConnect {
                             alreadyInDatabase = true
                         }
                     }
+                    // Only add notifications not already in db
                     if alreadyInDatabase == false {
                         try await db.collection("user").document("\(username)").updateData(["notifications.\(notification.notificationId).notificationTitle": notification.notificationTitle,"notifications.\(notification.notificationId).notificationSummary": notification.notificationSummary])
                         print("Document updated successfully")
                     }
                 }
             } else {
-                print("Nope")
+                print("Nil found")
             }
-            print("Docs recieved")
+            print("Documents recieved")
         } catch {
             print("Error retrieving document")
         }
     }
     
     // Function for deleting notifications from Firebase
-    func deleteNotification(username: String, notification: Notification) async {
+    func deleteNotification(notification: Notification) async {
         do {
             try await db.collection("user").document("\(username)").updateData(["notifications.\(notification.notificationId)": FieldValue.delete()])
             print("Document deleted successfully")

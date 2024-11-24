@@ -1,19 +1,16 @@
-//
-//  FriendIndividualView.swift
-//  MobileAppProject
-//
-//  Created by user267577 on 11/18/24.
-//
+// View of a friends profile
+// FriendIndividualView.swift
+// MobileAppProject
+// Carson J. King
 
 import SwiftUI
 
 struct FriendIndividualView: View {
+    
     @EnvironmentObject var friendStore: FriendStore
     @State var friendUsername: String
     @State var buttonText = ""
-    
     @State var friendStatus = 0
-    
     
     func updateFriendStatus() {
         var friendFound = false
@@ -34,7 +31,7 @@ struct FriendIndividualView: View {
         }
         Task {
             do {
-                await DBFriendConnect().updateFriendStatus(username: "cking", friendUsername: friendUsername, friendStatus:  friendStatus)
+                await DBFriendConnect(username: "cking").updateFriendStatus(friendUsername: friendUsername, friendStatus:  friendStatus)
             }
         }
     }
@@ -45,7 +42,8 @@ struct FriendIndividualView: View {
             Button(buttonText) { updateFriendStatus()
             }
             Text("\(friendStatus)")
-        }.onAppear {
+        }
+        .onAppear {
             var friendFound = false
             for friend in friendStore.allFriends {
                 if friend.friendUsername == friendUsername {
@@ -69,5 +67,6 @@ struct FriendIndividualView: View {
 }
 
 #Preview {
-    FriendIndividualView(friendUsername: "Joe").environmentObject(FriendStore())
+    FriendIndividualView(friendUsername: "Joe")
+        .environmentObject(FriendStore())
 }

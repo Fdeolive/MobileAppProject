@@ -1,9 +1,7 @@
-//
-//  DBFriendConnect.swift
-//  MobileAppProject
-//
-//  Created by user267577 on 11/18/24.
-//
+// Struct for connections to firebase
+// DBFriendConnect.swift
+// MobileAppProject
+// Carson J. King
 
 import Foundation
 import FirebaseCore
@@ -12,10 +10,38 @@ import FirebaseFirestore
 struct DBFriendConnect {
     // Get db
     let db = Firestore.firestore()
+    private var username = ""
+    
+    init(username: String) {
+        self.username = username
+    }
+    
+    func callGetFriends(friendStore: FriendStore) {
+        Task {
+            do {
+                await getFriends(friendStore: friendStore)
+            }
+        }
+    }
+    
+    func callUpdateFriendStatus(friendUsername: String, friendStatus: Int) {
+        Task {
+            do {
+                await updateFriendStatus(friendUsername: friendUsername, friendStatus: friendStatus)
+            }
+        }
+    }
+    
+    func callFindUserToFriend(friendStore: FriendStore, foundUser: FoundUser, friendSearch: String) {
+        Task {
+            do {
+                await findUserToFriend(friendStore: friendStore, foundUser: foundUser, friendSearch: friendSearch)
+            }
+        }
+    }
     
     // Function to read all notifications from Firebase into the NotificationStore
-    // NOTE: Only reads in notifications that the NotificationStore doesn't already have
-    func getFriends(username: String, friendStore: FriendStore) async {
+    func getFriends(friendStore: FriendStore) async {
         DispatchQueue.main.async {
             friendStore.allFriends = []
         }
@@ -41,7 +67,7 @@ struct DBFriendConnect {
     }
     
     // Function for updating/adding notifications to Firebase
-    func updateFriendStatus(username: String, friendUsername: String, friendStatus: Int) async {
+    func updateFriendStatus(friendUsername: String, friendStatus: Int) async {
         do {
             if friendStatus == 1 {
                 let document = try await db.collection("user").document("\(friendUsername)").getDocument()
@@ -99,6 +125,3 @@ struct DBFriendConnect {
         }
     }
 }
-
-
-

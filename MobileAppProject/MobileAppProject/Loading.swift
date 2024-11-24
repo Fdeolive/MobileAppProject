@@ -1,9 +1,7 @@
-//
-//  Loading.swift
-//  MobileAppProject
-//
-//  Created by user267577 on 11/23/24.
-//
+// Class to track if loading is complete
+// Loading.swift
+// MobileAppProject
+// Carson J. King
 
 import Foundation
 

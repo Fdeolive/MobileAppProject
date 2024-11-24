@@ -1,6 +1,7 @@
-// ToggleButtonView
-// CS 3750
-// A button that fits the wireframe and has two different size options as well as some other customization
+// A view for the custom search bar
+// SearchBarView.swift
+// MobileAppProject
+// Carson J. King
 
 import SwiftUI
 
@@ -29,10 +30,6 @@ struct SearchBarView: View {
                 )
                 .padding([.leading, .trailing], 25)
                 .padding([.top, .bottom], 10)
-            
-            
         }
     }
 }
-
-

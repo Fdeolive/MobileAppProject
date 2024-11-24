@@ -8,26 +8,25 @@
 import SwiftUI
 import FirebaseCore
 import FirebaseAuth
-//import GoogleSignIn//
+//import GoogleSignIn
 
 class AppDelegate: NSObject, UIApplicationDelegate {
-  func application(_ application: UIApplication,
-                   didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-    FirebaseApp.configure()
-    print("Configured Firebase!")
-
-    return true
-  }
+    func application(_ application: UIApplication,
+                     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+        FirebaseApp.configure()
+        print("Configured Firebase!")
+        
+        return true
+    }
 }
 
 @main
 struct MobileAppProjectApp: App {
     // Register app deligate for Firebase setup
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
-
+    
     var body: some Scene {
         WindowGroup {
-            //ContentView()
             RootView().environmentObject(NotificationStore()).environmentObject(FriendStore()).environmentObject(FoundUser()).environmentObject(Loading())
         }
     }

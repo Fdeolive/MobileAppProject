@@ -1,9 +1,7 @@
-//
-//  FriendExists.swift
-//  MobileAppProject
-//
-//  Created by user267577 on 11/19/24.
-//
+// A class to track a found user
+// FriendExists.swift
+// MobileAppProject
+// Carson J. King
 
 import Foundation
 
