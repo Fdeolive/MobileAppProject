@@ -42,10 +42,10 @@ struct DBNotificationConnect {
         }
     }
     
-    func callDeleteAllNotifications() {
+    func callDeleteAllNotifications(notificationStore: NotificationStore) {
         Task {
             do {
-                await deleteAllNotifications()
+                await deleteAllNotifications(notificationStore: notificationStore)
             }
         }
     }
@@ -111,9 +111,11 @@ struct DBNotificationConnect {
         }
     }
     
-    func deleteAllNotifications() async {
+    func deleteAllNotifications(notificationStore: NotificationStore) async {
         do {
-            try await db.collection("user").document("\(username)").updateData(["notifications": FieldValue.delete()])
+            for notification in notificationStore.allNotifications {
+                try await db.collection("user").document("\(username)").updateData(["notifications.\(notification.notificationId)": FieldValue.delete()])
+            }
             print("All notifications deleted successfully")
         } catch {
             print("Error deleting all notifications")

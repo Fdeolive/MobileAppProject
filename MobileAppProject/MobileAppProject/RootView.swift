@@ -4,6 +4,9 @@
 //
 
 import SwiftUI
+import Firebase
+import FirebaseCore
+import FirebaseAuth
 
 struct RootView: View {
     
@@ -16,6 +19,7 @@ struct RootView: View {
     @Environment(\.scenePhase) var scenePhase
     @State private var startFlag = false
     @State var loadingData = false
+    var user: User?
     
     
     // Function to connect DB and load data for the app
@@ -33,24 +37,14 @@ struct RootView: View {
     var body: some View {
         VStack() {
             // Bridge gap between login/register and HomeView of app
-            if startFlag {
-                // If the app is done loading show the HomeView
-                if loading.isLoading == false {
-                    HomeView()
-                } else {
-                    LoadingView()
-                }
+            if loading.isLoading == false {
+                HomeView()
             } else {
-                // StartView(startFlag: $startFlag)
-                //ContentView()
-                Button("click to start", action: {startFlag.toggle()})
+                LoadingView()
             }
         }
-        .onChange(of: startFlag) { newStartFlag in
-            // Start retrieving app data
-            if newStartFlag {
-                connectDB()
-            }
+        .onAppear() {
+            connectDB()
         }
         .onChange(of: scenePhase) { newPhase in
             // For persistence

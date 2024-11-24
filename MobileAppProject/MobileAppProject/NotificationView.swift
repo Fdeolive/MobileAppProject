@@ -24,6 +24,10 @@ struct NotificationView: View {
             GeometryReader {geometry in VStack {
                 HStack {
                     if showDeleteAll {
+                        Button("add") {
+                            notificationStore.allNotifications.append(Notification("dpoulin added to their wishlist!", "Harry Potter and the Goblet of Fire was added to dpoulin's wishlist. Go check it out!"))
+                            DBNotificationConnect(username: "cking").callUpdateNotifications(notificationStore: notificationStore)
+                        }.font(.title)
                         Button("Delete All") {
                             showingAlert2 = true
                         }
@@ -87,9 +91,9 @@ struct NotificationView: View {
                     .alert("Delete all notifications?", isPresented: $showingAlert2) {
                         Button("Confirm", role: .destructive) {
                             // Update notificationStore
-                            notificationStore.deleteAll()
                             // Update Firebase
-                            DBNotificationConnect(username: "cking").callDeleteAllNotifications()
+                            DBNotificationConnect(username: "cking").callDeleteAllNotifications(notificationStore: notificationStore)
+                            notificationStore.deleteAll()
                         }
                         Button("Cancel", role: .cancel) { }
                     }

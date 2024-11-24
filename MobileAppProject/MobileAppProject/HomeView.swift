@@ -66,7 +66,6 @@ struct HomeView: View {
                                 Image(systemName: "person.2.fill")
                             }
                             .tag(3)
-                            // TODO: Insert Profile view here
                             ProfileView().tabItem() {
                                 Image(systemName: "person.fill")
                             }
