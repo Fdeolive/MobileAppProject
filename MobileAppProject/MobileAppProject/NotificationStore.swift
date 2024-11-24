@@ -18,4 +18,9 @@ class NotificationStore: ObservableObject {
             allNotifications.remove(at: idx)
         }
     }
+    
+    // Function to delete all notifications
+    func deleteAll() {
+        allNotifications = []
+    }
 }

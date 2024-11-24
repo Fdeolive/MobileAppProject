@@ -11,21 +11,28 @@ struct NotificationView: View {
     
     @EnvironmentObject var notificationStore: NotificationStore
     // Alert for deleting notifications
-    @State private var showingAlert = false
+    @State private var showingAlert1 = false
+    @State private var showingAlert2 = false
     @State var currentNotification: Notification!
+    private let darkGreen = Color(red: 50/255, green: 150/255, blue: 50/255)
     private let darkerGreen = Color(red: 0/255, green: 150/255, blue: 25/255)
     private let lighterGreen = Color(red: 240/255, green: 255/255, blue: 240/255)
+    @State var showDeleteAll = false
     
     var body: some View {
         NavigationView {
-            GeometryReader { geometry in VStack {
+            GeometryReader {geometry in VStack {
                 HStack {
+                    if showDeleteAll {
+                        Button("Delete All") {
+                            showingAlert2 = true
+                        }
+                        .font(.title)
+                        .padding([.leading])
+                        .foregroundStyle(darkerGreen)
+                    }
                     Spacer()
-                    Button("Add Notification (Testing)") {
-                        // TODO: Delete
-                        notificationStore.allNotifications.append(Notification("dpoulin added to their wishlist", "Harry Potter and the Goblet of Fire was added to dpoulin's wishlist. Go check it out!"))
-                        DBNotificationConnect(username: "cking")
-                            .callUpdateNotifications(notificationStore: notificationStore)
+                    Button("Edit") { showDeleteAll.toggle()
                     }
                     .font(.title)
                     .padding([.trailing])
@@ -53,7 +60,7 @@ struct NotificationView: View {
                                 }
                             }
                             // Swipe to delete mechanic
-                            .swipeActions(edge: .leading) { Button("Delete?", action: {showingAlert = true; currentNotification = notification})}
+                            .swipeActions(edge: .leading) { Button("Delete?", action: {showingAlert1 = true; currentNotification = notification})}
                             .tint(Color.red)
                         }
                         .listRowSeparator(.hidden)
@@ -68,12 +75,21 @@ struct NotificationView: View {
                     .environment(\.defaultMinListRowHeight, 100)
                     .listRowSpacing(10.0)
                     .scrollContentBackground(.hidden)
-                    .alert(currentNotification == nil ? "Delete?" : "Delete \(currentNotification.notificationTitle)?", isPresented: $showingAlert) {
+                    .alert(currentNotification == nil ? "Delete?" : "Delete \(currentNotification.notificationTitle)?", isPresented: $showingAlert1) {
                         Button("Confirm", role: .destructive) {
                             // Update notificationStore
                             notificationStore.delete(notification: currentNotification)
                             // Update Firebase
                             DBNotificationConnect(username: "cking").callDeleteNotification(notification: currentNotification)
+                        }
+                        Button("Cancel", role: .cancel) { }
+                    }
+                    .alert("Delete all notifications?", isPresented: $showingAlert2) {
+                        Button("Confirm", role: .destructive) {
+                            // Update notificationStore
+                            notificationStore.deleteAll()
+                            // Update Firebase
+                            DBNotificationConnect(username: "cking").callDeleteAllNotifications()
                         }
                         Button("Cancel", role: .cancel) { }
                     }

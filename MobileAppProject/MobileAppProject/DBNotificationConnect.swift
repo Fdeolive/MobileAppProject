@@ -16,6 +16,7 @@ struct DBNotificationConnect {
     init(username: String) {
         self.username = username
     }
+    
     // Call async methods
     func callGetNotifications(notificationStore: NotificationStore) {
         Task {
@@ -37,6 +38,14 @@ struct DBNotificationConnect {
         Task {
             do {
                 await deleteNotification(notification: notification)
+            }
+        }
+    }
+    
+    func callDeleteAllNotifications() {
+        Task {
+            do {
+                await deleteAllNotifications()
             }
         }
     }
@@ -96,9 +105,18 @@ struct DBNotificationConnect {
     func deleteNotification(notification: Notification) async {
         do {
             try await db.collection("user").document("\(username)").updateData(["notifications.\(notification.notificationId)": FieldValue.delete()])
-            print("Document deleted successfully")
+            print("Notification deleted successfully")
         } catch {
-            print("Error deleting document")
+            print("Error deleting notification")
+        }
+    }
+    
+    func deleteAllNotifications() async {
+        do {
+            try await db.collection("user").document("\(username)").updateData(["notifications": FieldValue.delete()])
+            print("All notifications deleted successfully")
+        } catch {
+            print("Error deleting all notifications")
         }
     }
 }

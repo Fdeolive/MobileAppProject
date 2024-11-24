@@ -13,14 +13,14 @@ struct HomeView: View {
     private let darkGreen = Color(red: 50/255, green: 150/255, blue: 50/255)
     
     var body: some View {
-        NavigationStack{
-            GeometryReader { geometry in ZStack() {
-                VStack(spacing: 0) {
-                    // Creates black bar at top of screen
-                    VStack {
-                    }
-                    .frame(width: geometry.size.width, height: 5)
-                    .background(Color.black)
+        GeometryReader { geometry in ZStack() {
+            VStack(spacing: 0) {
+                // Creates black bar at top of screen
+                VStack {
+                }
+                .frame(width: geometry.size.width, height: 5)
+                .background(Color.black)
+                NavigationStack {
                     // Page title and notification button
                     ZStack {
                         HStack {
@@ -71,51 +71,51 @@ struct HomeView: View {
                         .toolbarBackground(.visible, for: .tabBar)
                         .toolbarColorScheme(.dark, for: .tabBar)
                     }
-                    // Creates black bar at bottom of screen
-                    VStack {
-                    }
-                    .frame(width: geometry.size.width, height: 5)
-                    .background(Color.black)
+                }.tint(Color.green)
+                // Creates black bar at bottom of screen
+                VStack {
                 }
-                .onChange(of: currentTab) {
-                    // Update the page title based on the current tab shown
-                    switch currentTab {
-                    case 0:
-                        pageTitle = "Shelves"
-                        showIsbnButton = false
-                    case 1:
-                        pageTitle = "Search"
-                        showIsbnButton = true
-                    case 2:
-                        pageTitle = "Scanner"
-                        showIsbnButton = false
-                    case 3:
-                        pageTitle = "Friends"
-                        showIsbnButton = false
-                    case 4:
-                        pageTitle = "Profile"
-                        showIsbnButton = false
-                    default:
-                        showIsbnButton = false
-                    }
-                }
-                // Show isbn button on search view
-                if showIsbnButton {
-                    VStack {
-                        Spacer()
-                        Button("Go To ISBN Scanner", action: { currentTab = 2 })
-                            .padding(10)
-                            .bold()
-                            .font(.title3)
-                            .frame(width: geometry.size.width - 75).background(darkGreen)
-                            .foregroundStyle(Color.white)
-                            .cornerRadius(10)
-                            .padding([.bottom], 65)
-                    }
+                .frame(width: geometry.size.width, height: 5)
+                .background(Color.black)
+            }
+            .onChange(of: currentTab) {
+                // Update the page title based on the current tab shown
+                switch currentTab {
+                case 0:
+                    pageTitle = "Shelves"
+                    showIsbnButton = false
+                case 1:
+                    pageTitle = "Search"
+                    showIsbnButton = true
+                case 2:
+                    pageTitle = "Scanner"
+                    showIsbnButton = false
+                case 3:
+                    pageTitle = "Friends"
+                    showIsbnButton = false
+                case 4:
+                    pageTitle = "Profile"
+                    showIsbnButton = false
+                default:
+                    showIsbnButton = false
                 }
             }
+            // Show isbn button on search view
+            if showIsbnButton {
+                VStack {
+                    Spacer()
+                    Button("Go To ISBN Scanner", action: { currentTab = 2 })
+                        .padding(10)
+                        .bold()
+                        .font(.title3)
+                        .frame(width: geometry.size.width - 75).background(darkGreen)
+                        .foregroundStyle(Color.white)
+                        .cornerRadius(10)
+                        .padding([.bottom], 65)
+                }
             }
-        }.tint(Color.green)
+        }
+        }
     }
 }
 
