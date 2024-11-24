@@ -40,7 +40,7 @@ struct isbnSearch: View {
     
     
     
-    
+    //Checks to see if book is in the users peronal book shelve
     func inPersonalWishList(bookTitle: String) async
     {
        
@@ -62,6 +62,14 @@ struct isbnSearch: View {
             print("Error getting document: \(error)")
             
         }
+    }
+    //Fixing link for book image
+    func fixingimageLink(urlBook:String)->String
+    {
+        let firstPart = urlBook[urlBook.startIndex...urlBook.index(urlBook.startIndex, offsetBy: 3)] + "s"
+        let secondPart = urlBook[urlBook.index(urlBook.startIndex, offsetBy: 4)...urlBook.index(before: urlBook.endIndex)]
+        let modifiedLink  = String(firstPart + secondPart)
+        return modifiedLink
     }
    
    
@@ -100,15 +108,9 @@ struct isbnSearch: View {
                                     }
                                     .padding()
                                     
-                                    let urlBook = String(eBook.volumeInfo.imageLinks.smallThumbnail)
-                                    
-                                    
-                                    let firstPart = urlBook[urlBook.startIndex...urlBook.index(urlBook.startIndex, offsetBy: 3)] + "s"
-                                    
-                                    let secondPart = urlBook[urlBook.index(urlBook.startIndex, offsetBy: 4)...urlBook.index(before: urlBook.endIndex)]
-                                    
-                                    
-                                    let modifiedText  = String(firstPart + secondPart)
+                                     
+                                    let modifiedText  = fixingimageLink(urlBook: String(eBook.volumeInfo.imageLinks.smallThumbnail))
+                                                                        
                                     Spacer(minLength: 50)
                                     
                                     AsyncImage(url: URL(string: modifiedText)) { image in

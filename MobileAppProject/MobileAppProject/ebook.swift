@@ -5,11 +5,9 @@
 //  Created by Fernanda Girelli on 10/16/24.
 //
 
+//Class for the results of the call to the google book api
 
 import Foundation
-
-
-
 class eBookResult: Codable {
     let items: [eBook]
 }

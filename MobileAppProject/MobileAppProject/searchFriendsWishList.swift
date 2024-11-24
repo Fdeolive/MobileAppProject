@@ -12,10 +12,12 @@ import SwiftUI
 import Vision
 import FirebaseCore
 import FirebaseFirestore
+import FirebaseAuth
 
 
 
 struct searchFriends: View{
+    var user: User?
     var bookTitles : String
     @State var friendsList: [String] = []
     @State var inFriendsList: [String] = []
@@ -102,8 +104,10 @@ struct searchFriends: View{
                 {
                     await
                     FriendsWishList(condtion: selectedConition, price: selectedPrice, bookTitle:bookTitles)
+                    
+                    printFriends = true
                 }
-                printFriends = true
+                
                 
             }
             .padding()
@@ -121,11 +125,26 @@ struct searchFriends: View{
                     Text("Does not match any books in your friends' wishlist").font(.title2).border(green).cornerRadius(2).padding(3)
                 }
                 else{
-                    List(inFriendsList, id:\.self){ friend in
-                        Text(friend)}
+                        VStack(){
+                            Text("In friend's wishlist:").font(.title2)
+                            List(inFriendsList, id:\.self){ friend in
+                                HStack(){
+                                    Spacer()
+                                    Text(friend).font(.title3)
+                                    Spacer()
+                                }
+                                 }.listStyle(.plain)
+                                .background(white.opacity(0.3))
+                            
+                        
+                    }.background(lightGreen).cornerRadius(20)
+                        .overlay(RoundedRectangle(cornerRadius: 15).stroke(green, lineWidth: 2))
+                        .padding(5)
+                    
                     Button("Notify")
                     {
-                        print("Notified the peeps")
+                        var notification=Notification("Wishlist Book Found!","\(collectionName) found \(bookTitles) with condition: \(selectedConition) at the price of \(selectedPrice)",90)
+                       
                     }
                     
                 }
