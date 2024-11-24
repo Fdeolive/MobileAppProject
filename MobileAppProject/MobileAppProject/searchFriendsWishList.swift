@@ -143,7 +143,7 @@ struct searchFriends: View{
                     
                     Button("Notify")
                     {
-                        var notification=Notification("Wishlist Book Found!","\(collectionName) found \(bookTitles) with condition: \(selectedConition) at the price of \(selectedPrice)",90)
+                        var notification=Notification("Wishlist Book Found!","\(collectionName) found \(bookTitles) with condition: \(selectedConition) at the price of \(selectedPrice)")
                        
                     }
                     
