@@ -11,13 +11,14 @@ import SwiftUI
 import CodeScanner
 import FirebaseCore
 import FirebaseFirestore
+import FirebaseAuth
 
 struct isbnSearch: View {
     @ObservedObject var viewModel = ebookListModelView()
     
     @State var inWishList = "No"
     let db = Firestore.firestore()
-    let collectionName = "username"
+    @State var collectionName = ""
     @State var checkingFriend = "false"
     @Binding var searchTerms: String?
 
@@ -38,12 +39,28 @@ struct isbnSearch: View {
     let conditonOptions = ["None","Worn in","Littly Used","Like New"]
 
     
-    
+    func getUserInfo() async
+    {
+        do{
+            if Auth.auth().currentUser != nil {
+                let userid = Auth.auth().currentUser!.uid
+                let userRef = db.collection("user").whereField(
+                    "uid", isEqualTo: userid)
+                let userInfo = try await userRef.getDocuments()
+                for docs in userInfo.documents
+                {
+                    collectionName = docs.get("username") as! String
+                }
+            }
+        } catch
+        {
+            print("Error getting user information")
+        }
+    }
     
     //Checks to see if book is in the users peronal book shelve
     func inPersonalWishList(bookTitle: String) async
     {
-       
         let docRef = db.collection("user").document(collectionName).collection("wishlist")
         do {
             
@@ -139,16 +156,17 @@ struct isbnSearch: View {
                                 }.frame(height:55).onAppear()
                         }.onAppear()
                             {
-                                
+                              
                             if let searchTerms = searchTerms {
                                         viewModel.searchTerm = searchTerms
-                                    
-                                }
-                            
-                            Task
-                            {
-                                await
-                                inPersonalWishList(bookTitle:viewModel.eBooks[0].volumeInfo.title)
+                                    }
+                                Task
+                                {
+                                    await getUserInfo()
+                                    if let firstBook = viewModel.eBooks.first
+                                    {
+                                                await inPersonalWishList(bookTitle: firstBook.volumeInfo.title)
+                                    }
                             }
   
         }
@@ -200,8 +218,4 @@ struct barCodeView: View
     
 }
 
-
-#Preview {
-    barCodeView()
-}
 

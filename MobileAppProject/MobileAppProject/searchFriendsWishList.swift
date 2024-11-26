@@ -23,7 +23,7 @@ struct searchFriends: View{
     @State var inFriendsList: [String] = []
     @State var printFriends = false
     let db = Firestore.firestore()
-    let collectionName = "username"
+    @State var collectionName = ""
     @State var checkingFriend = "false"
     // Important app colors
     private let lightGreen = Color(red: 230/255, green: 255/255, blue: 220/255)
@@ -39,6 +39,24 @@ struct searchFriends: View{
     @State private var selectedCondition = "None"
     let conditonOptions = ["None","Worn in","Littly Used","Like New"]
     
+    func getUserInfo() async
+    {
+        do{
+            if Auth.auth().currentUser != nil {
+                let userid = Auth.auth().currentUser!.uid
+                let userRef = db.collection("user").whereField(
+                    "uid", isEqualTo: userid)
+                let userInfo = try await userRef.getDocuments()
+                for docs in userInfo.documents
+                {
+                    collectionName = docs.get("username") as! String
+                }
+            }
+        } catch
+        {
+            print("Error getting user information")
+        }
+    }
     func sendingFriendsNotification(friendID: Array<String>, bookTitle: String, price: Int, condition: String) async
     {
         for friendId in friendID
@@ -85,8 +103,8 @@ struct searchFriends: View{
                             
                             for docs in docquery.documents
                             {
-                                var priceSelected = docs.get("price") ?? 9
-                                var conditionSelected=docs.get("condition") ?? 9
+                                let priceSelected = docs.get("price") ?? 9
+                                let conditionSelected=docs.get("condition") ?? 9
                                 print(conditionSelected)
                                 if(priceSelected as! Int >= price && conditionSelected as! Int >= condition)
                                 {
@@ -138,7 +156,7 @@ struct searchFriends: View{
             {
                 
                 var conditionValue = 4
-                var conditionMap = ["None": 4,"Worn in": 3 ,"Littly Used": 2,"Like New": 1]
+                let conditionMap = ["None": 4,"Worn in": 3 ,"Littly Used": 2,"Like New": 1]
                 conditionValue = conditionMap[selectedCondition] ?? 4
                 Task
                 {
@@ -196,6 +214,12 @@ struct searchFriends: View{
                     
                 }
             }
+        }.onAppear()
+        {
+            Task
+            {
+                await getUserInfo()
+            }
         }
     }
 }
@@ -207,3 +231,4 @@ struct searchFriends: View{
 #Preview {
     searchFriends(bookTitles: "Fourth Wing")
 }
+
