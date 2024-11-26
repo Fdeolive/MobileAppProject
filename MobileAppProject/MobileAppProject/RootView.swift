@@ -7,31 +7,56 @@ import SwiftUI
 import Firebase
 import FirebaseCore
 import FirebaseAuth
+import FirebaseFirestore
 
 struct RootView: View {
     
     // App users notifications and friends
     @EnvironmentObject var notificationStore: NotificationStore
     @EnvironmentObject var friendStore: FriendStore
+    @EnvironmentObject var username: Username
     // Object to know whether the loading of data for the app is done or not
     @EnvironmentObject var loading: Loading
     // For persistence
     @Environment(\.scenePhase) var scenePhase
     @State private var startFlag = false
     @State var loadingData = false
-    var user: User?
+    
     
     
     // Function to connect DB and load data for the app
     func connectDB() {
         Task {
             do {
-                await DBNotificationConnect(username: "cking").getNotifications(notificationStore: notificationStore)
-                await DBFriendConnect(username: "cking").getFriends(friendStore: friendStore)
+                await getUserName(username: username)
+                await DBNotificationConnect(username: username.username).getNotifications(notificationStore: notificationStore)
+                await DBFriendConnect(username: username.username).getFriends(friendStore: friendStore)
                 // Await functions are done so loading is false
                 loading.isLoading = false
             }
         }
+    }
+    
+    func getUserName(username: Username) async {
+        let db = Firestore.firestore()
+        var userId = ""
+        do {
+            if Auth.auth().currentUser != nil {
+                userId = Auth.auth().currentUser!.uid
+                let docs = try await db.collection("user").whereField("uid", isEqualTo: userId).getDocuments()
+                for doc in docs.documents {
+                    username.username = doc.get("username") as! String
+                    print(1)
+                }
+            } else {
+                    username.username = "default"
+            }
+            print(3)
+            print(username.username)
+        } catch {
+            print("Error getting username")
+        }
+        
     }
     
     var body: some View {
@@ -44,6 +69,7 @@ struct RootView: View {
             }
         }
         .onAppear() {
+            print(2)
             connectDB()
         }
         .onChange(of: scenePhase) { newPhase in
@@ -65,4 +91,5 @@ struct RootView: View {
         .environmentObject(FriendStore())
         .environmentObject(FoundUser())
         .environmentObject(Loading())
+        .environmentObject(Username())
 }

@@ -236,15 +236,22 @@ struct RegisterView: View {
                    let hashedPassword = hashPassword(password)
                    
                    // Save user data to Firestore
+                   let registerNotification = Notification("Welcome to Book Hunting!", "Thanks for joining our book hunting app. what are you waiting for? Go explore the app and it's features!")
                    let userData: [String: Any] = [
                        "email": email,
                        "username": username,
                        "hashedPassword": hashedPassword,
-                       "uid": user.uid
+                       "uid": user.uid,
+                       "notifications": [
+                        "\(registerNotification.notificationId)": [
+                        "notificationTitle": "\(registerNotification.notificationTitle)",
+                        "notificationSummary": "\(registerNotification.notificationSummary)"
+                        ]],
+                        "friends": ["default": true]
                    ]
 
                    let db = Firestore.firestore()
-                   db.collection("user").document(user.uid).setData(userData) { error in
+                   db.collection("user").document(username).setData(userData) { error in
                        if let error = error {
                            registrationError = "Error storing user data: \(error.localizedDescription)"
                            showMessage = true
@@ -259,6 +266,7 @@ struct RegisterView: View {
                            showMessage = true
                        }
                    }
+                   DBFriendConnect(username: username).callUpdateFriendStatus(friendUsername: "default", friendStatus: 0)
                }
            }
        }

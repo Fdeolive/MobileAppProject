@@ -8,6 +8,7 @@ import SwiftUI
 struct FriendAddView: View {
     
     @EnvironmentObject var friendStore: FriendStore
+    @EnvironmentObject var username: Username
     @State private var searchEntry = ""
     @State var userExists = false
     @State var findUser = ""
@@ -21,7 +22,7 @@ struct FriendAddView: View {
                     SearchBarView(searchText: "Find for a friend", searchingValue: $searchEntry, action: {})
                     Button("Find") {
                         findUser = searchEntry
-                        DBFriendConnect(username: "cking").callFindUserToFriend(friendStore: friendStore, foundUser: foundUser, friendSearch: findUser) }
+                        DBFriendConnect(username: username.username).callFindUserToFriend(friendStore: friendStore, foundUser: foundUser, friendSearch: findUser) }
                     .foregroundStyle(Color.green)
                     .font(.title3)
                     .bold()
@@ -82,4 +83,5 @@ struct FriendAddView: View {
     FriendAddView()
         .environmentObject(FriendStore())
         .environmentObject(FoundUser())
+        .environmentObject(Username())
 }
