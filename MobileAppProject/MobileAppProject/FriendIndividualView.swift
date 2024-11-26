@@ -12,6 +12,7 @@ import FirebaseFirestore
 struct FriendIndividualView: View {
     
     @EnvironmentObject var friendStore: FriendStore
+    @EnvironmentObject var username: Username
     @State var friendUsername: String
     @State var buttonText = ""
     @State var friendStatus = 0
@@ -35,7 +36,7 @@ struct FriendIndividualView: View {
         }
         Task {
             do {
-                await DBFriendConnect(username: "cking").updateFriendStatus(friendUsername: friendUsername, friendStatus:  friendStatus)
+                await DBFriendConnect(username: username.username).updateFriendStatus(friendUsername: friendUsername, friendStatus:  friendStatus)
             }
         }
     }
@@ -124,4 +125,5 @@ struct FriendIndividualView: View {
 #Preview {
     FriendIndividualView(friendUsername: "Joe")
         .environmentObject(FriendStore())
+        .environmentObject(Username())
 }

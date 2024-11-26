@@ -56,7 +56,6 @@ struct DBNotificationConnect {
             notificationStore.allNotifications = []
         }
         let docRef = db.collection("user").document("\(username)")
-        print("k\(username)")
         do {
             let document = try await docRef.getDocument()
             if let notifications = document.get("notifications") as? [String:[String:String]] {
