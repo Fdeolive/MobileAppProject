@@ -8,10 +8,40 @@
 import SwiftUI
 import Firebase
 import FirebaseAuth
+import FirebaseCore
 import SwiftKeychainWrapper
 import FirebaseFirestore
 
 struct RegisterView: View {
+    
+    let db = Firestore.firestore()
+    func callAddDefaultShelves() {
+        Task {
+            do {
+                await addDefaultShelves()
+            }
+        }
+    }
+
+    //Calls callGetShelves to update from firebase.  Checks that shelfTitle is not in list
+    //If not in list it adds it to the firebase and updates the local list
+    func addDefaultShelves() async {
+        let docRef = db.collection("user").document(username)//.collection("wishlist").document("Hp")
+        
+        do {
+            try await docRef.updateData([
+                "bookShelves": ["Favorites", "Wishlist"]
+            ])
+            let shelfCollectionRef1 = db.collection("user").document(username).collection("Favorites").document("Book")
+            try await shelfCollectionRef1.setData(["Title": "bookname"])
+            let shelfCollectionRef2 = db.collection("user").document(username).collection("Wishlist").document("Book")
+            try await shelfCollectionRef2.setData(["Title": "bookname"])
+                print("Document successfully updated")
+        } catch {
+          print("Error updating document: \(error)")
+        }
+    }
+    
     @State private var email = ""
     @State private var password = ""
     @State private var registrationSuccess = false
@@ -167,6 +197,7 @@ struct RegisterView: View {
                         return Alert(title: Text("Registration Successful"),
                                      message: Text("You have successfully registered your account for Book Hunter. Please login to get started!"),
                                      dismissButton: .default(Text("Go to Login Page")) {
+                            callAddDefaultShelves()
                             registrationSuccess = true
                         })
                     }
