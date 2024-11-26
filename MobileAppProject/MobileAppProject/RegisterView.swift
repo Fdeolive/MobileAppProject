@@ -33,7 +33,7 @@ struct RegisterView: View {
     @State private var registrationError: String?
     
     // State to track if the user is currently typing
-        @State private var isTypingUsername = false
+    @State private var isTypingUsername = false
     
     // Main Color
     private let darkGreen = Color(red: 50/255, green: 150/255, blue: 50/255)
@@ -77,24 +77,24 @@ struct RegisterView: View {
                     
                     // Username field
                     HStack {
-                                            Image(systemName: "person")
-                                                .foregroundColor(.black.opacity(0.5))
-                                            TextField("Username", text: $username, onEditingChanged: { isEditing in
-                                                isTypingUsername = isEditing // Track when user starts or stops typing
-                                                
-                                                if !isEditing {
-                                                    // Check if the username is available only after the user stops typing
-                                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                                                        checkUsernameAvailability(username)
-                                                    }
-                                                }
-                                            }).autocapitalization(.none)
-                                        }
-                                        .padding()
-                                        .frame(width: 300, height: 50)
-                                        .background(getUsernameFieldColor())  // Use function to get the correct color
-                                        .cornerRadius(10)
-                                        .offset(y: -90)
+                        Image(systemName: "person")
+                            .foregroundColor(.black.opacity(0.5))
+                        TextField("Username", text: $username, onEditingChanged: { isEditing in
+                            isTypingUsername = isEditing // Track when user starts or stops typing
+                            
+                            if !isEditing {
+                                // Check if the username is available only after the user stops typing
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                    checkUsernameAvailability(username)
+                                }
+                            }
+                        }).autocapitalization(.none)
+                    }
+                    .padding()
+                    .frame(width: 300, height: 50)
+                    .background(getUsernameFieldColor())  // Use function to get the correct color
+                    .cornerRadius(10)
+                    .offset(y: -90)
                     
                     // Email field
                     HStack {
@@ -186,82 +186,83 @@ struct RegisterView: View {
     
     // Get the background color based on the username field state
     func getUsernameFieldColor() -> Color {
-            if username.isEmpty {
-                return Color.black.opacity(0.05)  // Default grey when no content
-            } else if isTypingUsername {
-                return Color.black.opacity(0.05)  // Grey while typing
-            } else if isUsernameValid {
-                return Color.green.opacity(0.1)  // Green if valid username
-            } else {
-                return Color.red.opacity(0.1)  // Red if username already taken
-            }
+        if username.isEmpty {
+            return Color.black.opacity(0.05)  // Default grey when no content
+        } else if isTypingUsername {
+            return Color.black.opacity(0.05)  // Grey while typing
+        } else if isUsernameValid {
+            return Color.green.opacity(0.1)  // Green if valid username
+        } else {
+            return Color.red.opacity(0.1)  // Red if username already taken
         }
+    }
     
     // Check if username is available in Firebase
-        func checkUsernameAvailability(_ username: String) {
-            let db = Firestore.firestore()
-            db.collection("user").whereField("username", isEqualTo: username).getDocuments { (snapshot, error) in
-                if let error = error {
-                    print("Error checking username availability: \(error.localizedDescription)")
-                    return
-                }
-                
-                // If no documents, username is available
-                DispatchQueue.main.async {
-                    isUsernameValid = snapshot?.documents.isEmpty ?? true
-                }
+    func checkUsernameAvailability(_ username: String) {
+        let db = Firestore.firestore()
+        db.collection("user").document(username).getDocument { (document, error) in
+            if let error = error {
+                print("Error checking username availability: \(error.localizedDescription)")
+                return
+            }
+            
+            // If document does not exist, username is available
+            DispatchQueue.main.async {
+                isUsernameValid = (document == nil || document?.exists == false)
             }
         }
+    }
 
     // Register User
     func register() {
-           // Validate input fields and username availability
-           guard !email.isEmpty, !password.isEmpty, isUsernameValid else {
-               // Show error if fields are empty or username is invalid
-               registrationError = "Please fill in all fields correctly."
-               showMessage = true
-               return
-           }
+        // Validate input fields and username availability
+        guard !email.isEmpty, !password.isEmpty, isUsernameValid else {
+            // Show error if fields are empty or username is invalid
+            registrationError = "Please fill in all fields correctly."
+            showMessage = true
+            return
+        }
 
-           // Create user with Firebase Authentication
-           Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
-               if let error = error {
-                   registrationError = "Firebase Auth Error: \(error.localizedDescription)"
-                   showMessage = true
-                   return
-               }
-               
-               // Hash password and store additional user data in Firestore
-               if let user = authResult?.user {
-                   let hashedPassword = hashPassword(password)
-                   
-                   // Save user data to Firestore
-                   let userData: [String: Any] = [
-                       "email": email,
-                       "username": username,
-                       "hashedPassword": hashedPassword,
-                       "uid": user.uid
-                   ]
+        // Create user with Firebase Authentication
+        Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
+            if let error = error {
+                registrationError = "Firebase Auth Error: \(error.localizedDescription)"
+                showMessage = true
+                return
+            }
+            
+            // Hash password and store additional user data in Firestore
+            if let user = authResult?.user {
+                let hashedPassword = hashPassword(password)
+                
+                // Save user data to Firestore
+                let userData: [String: Any] = [
+                    "email": email,
+                    "username": username,
+                    "hashedPassword": hashedPassword,
+                    "uid": user.uid
+                ]
 
-                   let db = Firestore.firestore()
-                   db.collection("user").document(user.uid).setData(userData) { error in
-                       if let error = error {
-                           registrationError = "Error storing user data: \(error.localizedDescription)"
-                           showMessage = true
-                       } else {
-                           // Save credentials to Keychain if 'Remember Password' is checked
-                           if rememberPassword {
-                               saveCredentialsToKeychain(email: email, password: password)
-                           }
-                           
-                           // Display success message
-                           registrationSuccess = true
-                           showMessage = true
-                       }
-                   }
-               }
-           }
-       }
+                let db = Firestore.firestore()
+                // Use username as the document ID
+                db.collection("user").document(username).setData(userData) { error in
+                    if let error = error {
+                        registrationError = "Error storing user data: \(error.localizedDescription)"
+                        showMessage = true
+                    } else {
+                        // Save credentials to Keychain if 'Remember Password' is checked
+                        if rememberPassword {
+                            saveCredentialsToKeychain(email: email, password: password)
+                        }
+                        
+                        // Display success message
+                        registrationSuccess = true
+                        showMessage = true
+                    }
+                }
+            }
+        }
+    }
     
     // Save Credentials to Keychain
     func saveCredentialsToKeychain(email: String, password: String) {
@@ -273,18 +274,18 @@ struct RegisterView: View {
     // Retrieve Credentials from Keychain
     func retrieveCredentialsFromKeychain() {
         if let storedEmail = KeychainWrapper.standard.string(forKey: "userEmail"),
-               let storedPassword = KeychainWrapper.standard.string(forKey: "userPassword"),
-               let storedUsername = KeychainWrapper.standard.string(forKey: "userUsername") {
-                self.email = storedEmail
-                self.password = storedPassword
-                self.username = storedUsername
-                self.rememberPassword = true
+           let storedPassword = KeychainWrapper.standard.string(forKey: "userPassword"),
+           let storedUsername = KeychainWrapper.standard.string(forKey: "userUsername") {
+            self.email = storedEmail
+            self.password = storedPassword
+            self.username = storedUsername
+            self.rememberPassword = true
         }
     }
     
-    // Simple password hashing function (placeholder)
+    // Password hashing
     func hashPassword(_ password: String) -> String {
-        return String(password.reversed())  // Simple example, replace with a secure hashing method
+        return String(password.reversed())
     }
 }
 
