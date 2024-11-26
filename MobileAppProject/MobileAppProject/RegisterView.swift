@@ -15,6 +15,8 @@ import FirebaseFirestore
 struct RegisterView: View {
     
     let db = Firestore.firestore()
+    
+    //Calls AddDefaultShelves
     func callAddDefaultShelves() {
         Task {
             do {
@@ -23,10 +25,10 @@ struct RegisterView: View {
         }
     }
 
-    //Calls callGetShelves to update from firebase.  Checks that shelfTitle is not in list
-    //If not in list it adds it to the firebase and updates the local list
+    //Updates firebase by adding the two default shelves to the list of shelves and
+    //By creating the shelves as collections
     func addDefaultShelves() async {
-        let docRef = db.collection("user").document(username)//.collection("wishlist").document("Hp")
+        let docRef = db.collection("user").document(username)
         
         do {
             try await docRef.updateData([
@@ -197,7 +199,7 @@ struct RegisterView: View {
                         return Alert(title: Text("Registration Successful"),
                                      message: Text("You have successfully registered your account for Book Hunter. Please login to get started!"),
                                      dismissButton: .default(Text("Go to Login Page")) {
-                            callAddDefaultShelves()
+                            callAddDefaultShelves()  //Adds the default shelves to firebase
                             registrationSuccess = true
                         })
                     }
