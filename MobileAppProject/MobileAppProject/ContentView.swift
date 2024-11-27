@@ -135,11 +135,11 @@ struct ContentView: View {
                     .offset(y: -25)
                     
                     // Navigation after successful login
-                    NavigationLink("", destination: HomeView())
+                    NavigationLink("", destination: RootView())
                                             .opacity(0)
                                         // Navigate to HomeView after successful login
                                         .navigationDestination(isPresented: $isLoggedIn) {
-                                            HomeView()
+                                            RootView()
                                         }
 
                 }

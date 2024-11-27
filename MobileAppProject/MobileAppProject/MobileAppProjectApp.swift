@@ -44,15 +44,19 @@ struct MobileAppProjectApp: App {
         WindowGroup {
             // Display HomeView if user has logged in before, otherwise go to login page
             if isLoggedIn {
-                RootView(user: user).environmentObject(NotificationStore())
+                RootView().environmentObject(NotificationStore())
                     .environmentObject(FriendStore())
                     .environmentObject(FoundUser())
                     .environmentObject(Loading())
+                    .environmentObject(Username())
+                    .environmentObject(ShelvesGlobal())
             } else {
                 ContentView().environmentObject(NotificationStore())
                     .environmentObject(FriendStore())
                     .environmentObject(FoundUser())
                     .environmentObject(Loading())
+                    .environmentObject(Username())
+                    .environmentObject(ShelvesGlobal())
             }
         }
     }

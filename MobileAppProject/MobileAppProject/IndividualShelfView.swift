@@ -13,8 +13,8 @@ struct IndividualShelfView: View {
     @State private var showBook = false
     @State private var showSearchView = false
     var shelfTitle: String = ""
-    @State var books = [Book("Harry Potter", "1234", "Like New", 5.00, "HP"), Book("1984", "1234", "Well Loved", 3.00, ""), Book("Animal Farm", "1234", "Moderately Used", 6.00, ""), Book("Brave New World", "1234", "Good", 1.00, "")]
-    @State var bookDisplayed = Book("Harry Potter", "1234", "Like New", 5.00, "HP")
+    @State var books = [Book("Harry Potter", "1234", "Like New", 5.00, "HP", ""), Book("1984", "1234", "Well Loved", 3.00, "", ""), Book("Animal Farm", "1234", "Moderately Used", 6.00, "", ""), Book("Brave New World", "1234", "Good", 1.00, "", "")]
+    @State var bookDisplayed = Book("Harry Potter", "1234", "Like New", 5.00, "HP", "")
     var body: some View {
         VStack(spacing: 0){
             ZStack{ //Puts add book button next to shelf title
@@ -101,5 +101,5 @@ struct IndividualShelfView: View {
 }
 
 #Preview {
-    IndividualShelfView(shelfTitle: "Shelf Title", books: [Book("Harry Potter", "1234", "Like New", 5.00, "HP"), Book("1984", "1234", "Well Loved", 3.00, ""), Book("Animal Farm", "1234", "Moderately Used", 6.00, ""), Book("Brave New World", "1234", "Good", 1.00, ""), Book("Fablehaven", "1234", "Like New", 9.00, "FablehavenCover"), Book("Fablehaven", "1234", "Like New", 9.00, "FablehavenCover"),Book("Fablehaven", "1234", "Like New", 9.00, "FablehavenCover")])
+    IndividualShelfView(shelfTitle: "Shelf Title", books: [Book("Harry Potter", "1234", "Like New", 5.00, "HP", ""), Book("1984", "1234", "Well Loved", 3.00, "", ""), Book("Animal Farm", "1234", "Moderately Used", 6.00, "", ""), Book("Brave New World", "1234", "Good", 1.00, "", ""), Book("Fablehaven", "1234", "Like New", 9.00, "FablehavenCover", ""), Book("Fablehaven", "1234", "Like New", 9.00, "FablehavenCover", ""),Book("Fablehaven", "1234", "Like New", 9.00, "FablehavenCover", "")])
 }

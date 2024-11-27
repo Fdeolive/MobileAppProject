@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct IndividualBookView: View {
-    @State var book = Book("Harry Potter", "1234", "Like New", 5.00, "HP")
+    @State var book = Book("Harry Potter", "1234", "Like New", 5.00, "HP", "")
     var body: some View {
         VStack{
             Text("\(book.bookTitle)").font(.system(size: 30, weight: .semibold))
@@ -46,5 +46,5 @@ struct IndividualBookView: View {
 }
 
 #Preview {
-    IndividualBookView(book: Book("Harry Potter", "1234", "Like New", 5.00, "HP"))
+    IndividualBookView(book: Book("Harry Potter", "1234", "Like New", 5.00, "HP", ""))
 }

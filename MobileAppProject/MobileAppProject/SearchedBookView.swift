@@ -9,6 +9,7 @@ import SwiftUI
 import Vision
 import FirebaseCore
 import FirebaseFirestore
+import FirebaseAuth
 
 
 struct SearchedBookView: View {
@@ -27,12 +28,29 @@ struct SearchedBookView: View {
     @State private var selectedConition = "None"
     let conditonOptions = ["None","Worn in","Littly Used","Like New"]
     
-    
+    @State private var collectionName = ""
     let db = Firestore.firestore()
-    let collectionName = "username"
+
     
     
-    
+    func getUserInfo() async
+    {
+        do{
+            if Auth.auth().currentUser != nil {
+                let userid = Auth.auth().currentUser!.uid
+                let userRef = db.collection("user").whereField(
+                    "uid", isEqualTo: userid)
+                let userInfo = try await userRef.getDocuments()
+                for docs in userInfo.documents
+                {
+                    collectionName = docs.get("username") as! String
+                }
+            }
+        } catch
+        {
+            print("Error getting user information")
+        }
+    }
     func getBookShelves() async {
         let docRef = db.collection("user").document(collectionName)
         
@@ -51,8 +69,11 @@ struct SearchedBookView: View {
     
     func addToBookShelf(shelf:String, title:String, authors:[String]?, image:String, condition:String, price:Int) async
     {
+        var conditionValue = 0
+        var conditionMap = ["None": 4,"Worn in": 3 ,"Littly Used": 2,"Like New": 1]
+        conditionValue = conditionMap[condition] ?? 4
         do{
-            try await db.collection("user").document(collectionName).collection(shelf).document(detail.volumeInfo.title).setData(["title":title,"authors":authors ?? "NA","image":image, "condition":condition, "Price":price])
+            try await db.collection("user").document(collectionName).collection(shelf).document(detail.volumeInfo.title).setData(["title":title,"authors":authors ?? "NA","image":image, "condition":conditionValue, "Price":price])
             
         }
         catch
@@ -133,7 +154,12 @@ struct SearchedBookView: View {
                         
                     }.onAppear
                     {
-                        Task {await getBookShelves()}
+                        Task{
+                            await getUserInfo()
+                            await getBookShelves()
+                        }
+                       
+                        
                     }
                     Spacer(minLength: geometry.size.height * 0.08)
                     Text("Overview:\n \(detail.volumeInfo.description ?? "No description avaliable")").padding(1)
@@ -142,5 +168,6 @@ struct SearchedBookView: View {
         }
   }
 }
+
 
 

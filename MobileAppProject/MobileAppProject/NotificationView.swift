@@ -6,10 +6,13 @@
 import SwiftUI
 import FirebaseCore
 import FirebaseFirestore
+import FirebaseAuth
 
 struct NotificationView: View {
+    var user: User?
     
     @EnvironmentObject var notificationStore: NotificationStore
+    @EnvironmentObject var username: Username
     // Alert for deleting notifications
     @State private var showingAlert1 = false
     @State private var showingAlert2 = false
@@ -24,20 +27,18 @@ struct NotificationView: View {
             GeometryReader {geometry in VStack {
                 HStack {
                     if showDeleteAll {
-                        Button("add") {
-                            notificationStore.allNotifications.append(Notification("dpoulin added to their wishlist!", "Harry Potter and the Goblet of Fire was added to dpoulin's wishlist. Go check it out!"))
-                            DBNotificationConnect(username: "cking").callUpdateNotifications(notificationStore: notificationStore)
-                        }.font(.title)
+                        
                         Button("Delete All") {
                             showingAlert2 = true
                         }
+                        .transition(.slide)
                         .font(.title)
                         .padding([.leading])
                         .foregroundStyle(darkerGreen)
                     }
                     Spacer()
-                    Button("Edit") { showDeleteAll.toggle()
-                    }
+                    Button("Edit") {withAnimation(.easeInOut(duration: 0.30)) { showDeleteAll.toggle()
+                    }}
                     .font(.title)
                     .padding([.trailing])
                     .foregroundStyle(darkerGreen)
@@ -74,7 +75,8 @@ struct NotificationView: View {
                                 .stroke(Color.green, lineWidth: 2)))
                     }
                     .refreshable {
-                        DBNotificationConnect(username: "cking").callGetNotifications(notificationStore: notificationStore)
+                        DBNotificationConnect(username: username.username).callGetNotifications(notificationStore: notificationStore)
+                        print(username.username)
                     }
                     .environment(\.defaultMinListRowHeight, 100)
                     .listRowSpacing(10.0)
@@ -84,7 +86,7 @@ struct NotificationView: View {
                             // Update notificationStore
                             notificationStore.delete(notification: currentNotification)
                             // Update Firebase
-                            DBNotificationConnect(username: "cking").callDeleteNotification(notification: currentNotification)
+                            DBNotificationConnect(username: username.username).callDeleteNotification(notification: currentNotification)
                         }
                         Button("Cancel", role: .cancel) { }
                     }
@@ -92,7 +94,7 @@ struct NotificationView: View {
                         Button("Confirm", role: .destructive) {
                             // Update notificationStore
                             // Update Firebase
-                            DBNotificationConnect(username: "cking").callDeleteAllNotifications(notificationStore: notificationStore)
+                            DBNotificationConnect(username: username.username).callDeleteAllNotifications(notificationStore: notificationStore)
                             notificationStore.deleteAll()
                         }
                         Button("Cancel", role: .cancel) { }
@@ -107,4 +109,5 @@ struct NotificationView: View {
 #Preview {
     NotificationView()
         .environmentObject(NotificationStore())
+        .environmentObject(Username())
 }
