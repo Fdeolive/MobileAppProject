@@ -19,8 +19,10 @@ struct RootView: View {
     @EnvironmentObject var loading: Loading
     // For persistence
     @Environment(\.scenePhase) var scenePhase
+    @EnvironmentObject var shelvesGlobal: ShelvesGlobal
     @State private var startFlag = false
     @State var loadingData = false
+
     
     
     
@@ -31,6 +33,8 @@ struct RootView: View {
                 await getUserName(username: username)
                 await DBNotificationConnect(username: username.username).getNotifications(notificationStore: notificationStore)
                 await DBFriendConnect(username: username.username).getFriends(friendStore: friendStore)
+                await DBShelvesConnect(username: username.username).getShelves(shelvesGlobal: shelvesGlobal)
+                await DBShelvesConnect(username: username.username).fillShelves(shelvesGlobal: shelvesGlobal)
                 // Await functions are done so loading is false
                 loading.isLoading = false
             }
@@ -92,4 +96,5 @@ struct RootView: View {
         .environmentObject(FoundUser())
         .environmentObject(Loading())
         .environmentObject(Username())
+        .environmentObject(ShelvesGlobal())
 }

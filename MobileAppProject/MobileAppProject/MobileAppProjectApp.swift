@@ -49,12 +49,14 @@ struct MobileAppProjectApp: App {
                     .environmentObject(FoundUser())
                     .environmentObject(Loading())
                     .environmentObject(Username())
+                    .environmentObject(ShelvesGlobal())
             } else {
                 ContentView().environmentObject(NotificationStore())
                     .environmentObject(FriendStore())
                     .environmentObject(FoundUser())
                     .environmentObject(Loading())
                     .environmentObject(Username())
+                    .environmentObject(ShelvesGlobal())
             }
         }
     }
