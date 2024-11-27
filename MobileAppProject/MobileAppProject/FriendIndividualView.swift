@@ -98,7 +98,7 @@ struct FriendIndividualView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center) // Center horizontally and vertically
                 
                 .navigationDestination(isPresented: $showBookshelfView) {
-                    ShelfView()
+                    FriendShelfView()
                 }
             }.onAppear {
                 var friendFound = false
