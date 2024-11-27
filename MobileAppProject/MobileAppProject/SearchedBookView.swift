@@ -29,6 +29,7 @@ struct SearchedBookView: View {
     let conditonOptions = ["None","Worn in","Littly Used","Like New"]
     
     @State private var collectionName = ""
+    @State private var addedMessage = false
     let db = Firestore.firestore()
 
     
@@ -140,11 +141,21 @@ struct SearchedBookView: View {
                             }
                             Button("Add")
                             {
+                               
+                                
                                 Task{
                                     await
                                     addToBookShelf(shelf: selectedBookShelf,title: detail.volumeInfo.title, authors: detail.volumeInfo.authors ?? ["NA"], image: modifiedText, condition:selectedConition, price:selectedPrice)
+                                   
                                 }
+                                addedMessage = true
                                 
+                            } .alert(isPresented: $addedMessage) {
+                                
+                                return Alert(title: Text("Book Added"),
+                                        
+                               dismissButton: .default(Text("Great!")))
+                           
                             }.padding()
                                 .background(green)
                                 .foregroundStyle(.white)
