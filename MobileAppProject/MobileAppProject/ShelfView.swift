@@ -11,7 +11,7 @@ import SwiftUI
 struct ShelfView: View {
     @State private var showShelf = false
     @State private var showBook = false
-    @State var bookDisplayed = Book("Harry Potter", "1234", "Like New", 5.00, "HP")
+    @State var bookDisplayed = Book("Harry Potter", "1234", "Like New", 5.00, "HP", "")
     
     //Todo: should it have at state
     var shelfTitle: String = ""
@@ -49,5 +49,5 @@ struct ShelfView: View {
 }
 
 #Preview {
-    ShelfView(shelfTitle: "title", books: [Book("Harry Potter", "1234", "Like New", 5.00, "HP"), Book("1984", "1234", "Well Loved", 3.00, ""), Book("Animal Farm", "1234", "Moderately Used", 6.00, ""), Book("Brave New World", "1234", "Good", 1.00, "")])
+    ShelfView(shelfTitle: "title", books: [Book("Harry Potter", "1234", "Like New", 5.00, "HP", ""), Book("1984", "1234", "Well Loved", 3.00, "", ""), Book("Animal Farm", "1234", "Moderately Used", 6.00, "", ""), Book("Brave New World", "1234", "Good", 1.00, "", "")])
 }
