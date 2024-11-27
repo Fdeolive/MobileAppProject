@@ -248,54 +248,61 @@ struct RegisterView: View {
 
     // Register User
     func register() {
-        // Validate input fields and username availability
-        guard !email.isEmpty, !password.isEmpty, isUsernameValid else {
-            // Show error if fields are empty or username is invalid
-            registrationError = "Please fill in all fields correctly."
-            showMessage = true
-            return
-        }
+           // Validate input fields and username availability
+           guard !email.isEmpty, !password.isEmpty, isUsernameValid else {
+               // Show error if fields are empty or username is invalid
+               registrationError = "Please fill in all fields correctly."
+               showMessage = true
+               return
+           }
 
-        // Create user with Firebase Authentication
-        Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
-            if let error = error {
-                registrationError = "Firebase Auth Error: \(error.localizedDescription)"
-                showMessage = true
-                return
-            }
-            
-            // Hash password and store additional user data in Firestore
-            if let user = authResult?.user {
-                let hashedPassword = hashPassword(password)
-                
-                // Save user data to Firestore
-                let userData: [String: Any] = [
-                    "email": email,
-                    "username": username,
-                    "hashedPassword": hashedPassword,
-                    "uid": user.uid
-                ]
+           // Create user with Firebase Authentication
+           Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
+               if let error = error {
+                   registrationError = "Firebase Auth Error: \(error.localizedDescription)"
+                   showMessage = true
+                   return
+               }
+               
+               // Hash password and store additional user data in Firestore
+               if let user = authResult?.user {
+                   let hashedPassword = hashPassword(password)
+                   
+                   // Save user data to Firestore
+                   let registerNotification = Notification("Welcome to Book Hunting!", "Thanks for joining our book hunting app. What are you waiting for? Go explore the app and it's features!")
+                   let userData: [String: Any] = [
+                       "email": email,
+                       "username": username,
+                       "hashedPassword": hashedPassword,
+                       "uid": user.uid,
+                       "notifications": [
+                        "\(registerNotification.notificationId)": [
+                        "notificationTitle": "\(registerNotification.notificationTitle)",
+                        "notificationSummary": "\(registerNotification.notificationSummary)"
+                        ]],
+                        "friends": ["default": true]
+                   ]
 
-                let db = Firestore.firestore()
-                // Use username as the document ID
-                db.collection("user").document(username).setData(userData) { error in
-                    if let error = error {
-                        registrationError = "Error storing user data: \(error.localizedDescription)"
-                        showMessage = true
-                    } else {
-                        // Save credentials to Keychain if 'Remember Password' is checked
-                        if rememberPassword {
-                            saveCredentialsToKeychain(email: email, password: password)
-                        }
-                        
-                        // Display success message
-                        registrationSuccess = true
-                        showMessage = true
-                    }
-                }
-            }
-        }
-    }
+                   let db = Firestore.firestore()
+                   db.collection("user").document(username).setData(userData) { error in
+                       if let error = error {
+                           registrationError = "Error storing user data: \(error.localizedDescription)"
+                           showMessage = true
+                       } else {
+                           // Save credentials to Keychain if 'Remember Password' is checked
+                           if rememberPassword {
+                               saveCredentialsToKeychain(email: email, password: password)
+                           }
+                           
+                           // Display success message
+                           registrationSuccess = true
+                           showMessage = true
+                       }
+                   }
+                   DBFriendConnect(username: username).callUpdateFriendStatus(friendUsername: "default", friendStatus: 0)
+               }
+           }
+       }
     
     // Save Credentials to Keychain
     func saveCredentialsToKeychain(email: String, password: String) {

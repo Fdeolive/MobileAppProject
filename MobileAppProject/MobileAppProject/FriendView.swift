@@ -11,6 +11,7 @@ import FirebaseFirestore
 struct FriendView: View {
     
     @EnvironmentObject var friendStore: FriendStore
+    @EnvironmentObject var username: Username
     @State private var searchEntry = ""
     @State var addFriend = false
     private let lightGreen = Color(red: 230/255, green: 255/255, blue: 220/255)
@@ -81,7 +82,7 @@ struct FriendView: View {
                         .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
                     }
                     .refreshable {
-                        DBFriendConnect(username: "cking").callGetFriends(friendStore: friendStore)
+                        DBFriendConnect(username: username.username).callGetFriends(friendStore: friendStore)
                     }
                     .scrollContentBackground(.hidden)
                 }
@@ -94,4 +95,5 @@ struct FriendView: View {
     FriendView()
         .environmentObject(FriendStore())
         .environmentObject(FoundUser())
+        .environmentObject(Username())
 }

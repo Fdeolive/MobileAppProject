@@ -36,7 +36,7 @@ struct HomeView: View {
                         HStack {
                             Spacer()
                             NavigationLink {
-                                NotificationView()
+                                NotificationView(user: user)
                             } label: {
                                 Image(systemName: "bell.fill")
                             }
@@ -128,4 +128,5 @@ struct HomeView: View {
         .environmentObject(NotificationStore())
         .environmentObject(FriendStore())
         .environmentObject(FoundUser())
+        .environmentObject(Username())
 }
