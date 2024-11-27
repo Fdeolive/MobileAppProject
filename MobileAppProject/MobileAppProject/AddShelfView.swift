@@ -25,7 +25,7 @@ struct AddShelfView: View {
 
     //Gets the array of shelves from firebase
     func getShelves() async {
-        let docRef = db.collection("user").document("DavidsTest")
+        let docRef = db.collection("user").document(username.username)
         do {
             let document = try await docRef.getDocument()
             if let shelves = document.get("bookShelves") as? [String] {
@@ -52,7 +52,7 @@ struct AddShelfView: View {
     //Calls callGetShelves to update from firebase.  Checks that shelfTitle is not in list
     //If not in list it adds it to the firebase and updates the local list
     func addShelf() async {
-        let docRef = db.collection("user").document("DavidsTest")//.collection("wishlist").document("Hp")
+        let docRef = db.collection("user").document(username.username)//.collection("wishlist").document("Hp")
         
         do {
             if (!shelfList.contains(shelfTitle)){
@@ -60,7 +60,7 @@ struct AddShelfView: View {
                 try await docRef.updateData([
                     "bookShelves": shelfList
                 ])
-                let shelfCollectionRef = db.collection("user").document("DavidsTest").collection("\(shelfTitle)").document("Book")
+                let shelfCollectionRef = db.collection("user").document("username.username").collection("\(shelfTitle)").document("Book")
                 try await shelfCollectionRef.setData(["Title": "bookname"])
                 print("Document successfully updated")
             }else{
@@ -81,17 +81,17 @@ struct AddShelfView: View {
     }
     
     func removeShelf() async {
-        let docRef = db.collection("user").document("DavidsTest")
+        let docRef = db.collection("user").document(username.username)
         shelfList = shelfList.filter{ $0 != shelfToRemove}
         do {
             try await docRef.updateData([
                 "bookShelves": shelfList
             ])
-            let docList = try await db.collection("user").document("DavidsTest").collection(shelfToRemove).getDocuments()
-            let collectionRef = db.collection("user").document("DavidsTest").collection(shelfToRemove)
+            let docList = try await db.collection("user").document(username.username).collection(shelfToRemove).getDocuments()
+            let collectionRef = db.collection("user").document(username.username).collection(shelfToRemove)
             for doc in docList.documents {
                 print("\(doc.documentID)")
-                try await db.collection("user").document("DavidsTest").collection(shelfToRemove).document(doc.documentID).delete()
+                try await db.collection("user").document(username.username).collection(shelfToRemove).document(doc.documentID).delete()
             }
         } catch {
             print("Error updating document: \(error)")
@@ -100,6 +100,7 @@ struct AddShelfView: View {
     }
     
     let db = Firestore.firestore()
+    @EnvironmentObject var username: Username
     @State var shelfList: [String] = []  //Holds shelves from firebase
     @State private var shelfTitle = ""  //holds entered title
     @State private var shelfToRemove = "//Default"
@@ -166,6 +167,7 @@ struct AddShelfView: View {
 
 #Preview {
     AddShelfView()
+        .environmentObject(Username())
 }
 
 
