@@ -61,7 +61,7 @@ struct isbnSearch: View {
     //Checks to see if book is in the users peronal book shelve
     func inPersonalWishList(bookTitle: String) async
     {
-        let docRef = db.collection("user").document(collectionName).collection("wishlist")
+        let docRef = db.collection("user").document(collectionName).collection("Wishlist")
         do {
             
             let docquery = try await docRef.whereField("title", isEqualTo: bookTitle).getDocuments()
@@ -182,13 +182,25 @@ struct barCodeView: View
     @State private var moveScreen = false
     @State private var fullRequest : String?
     @StateObject var viewModel = ebookListModelView()
+    private let darkGreen = Color(red: 50/255, green: 150/255, blue: 50/255)
     
     var body: some View {
         NavigationStack {
             VStack(spacing: 10) {
                
-            Text("Hey")
-                
+            Text("No Book scanned")
+                Button("Scanner")
+                {
+                    isPresentingScanner = true
+                }.padding(10)
+                    .bold()
+                    .font(.title3)
+                    .background(darkGreen)
+                    .foregroundStyle(Color.white)
+                    .cornerRadius(10)
+                    .padding([.bottom], 65)
+            
+              
             }
             .sheet(isPresented: $isPresentingScanner) {
                 CodeScannerView(codeTypes: [.ean8, .ean13, .upce, .code128, .code39, .pdf417]) { response in
@@ -204,12 +216,8 @@ struct barCodeView: View
                     }
                 }
             }
-            
-            .navigationDestination(isPresented: $moveScreen)
-            {
-                isbnSearch( searchTerms: $scannedCode)
-               
-                    }
+            NavigationLink(destination: isbnSearch( searchTerms: $scannedCode)) {}
+          
         }.onAppear()
         {
             isPresentingScanner = true

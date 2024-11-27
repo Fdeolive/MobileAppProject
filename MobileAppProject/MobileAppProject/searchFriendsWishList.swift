@@ -90,7 +90,7 @@ struct searchFriends: View{
             print(price)
             for friend in friendsList
             {
-                let docRef = db.collection("user").document(friend).collection("wishlist")
+                let docRef = db.collection("user").document(friend).collection("Wishlist")
                 do {
                     
                     let docqueryCompound = docRef
