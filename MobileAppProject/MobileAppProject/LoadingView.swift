@@ -22,7 +22,7 @@ struct LoadingView: View {
                         isLoading = true
                     }
                 Spacer()
-                Text("Welcome to Book Hunting!")
+                Text("Welcome to Book Quest!")
                     .font(.title2)
                     .bold()
                     .foregroundStyle(Color.white)
