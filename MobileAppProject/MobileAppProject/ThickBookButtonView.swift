@@ -21,7 +21,12 @@ struct ThickBookButtonView: View {
                     .background(.gray)
                     .font(.system(size: 20, weight: .semibold))
             }else{
-                Image(image).resizable().aspectRatio(contentMode: .fit).frame(width: 90, height: 100).background(.gray)
+                /*Image(image).resizable().aspectRatio(contentMode: .fit).frame(width: 90, height: 100).background(.gray)*/
+                AsyncImage(url: URL(string: image)){ image in
+                    image.resizable().aspectRatio(contentMode: .fit)
+                } placeholder: {
+                    Rectangle().background(.gray)
+                }.frame(width: 90, height: 100).background(.gray)
             }
         }
     }

@@ -76,5 +76,14 @@ struct DBShelvesConnect {
         }
     }
     
+    func callFillShelves(shelvesGlobal: ShelvesGlobal) {
+        Task {
+            do {
+                await fillShelves(shelvesGlobal: shelvesGlobal)
+            }
+        }
+    }
+
+    
     
 }

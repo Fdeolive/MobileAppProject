@@ -13,10 +13,10 @@ import FirebaseFirestore
 
 struct AddShelfView: View {
     
-    func callGetShelves() {
+    func callGetShelvesLocal() {
         Task {
             do {
-                await getShelves()
+                await getShelvesLocal()
             }
         }
     }
@@ -24,7 +24,7 @@ struct AddShelfView: View {
 
 
     //Gets the array of shelves from firebase
-    func getShelves() async {
+    func getShelvesLocal() async {
         let docRef = db.collection("user").document(username.username)
         do {
             let document = try await docRef.getDocument()
@@ -50,12 +50,12 @@ struct AddShelfView: View {
                 await DBShelvesConnect(username: username.username).fillShelves(shelvesGlobal: shelvesGlobal)*/
             }
         }
-        Task{
+        /*Task{
             do{
                 await DBShelvesConnect(username: username.username).getShelves(shelvesGlobal: shelvesGlobal)
                 await DBShelvesConnect(username: username.username).fillShelves(shelvesGlobal: shelvesGlobal)
             }
-        }
+        }*/
     }
 
     //Calls callGetShelves to update from firebase.  Checks that shelfTitle is not in list
@@ -174,7 +174,7 @@ struct AddShelfView: View {
             .foregroundStyle(.black)
             .disabled(shelfToRemove == "\\Default")
             
-        }.onAppear(){callGetShelves()}
+        }.onAppear(){callGetShelvesLocal()}
     }
 }
 

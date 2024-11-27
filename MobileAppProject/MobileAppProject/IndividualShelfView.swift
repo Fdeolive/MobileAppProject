@@ -32,7 +32,7 @@ struct IndividualShelfView: View {
                     .background(.white)
                     .cornerRadius(25 / 2)
                     .offset(x: UIScreen.main.bounds.width * 0.30)
-            }.navigationDestination(isPresented: $showSearchView) { SearchView()}
+            }.navigationDestination(isPresented: $showSearchView) { fixingShelfView()}
             ScrollView(){
                 VStack(spacing: 5){
                     if (books.count == 0){

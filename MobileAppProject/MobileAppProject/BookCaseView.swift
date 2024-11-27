@@ -9,6 +9,7 @@
 import SwiftUI
 
 struct BookCaseView: View {
+    @EnvironmentObject var username: Username
     @EnvironmentObject var shelvesGlobal: ShelvesGlobal
     @State private var addBook = false
     //@State private var myShelf = Shelf("shelf1",[Book("Harry Potter", "1234", "Like New", 5.00, "HP", ""), Book("Fablehaven", "1234", "Like New", 9.00, "FablehavenCover", "")])
@@ -38,11 +39,15 @@ struct BookCaseView: View {
                     ShelfView(shelfTitle: "empty but also really long title", books: [])*/
                 }
             }.navigationDestination(isPresented: $addBook) {AddShelfView()}
-        }
+        }/*.onAppear(){
+            DBShelvesConnect(username: username.username).callGetShelves(shelvesGlobal: shelvesGlobal)
+            DBShelvesConnect(username: username.username).callFillShelves(shelvesGlobal: shelvesGlobal)
+        }*/
     }
 }
 
 #Preview {
     BookCaseView()
+        .environmentObject(Username())
         .environmentObject(ShelvesGlobal())
 }
