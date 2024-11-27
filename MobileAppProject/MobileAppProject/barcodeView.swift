@@ -190,16 +190,16 @@ struct barCodeView: View
                
             Text("No Book scanned")
                 Button("Scanner")
-                {
-                    isPresentingScanner = true
-                }.padding(10)
-                    .bold()
-                    .font(.title3)
-                    .background(darkGreen)
-                    .foregroundStyle(Color.white)
-                    .cornerRadius(10)
-                    .padding([.bottom], 65)
-            
+                                {
+                                    isPresentingScanner = true
+                                }.padding(10)
+                                    .bold()
+                                    .font(.title3)
+                                    .background(darkGreen)
+                                    .foregroundStyle(Color.white)
+                                    .cornerRadius(10)
+                                    .padding([.bottom], 65)
+                
               
             }
             .sheet(isPresented: $isPresentingScanner) {
@@ -216,7 +216,11 @@ struct barCodeView: View
                     }
                 }
             }
-            NavigationLink(destination: isbnSearch( searchTerms: $scannedCode)) {}
+            .navigationDestination(isPresented: $moveScreen)
+                        {
+                            isbnSearch( searchTerms: $scannedCode)
+                           
+                                }
           
         }.onAppear()
         {
@@ -225,5 +229,7 @@ struct barCodeView: View
             }
     
 }
+
+
 
 
