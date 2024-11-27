@@ -56,6 +56,8 @@ struct DBShelvesConnect {
                 shelvesGlobal.shelves = []
             }
             var increment = 0
+            print("here")
+            print(shelvesGlobal.shelfTitles)
             for shelf in shelvesGlobal.shelfTitles{
                 DispatchQueue.main.async {
                     shelvesGlobal.shelves.append(Shelf(shelf, []))
@@ -64,10 +66,11 @@ struct DBShelvesConnect {
                 for doc in docList.documents {
                     print("\(doc.documentID) => \(doc.data())")
                     print("\(doc.data()["title"] ?? "NA")")
+                    print("increment= \(increment)")
                     shelvesGlobal.shelves[increment].shelfBooks.append(
                         Book("\(doc.data()["title"] ?? "NA")", "\(doc.data()["ISBN"] ?? "0000")", "\(doc.data()["condition"] ?? "NA")", Float("\(doc.data()["price"] ?? 0)")!, "\(doc.data()["image"] ?? "")", "\(doc.data()["title"] ?? "NA")"))
-                increment += 1
                 }
+                increment += 1
             }
         }catch{
             print("Error: \(error)")
