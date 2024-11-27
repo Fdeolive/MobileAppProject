@@ -53,9 +53,16 @@ struct DBShelvesConnect {
         do{
             let docRef = db.collection("user").document(username)
             for shelf in shelvesGlobal.shelfTitles{
+                DispatchQueue.main.async {
+                    shelvesGlobal.shelves = []
+                }
                 let docList = try await docRef.collection(shelf).getDocuments()
                 for doc in docList.documents {
                     print("\(doc.documentID) => \(doc.data())")
+                    print("\(doc.data()["title"] ?? "NA")")
+                    //DispatchQueue.main.async {
+                        //shelvesGlobal.shelves.append(Shelf("shelftitle"), Book(doc.data()["title"], //doc.data()["ISBN"],Float(doc.data()["price"]),doc.data()["image"],doc.data()["authors"]))
+                    //}
                 }
             }
         }catch{
