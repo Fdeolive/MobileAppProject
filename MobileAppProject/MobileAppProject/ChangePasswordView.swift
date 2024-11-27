@@ -160,18 +160,12 @@ struct ChangePasswordView: View {
             "hashedPassword": hashedPassword
         ]
         
-        db.collection("user").document(user.uid).updateData(userData) { error in
-            if let error = error {
-                errorMessage = "Error updating password: \(error.localizedDescription)"
-            } else {
-                showAlert = true
-            }
-        }
+        db.collection("user").document(user.uid).updateData(userData) 
     }
     
     // Simple password hashing function (placeholder)
     func hashPassword(_ password: String) -> String {
-        return String(password.reversed())  // Replace with a secure hashing method
+        return String(password.reversed())
     }
 }
 

@@ -82,7 +82,7 @@ struct ContentView: View {
                         Image(systemName: "person")
                             .foregroundColor(.black.opacity(0.5))
                         TextField("Username", text: $username)
-                    }.autocapitalization(.none)
+                    }.autocapitalization(.none).disableAutocorrection(true)
                     .padding()
                     .frame(width: 300, height: 50)
                     .background(Color.black.opacity(0.05))
@@ -96,10 +96,10 @@ struct ContentView: View {
                             .foregroundColor(.black.opacity(0.5))
                         if isPasswordVisible {
                             TextField("Password", text: $password)
-                                .padding()
+                                .padding().autocapitalization(.none).disableAutocorrection(true)
                         } else {
                             SecureField("Password", text: $password)
-                                .padding()
+                                .padding().autocapitalization(.none).disableAutocorrection(true)
                         }
                         Button(action: {
                             isPasswordVisible.toggle()

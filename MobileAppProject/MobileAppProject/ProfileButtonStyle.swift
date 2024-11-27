@@ -11,7 +11,7 @@ struct ProfileButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .foregroundColor(.white)
-            .frame(width: 300, height: 50)
+            .frame(width: 300, height: 40)
             .background(Color.green)
             .cornerRadius(10)
             .padding(.horizontal)
