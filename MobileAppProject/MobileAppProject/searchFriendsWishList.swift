@@ -84,8 +84,9 @@ struct searchFriends: View{
         let docRef = db.collection("user").document(collectionName)
         do{
             let document = try await docRef.getDocument()
-            if let friendList = document.get("friends") as? [String] {
-                self.friendsList = Array(friendList)
+            if let friendMap = document.get("friends") as?  [String: Bool] {
+                let friendsList = Array(friendMap.keys)
+                self.friendsList = friendsList
             }
             print(price)
             for friend in friendsList
