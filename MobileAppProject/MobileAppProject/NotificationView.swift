@@ -27,11 +27,7 @@ struct NotificationView: View {
             GeometryReader {geometry in VStack {
                 HStack {
                     if showDeleteAll {
-                        //TODO: Delete
-                        Button("add") {
-                            notificationStore.allNotifications.append(Notification("dpoulin added to their wishlist!", "Harry Potter and the Goblet of Fire was added to dpoulin's wishlist. Go check it out!"))
-                            DBNotificationConnect(username: username.username).callUpdateNotifications(notificationStore: notificationStore)
-                        }.font(.title)
+                        
                         Button("Delete All") {
                             showingAlert2 = true
                         }

@@ -278,7 +278,9 @@ struct RegisterView: View {
                        "notifications": [
                         "\(registerNotification.notificationId)": [
                         "notificationTitle": "\(registerNotification.notificationTitle)",
-                        "notificationSummary": "\(registerNotification.notificationSummary)"
+                        "notificationSummary": "\(registerNotification.notificationSummary)",
+                        "friendUsername":
+                            "\(registerNotification.friendUsername)"
                         ]],
                         "friends": ["default": true]
                    ]

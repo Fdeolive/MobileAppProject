@@ -61,7 +61,7 @@ struct DBNotificationConnect {
             if let notifications = document.get("notifications") as? [String:[String:String]] {
                 for (id, value) in notifications {
                     DispatchQueue.main.async {
-                        notificationStore.allNotifications.append(Notification(value["notificationTitle"]!, value["notificationSummary"]!, UUID(uuidString: id)!))
+                        notificationStore.allNotifications.append(Notification(value["notificationTitle"]!, value["notificationSummary"]!, UUID(uuidString: id)!, value["friendUsername"]!))
                     }
                 }
             } else {
@@ -88,7 +88,7 @@ struct DBNotificationConnect {
                     }
                     // Only add notifications not already in db
                     if alreadyInDatabase == false {
-                        try await db.collection("user").document("\(username)").updateData(["notifications.\(notification.notificationId).notificationTitle": notification.notificationTitle,"notifications.\(notification.notificationId).notificationSummary": notification.notificationSummary])
+                        try await db.collection("user").document("\(username)").updateData(["notifications.\(notification.notificationId).notificationTitle": notification.notificationTitle,"notifications.\(notification.notificationId).notificationSummary": notification.notificationSummary, "notifications.\(notification.notificationId).friendUsername": notification.friendUsername])
                         print("Document updated successfully")
                     }
                 }
