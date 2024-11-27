@@ -9,8 +9,9 @@
 import SwiftUI
 
 struct BookCaseView: View {
+    @EnvironmentObject var shelvesGlobal: ShelvesGlobal
     @State private var addBook = false
-    @State private var myShelf = Shelf("shelf1",[Book("Harry Potter", "1234", "Like New", 5.00, "HP", ""), Book("Fablehaven", "1234", "Like New", 9.00, "FablehavenCover", "")])
+    //@State private var myShelf = Shelf("shelf1",[Book("Harry Potter", "1234", "Like New", 5.00, "HP", ""), Book("Fablehaven", "1234", "Like New", 9.00, "FablehavenCover", "")])
     var body: some View {
         NavigationStack{
             ScrollView {
@@ -25,10 +26,14 @@ struct BookCaseView: View {
                             .cornerRadius(10)
                     }.padding()
 
-                    ShelfView(shelfTitle: myShelf.shelfTitle, books: myShelf.shelfBooks)
+                    ForEach(0..<shelvesGlobal.shelves.count){shelf in
+                        ShelfView(shelfTitle: shelvesGlobal.shelves[shelf].shelfTitle, books: shelvesGlobal.shelves[shelf].shelfBooks)
+                    }
+                    
+                    /*ShelfView(shelfTitle: myShelf.shelfTitle, books: myShelf.shelfBooks)
                     ShelfView(shelfTitle: "t2", books: [Book("Harry Potter", "1234", "Like New", 5.00, "HP", ""), Book("1984", "1234", "Well Loved", 3.00, "", ""), Book("Animal Farm", "1234", "Moderately Used", 6.00, "", ""), Book("Brave New World", "1234", "Good", 1.00, "", "")])
                     ShelfView(shelfTitle: "t3", books: [Book("Harry Potter", "1234", "Like New", 5.00, "HP", ""), Book("1984", "1234", "Well Loved", 3.00, "", ""), Book("Animal Farm", "1234", "Moderately Used", 6.00, "", ""), Book("Brave New World", "1234", "Good", 1.00, "", "")])
-                    ShelfView(shelfTitle: "empty but also really long title", books: [])
+                    ShelfView(shelfTitle: "empty but also really long title", books: [])*/
                 }
             }.navigationDestination(isPresented: $addBook) {AddShelfView()}
         }
@@ -37,4 +42,5 @@ struct BookCaseView: View {
 
 #Preview {
     BookCaseView()
+        .environmentObject(ShelvesGlobal())
 }
