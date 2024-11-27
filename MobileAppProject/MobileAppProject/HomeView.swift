@@ -9,7 +9,7 @@ import FirebaseCore
 import FirebaseAuth
 
 struct HomeView: View {
-    
+    @Binding var isLoggedIn: Bool
     var user: User?
     
     @State var pageTitle: String = "Shelves"
@@ -66,7 +66,7 @@ struct HomeView: View {
                                 Image(systemName: "person.2.fill")
                             }
                             .tag(3)
-                            ProfileView().tabItem() {
+                            ProfileView(isLoggedIn: $isLoggedIn).tabItem() {
                                 Image(systemName: "person.fill")
                             }
                             .tag(4)
@@ -124,8 +124,8 @@ struct HomeView: View {
 }
 
 #Preview {
-    HomeView()
-        .environmentObject(NotificationStore())
+    @Previewable @State var isLoggedIn = true
+    HomeView(isLoggedIn: $isLoggedIn)        .environmentObject(NotificationStore())
         .environmentObject(FriendStore())
         .environmentObject(FoundUser())
         .environmentObject(Username())

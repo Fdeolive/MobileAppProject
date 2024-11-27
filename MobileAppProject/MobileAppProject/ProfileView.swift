@@ -5,7 +5,7 @@ import FirebaseFirestore
 import PhotosUI
 
 struct ProfileView: View {
-    // Reference to the current authenticated user
+    @Binding var isLoggedIn: Bool
     var user: User?
 
     // Main Color
@@ -88,8 +88,32 @@ struct ProfileView: View {
                                 Label("Remove Profile Picture", systemImage: "trash")
                                     .foregroundColor(.red)
                             }
-                            .padding(.bottom, 8) // Reduced bottom padding
+                            .padding(.bottom, 20)
                         }
+                        
+                        // Add buttons for other profile features
+                        VStack(spacing: 20) {
+                            Button("Change Password") {
+                                showChangePasswordView = true
+                            }
+                            .buttonStyle(ProfileButtonStyle())
+                            
+                            Button("Change Username") {
+                                showChangeUsernameView = true
+                            }
+                            .buttonStyle(ProfileButtonStyle())
+                            
+                            Button("View My Bookshelf") {
+                                showBookshelfView = true
+                            }
+                            .buttonStyle(ProfileButtonStyle())
+                            Button("Log Out") {
+                                isLoggedIn = false
+                                
+                            }.buttonStyle(ProfileButtonStyle())
+                        }
+                        .padding(.top, 20)
+                    }
                     
                         Text("Bio")
                             .font(.headline) // Keep default for Bio title
@@ -200,5 +224,6 @@ struct ProfileView: View {
 }
 
 #Preview {
-    ProfileView()
+    @Previewable @State var isLoggedIn = true
+    ProfileView(isLoggedIn: $isLoggedIn)
 }

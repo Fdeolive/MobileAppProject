@@ -78,7 +78,7 @@ struct DBFriendConnect {
                 } else {
                     try await db.collection("user").document("\(username)").updateData(["friends.\(friendUsername)": false])
                     // Technically not unique
-                    let newNotification = Notification("\(username) wants to be your friend", "You got a friend request from \(username). Search for their name in the friends tab to add them!", UUID(), "\(username)")
+                    let newNotification = Notification("\(username) wants to be your friend", "You got a friend request from \(username). Search for their name in the friends tab to add them. Or add them below!", UUID(), "\(username)")
                     try await db.collection("user").document("\(friendUsername)").updateData(["notifications.\(newNotification.notificationId).notificationTitle": newNotification.notificationTitle,"notifications.\(newNotification.notificationId).notificationSummary": newNotification.notificationSummary,"notifications.\(newNotification.notificationId).friendUsername": newNotification.friendUsername])
                 }
             } else if friendStatus == 2 {

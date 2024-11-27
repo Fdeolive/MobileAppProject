@@ -20,7 +20,7 @@ struct SearchedBookView: View {
     private let white = Color.white
     
     @State private var bookShelvesTitles: [String] = []
-    @State private var selectedBookShelf = "wishlist"
+    @State private var selectedBookShelf = "Wishlist"
     
     @State private var selectedPrice = 0
     let priceOptions =  [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
@@ -70,7 +70,7 @@ struct SearchedBookView: View {
     func addToBookShelf(shelf:String, title:String, authors:[String]?, image:String, condition:String, price:Int) async
     {
         var conditionValue = 0
-        var conditionMap = ["None": 4,"Worn in": 3 ,"Littly Used": 2,"Like New": 1]
+        let conditionMap = ["None": 4,"Worn in": 3 ,"Littly Used": 2,"Like New": 1]
         conditionValue = conditionMap[condition] ?? 4
         do{
             try await db.collection("user").document(collectionName).collection(shelf).document(detail.volumeInfo.title).setData(["title":title,"authors":authors ?? "NA","image":image, "condition":conditionValue, "Price":price])
@@ -121,7 +121,7 @@ struct SearchedBookView: View {
                                 
                             }
                             
-                            if(selectedBookShelf=="wishlist")
+                            if(selectedBookShelf=="Wishlist")
                             {
                                 Text("\nMax Price: ")
                                 Picker("Price", selection: $selectedPrice) {
@@ -142,7 +142,7 @@ struct SearchedBookView: View {
                             {
                                 Task{
                                     await
-                                    addToBookShelf(shelf: selectedBookShelf,title: detail.volumeInfo.title, authors: detail.volumeInfo.authors ?? ["NA"], image: detail.volumeInfo.imageLinks.smallThumbnail, condition:selectedConition, price:selectedPrice)
+                                    addToBookShelf(shelf: selectedBookShelf,title: detail.volumeInfo.title, authors: detail.volumeInfo.authors ?? ["NA"], image: modifiedText, condition:selectedConition, price:selectedPrice)
                                 }
                                 
                             }.padding()
