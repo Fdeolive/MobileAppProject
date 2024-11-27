@@ -48,6 +48,7 @@ struct RegisterView: View {
     @State private var password = ""
     @State private var registrationSuccess = false
     @State private var showMessage = false
+    @Environment(\.presentationMode) var presentation
     
     // State for optional checkbox
     @State private var rememberPassword = false
@@ -71,7 +72,7 @@ struct RegisterView: View {
     private let darkGreen = Color(red: 50/255, green: 150/255, blue: 50/255)
     
     var body: some View {
-        NavigationStack {
+        //NavigationView {
             ZStack {
                 // Dark green background
                 Color(darkGreen).ignoresSafeArea()
@@ -95,14 +96,19 @@ struct RegisterView: View {
                     
                     // Navigation Links for Login and Register
                     HStack {
-                        NavigationLink("Login", destination: ContentView())
-                            .foregroundColor(.blue)
+                        Button("Login") {
+                            presentation.wrappedValue.dismiss()
+                        }
+                        //NavigationLink("Login", destination: ContentView())
+                            //.foregroundColor(.blue)
                        
                         Spacer()
                             .frame(width: 75)
-                        
-                        NavigationLink("Register", destination: RegisterView())
-                            .foregroundColor(.blue)
+                        Button("Register") {
+                            
+                        }
+                        //NavigationLink("Register", destination: RegisterView())
+                            //.foregroundColor(.blue)
                     }
                     .padding(.bottom, 50)
                     .offset(y: -60)
@@ -201,16 +207,17 @@ struct RegisterView: View {
                                      dismissButton: .default(Text("Go to Login Page")) {
                             callAddDefaultShelves()  //Adds the default shelves to firebase
                             registrationSuccess = true
+                            presentation.wrappedValue.dismiss()
                         })
                     }
                 }
-            }
-            .navigationTitle("")
-            .navigationBarHidden(true)
+            //}
+            //.navigationTitle("")
+            //.navigationBarHidden(true)
             // Switch back to Login
-            .navigationDestination(isPresented: $registrationSuccess) {
-                ContentView()
-            }
+            //.navigationDestination(isPresented: $registrationSuccess) {
+                //ContentView()
+            //}
             .onAppear {
                 retrieveCredentialsFromKeychain()  // Retrieve credentials on view load
             }

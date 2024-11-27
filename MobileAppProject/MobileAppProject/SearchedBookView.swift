@@ -142,7 +142,7 @@ struct SearchedBookView: View {
                             {
                                 Task{
                                     await
-                                    addToBookShelf(shelf: selectedBookShelf,title: detail.volumeInfo.title, authors: detail.volumeInfo.authors ?? ["NA"], image: detail.volumeInfo.imageLinks.smallThumbnail, condition:selectedConition, price:selectedPrice)
+                                    addToBookShelf(shelf: selectedBookShelf,title: detail.volumeInfo.title, authors: detail.volumeInfo.authors ?? ["NA"], image: modifiedText, condition:selectedConition, price:selectedPrice)
                                 }
                                 
                             }.padding()

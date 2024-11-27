@@ -12,6 +12,7 @@ import FirebaseFirestore
 import PhotosUI
 
 struct ProfileView: View {
+    @Binding var isLoggedIn: Bool
     var user: User?
     
     // Main Color
@@ -106,6 +107,10 @@ struct ProfileView: View {
                                 showBookshelfView = true
                             }
                             .buttonStyle(ProfileButtonStyle())
+                            Button("Log Out") {
+                                isLoggedIn = false
+                                
+                            }.buttonStyle(ProfileButtonStyle())
                         }
                         .padding(.top, 20)
                     }
@@ -128,5 +133,6 @@ struct ProfileView: View {
 }
 
 #Preview {
-    ProfileView()
+    @Previewable @State var isLoggedIn = true
+    ProfileView(isLoggedIn: $isLoggedIn)
 }
