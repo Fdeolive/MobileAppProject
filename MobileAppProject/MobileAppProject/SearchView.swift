@@ -23,7 +23,7 @@ struct SearchView: View {
                                        "Well Loved": true]
     @State var applyToggle = false
     // Pretend book objects for testing
-    @State var books = [Book("Harry Potter", "1", "Like New", 5.00, "", ""), Book("1984", "2", "Well Loved", 3.00, "", ""), Book("Animal Farm", "3", "Moderately Used", 6.00, "", ""), Book("Brave New World", "4", "Good", 1.00, "", "")]
+    @State var books = [Book("Harry Potter", "1", "Like New", 5.00, "", [""]), Book("1984", "2", "Well Loved", 3.00, "", [""]), Book("Animal Farm", "3", "Moderately Used", 6.00, "", [""]), Book("Brave New World", "4", "Good", 1.00, "", [""])]
     // Important app colors
     private let lightGreen = Color(red: 230/255, green: 255/255, blue: 220/255)
     private let darkGreen = Color(red: 0/255, green: 125/255, blue: 50/255)

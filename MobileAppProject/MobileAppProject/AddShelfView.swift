@@ -86,8 +86,8 @@ struct AddShelfView: View {
             do {
                 await removeShelf()
                 //updates global
-                await DBShelvesConnect(username: username.username).getShelves(shelvesGlobal: shelvesGlobal)
-                await DBShelvesConnect(username: username.username).fillShelves(shelvesGlobal: shelvesGlobal)
+                //await DBShelvesConnect(username: username.username).getShelves(shelvesGlobal: shelvesGlobal)
+                //await DBShelvesConnect(username: username.username).fillShelves(shelvesGlobal: shelvesGlobal)
             }
         }
     }

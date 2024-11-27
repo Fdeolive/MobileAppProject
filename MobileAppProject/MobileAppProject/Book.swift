@@ -12,9 +12,9 @@ class Book {
     var bookCondition = ""
     var bookPrice: Float = 0
     var bookImage = ""
-    var bookAuthor = ""
+    var bookAuthor = [String]()
     
-    init(_ bookTitle: String, _ bookISBN: String, _ bookCondition: String, _ bookPrice: Float, _ bookImage: String, _ bookAuthor: String) {
+    init(_ bookTitle: String, _ bookISBN: String, _ bookCondition: String, _ bookPrice: Float, _ bookImage: String, _ bookAuthor: [String]) {
         self.bookTitle = bookTitle
         self.bookISBN = bookISBN
         self.bookCondition = bookCondition

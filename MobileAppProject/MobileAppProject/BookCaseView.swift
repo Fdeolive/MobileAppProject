@@ -9,6 +9,32 @@
 import SwiftUI
 
 struct BookCaseView: View {
+    
+    func refresh() {
+        Task {
+            do {
+                await DBShelvesConnect(username: username.username).getShelves(shelvesGlobal: shelvesGlobal)
+                await DBShelvesConnect(username: username.username).fillShelves(shelvesGlobal: shelvesGlobal)
+
+            }
+        }
+    }
+    func refresh1() {
+        Task {
+            do {
+                await DBShelvesConnect(username: username.username).getShelves(shelvesGlobal: shelvesGlobal)
+            }
+        }
+    }
+    func refresh2() {
+        Task {
+            do {
+                await DBShelvesConnect(username: username.username).fillShelves(shelvesGlobal: shelvesGlobal)
+
+            }
+        }
+    }
+    
     @EnvironmentObject var username: Username
     @EnvironmentObject var shelvesGlobal: ShelvesGlobal
     @State private var addBook = false
@@ -18,7 +44,7 @@ struct BookCaseView: View {
             ScrollView {
                 VStack(alignment: .leading) {
                     Button(action: {print("Add shelf button"); addBook = true}) {
-                        Text("Add + / Remove -").padding()
+                        Text("Add +  /  Remove -").padding()
                             .font(.title)
                             .frame(width: UIScreen.main.bounds.width * 0.68,
                                    height: 35, alignment: .leading)
@@ -26,6 +52,46 @@ struct BookCaseView: View {
                             .background(.brown)
                             .cornerRadius(10)
                     }.padding()
+                    Button(action: {
+                        refresh1()
+                        /*DBShelvesConnect(username: username.username).callGetShelves(shelvesGlobal: shelvesGlobal)
+                        DBShelvesConnect(username: username.username).callFillShelves(shelvesGlobal: shelvesGlobal)*/
+                    }) {
+                        Text("Refresh").padding()
+                            .font(.title)
+                            .frame(width: UIScreen.main.bounds.width * 0.68,
+                                   height: 35, alignment: .leading)
+                            .foregroundColor(Color.white)
+                            .background(.brown)
+                            .cornerRadius(10)
+                    }.padding()
+                    Button(action: {
+                        refresh()
+                        /*DBShelvesConnect(username: username.username).callGetShelves(shelvesGlobal: shelvesGlobal)
+                        DBShelvesConnect(username: username.username).callFillShelves(shelvesGlobal: shelvesGlobal)*/
+                    }) {
+                        Text("Refresh1").padding()
+                            .font(.title)
+                            .frame(width: UIScreen.main.bounds.width * 0.68,
+                                   height: 35, alignment: .leading)
+                            .foregroundColor(Color.white)
+                            .background(.brown)
+                            .cornerRadius(10)
+                    }.padding()
+                    Button(action: {
+                        refresh2()
+                        /*DBShelvesConnect(username: username.username).callGetShelves(shelvesGlobal: shelvesGlobal)
+                        DBShelvesConnect(username: username.username).callFillShelves(shelvesGlobal: shelvesGlobal)*/
+                    }) {
+                        Text("Refresh2").padding()
+                            .font(.title)
+                            .frame(width: UIScreen.main.bounds.width * 0.68,
+                                   height: 35, alignment: .leading)
+                            .foregroundColor(Color.white)
+                            .background(.brown)
+                            .cornerRadius(10)
+                    }.padding()
+
 
                     ForEach(0..<shelvesGlobal.shelves.count, id: \.self){shelf in
                         ShelfView(shelfTitle: shelvesGlobal.shelves[shelf].shelfTitle, books: shelvesGlobal.shelves[shelf].shelfBooks)

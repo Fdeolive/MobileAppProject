@@ -62,11 +62,12 @@ struct DBShelvesConnect {
                 }
                 let docList = try await docRef.collection(shelf).getDocuments()
                 for doc in docList.documents {
-                    //print("\(doc.documentID) => \(doc.data())")
+                    print(shelvesGlobal.shelves[increment].shelfTitle)
+                    print("\(doc.documentID) => \(doc.data())")
                     //print("\(doc.data()["title"] ?? "NA")")
                     //print("increment= \(increment)")
                     shelvesGlobal.shelves[increment].shelfBooks.append(
-                        Book("\(doc.data()["title"] ?? "NA")", "\(doc.data()["ISBN"] ?? "0000")", "\(doc.data()["condition"] ?? "NA")", Float("\(doc.data()["price"] ?? 0)")!, "\(doc.data()["image"] ?? "")", "\(doc.data()["title"] ?? "NA")"))
+                        Book("\(doc.data()["title"] ?? "NA")", "\(doc.data()["ISBN"] ?? "0000")", "\(doc.data()["condition"] ?? "None")", Float("\(doc.data()["price"] ?? 0)")!, "\(doc.data()["image"] ?? "")", doc.data()["authors"] as? [String] ?? ["NA"]))//["author"]))//doc.data()["author"] ?? ["NA"])))
                 }
                 increment += 1
             }

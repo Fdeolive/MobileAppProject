@@ -8,12 +8,17 @@
 import SwiftUI
 
 struct IndividualBookView: View {
-    @State var book = Book("Harry Potter", "1234", "Like New", 5.00, "HP", "")
+    @State var book = Book("Harry Potter", "1234", "Like New", 5.00, "HP", ["JK"])
     var body: some View {
         VStack{
             Text("\(book.bookTitle)").font(.system(size: 30, weight: .semibold))
             if (book.bookImage.count > 0){
-                Image(book.bookImage).resizable().aspectRatio(contentMode: .fit).frame(width: 136, height: 200).background(.gray)
+                //Image(book.bookImage).resizable().aspectRatio(contentMode: .fit).frame(width: 136, height: 200).background(.gray)
+                AsyncImage(url: URL(string: book.bookImage)){ image in
+                    image.resizable().aspectRatio(contentMode: .fit)
+                } placeholder: {
+                    Rectangle().background(.gray)
+                }.frame(width: 204, height: 300).background(.gray)
             }else{
                 Text("No Image Available")
                     .frame(width: 136, height: 200)
@@ -22,11 +27,13 @@ struct IndividualBookView: View {
                     .font(.system(size: 20, weight: .semibold))
                     
             }
-            Text("Author: Filler").font(.system(size: 20, weight: .semibold))
-            Text("Rating: Filler").font(.system(size: 20, weight: .semibold))
-            Text("Summary: Filler\n  Filler...\n  Filler...\n").font(.system(size: 20, weight: .semibold))
+            Text("Author/s: \(book.bookAuthor)").font(.system(size: 20, weight: .semibold))
+            //Text("Price: \(book.bookPrice)").font(.system(size: 20, weight: .semibold))
+            //Text("condition: \(book.bookCondition)").font(.system(size: 20, weight: .semibold))
+            //Text("Rating: Filler").font(.system(size: 20, weight: .semibold))
+            //Text("Summary: Filler\n  Filler...\n  Filler...\n").font(.system(size: 20, weight: .semibold))
             
-            Text("Versions:")
+            /*Text("Versions:")
                 ScrollView(.horizontal){
                     HStack(spacing: 20){
                         Rectangle()
@@ -38,7 +45,7 @@ struct IndividualBookView: View {
                                 .frame(width: 68, height: 100)
                         }
                     }.padding()
-                }
+                }*/
             }
             Spacer()
         }
@@ -46,5 +53,5 @@ struct IndividualBookView: View {
 }
 
 #Preview {
-    IndividualBookView(book: Book("Harry Potter", "1234", "Like New", 5.00, "HP", ""))
+    IndividualBookView(book: Book("Harry Potter", "1234", "Like New", 5.00, "HP", ["JK"]))
 }
