@@ -12,6 +12,7 @@ import FirebaseFirestore
 struct RootView: View {
     
     // App users notifications and friends
+    @Binding var isLoggedIn: Bool
     @EnvironmentObject var notificationStore: NotificationStore
     @EnvironmentObject var friendStore: FriendStore
     @EnvironmentObject var username: Username
@@ -67,7 +68,7 @@ struct RootView: View {
         VStack() {
             // Bridge gap between login/register and HomeView of app
             if loading.isLoading == false {
-                HomeView()
+                HomeView(isLoggedIn: $isLoggedIn)
             } else {
                 LoadingView()
             }
@@ -90,7 +91,8 @@ struct RootView: View {
 }
 
 #Preview {
-    RootView()
+    @Previewable @State var isLoggedIn = true
+    RootView(isLoggedIn: $isLoggedIn)
         .environmentObject(NotificationStore())
         .environmentObject(FriendStore())
         .environmentObject(FoundUser())

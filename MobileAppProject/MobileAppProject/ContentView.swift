@@ -42,114 +42,111 @@ struct ContentView: View {
     private let darkGreen = Color(red: 50/255, green: 150/255, blue: 50/255)
 
     var body: some View {
-        NavigationStack {
-            ZStack {
-                Color(darkGreen).ignoresSafeArea()
-                Rectangle().trim(from: 0.0, to: 0.5).frame(width: 1000, height: 1000)
-                    .foregroundColor(.white)
-
-                Circle()
-                    .frame(width: 700.0, height: 800)
-                    .foregroundColor(.white)
-                
-                VStack {
-                    if isUnlocked {
-                        Text("Unlocked").offset(y: -125)
-                    } else {
-                        Text("Locked").offset(y: -125)
-                    }
+        if isLoggedIn == false {
+            NavigationStack {
+                ZStack {
+                    Color(darkGreen).ignoresSafeArea()
+                    Rectangle().trim(from: 0.0, to: 0.5).frame(width: 1000, height: 1000)
+                        .foregroundColor(.white)
                     
-                    Text("Welcome to \n Book Hunter")
-                        .font(.largeTitle)
-                        .bold()
-                        .padding()
-                        .offset(y: -100)
+                    Circle()
+                        .frame(width: 700.0, height: 800)
+                        .foregroundColor(.white)
                     
-                    HStack {
-                        NavigationLink("Login", destination: ContentView())
-                            .foregroundColor(.blue)
-                        
-                        Spacer()
-                            .frame(width: 75)
-                        
-                        NavigationLink("Register", destination: RegisterView())
-                            .foregroundColor(.blue)
-                    }
-                    .padding(.bottom, 50).offset(y: -60)
-                    
-                    // Username Field (instead of email)
-                    HStack {
-                        Image(systemName: "person")
-                            .foregroundColor(.black.opacity(0.5))
-                        TextField("Username", text: $username)
-                    }.autocapitalization(.none)
-                    .padding()
-                    .frame(width: 300, height: 50)
-                    .background(Color.black.opacity(0.05))
-                    .cornerRadius(10)
-                    .border(.red, width: CGFloat(wrongUsername))
-                    .offset(y: -75)
-                    
-                    // Password Field
-                    HStack {
-                        Image(systemName: "lock")
-                            .foregroundColor(.black.opacity(0.5))
-                        if isPasswordVisible {
-                            TextField("Password", text: $password)
-                                .padding()
+                    VStack {
+                        if isUnlocked {
+                            Text("Unlocked").offset(y: -125)
                         } else {
-                            SecureField("Password", text: $password)
-                                .padding()
+                            Text("Locked").offset(y: -125)
                         }
-                        Button(action: {
-                            isPasswordVisible.toggle()
-                        }) {
-                            Image(systemName: isPasswordVisible ? "eye.slash" : "eye")
+                        
+                        Text("Welcome to \n Book Hunter")
+                            .font(.largeTitle)
+                            .bold()
+                            .padding()
+                            .offset(y: -100)
+                        
+                        HStack {
+                            NavigationLink("Login", destination: ContentView())
+                                .foregroundColor(.blue)
+                            
+                            Spacer()
+                                .frame(width: 75)
+                            
+                            NavigationLink("Register", destination: RegisterView())
+                                .foregroundColor(.blue)
+                        }
+                        .padding(.bottom, 50).offset(y: -60)
+                        
+                        // Username Field (instead of email)
+                        HStack {
+                            Image(systemName: "person")
                                 .foregroundColor(.black.opacity(0.5))
+                            TextField("Username", text: $username)
+                        }.autocapitalization(.none)
+                            .padding()
+                            .frame(width: 300, height: 50)
+                            .background(Color.black.opacity(0.05))
+                            .cornerRadius(10)
+                            .border(.red, width: CGFloat(wrongUsername))
+                            .offset(y: -75)
+                        
+                        // Password Field
+                        HStack {
+                            Image(systemName: "lock")
+                                .foregroundColor(.black.opacity(0.5))
+                            if isPasswordVisible {
+                                TextField("Password", text: $password)
+                                    .padding()
+                            } else {
+                                SecureField("Password", text: $password)
+                                    .padding()
+                            }
+                            Button(action: {
+                                isPasswordVisible.toggle()
+                            }) {
+                                Image(systemName: isPasswordVisible ? "eye.slash" : "eye")
+                                    .foregroundColor(.black.opacity(0.5))
+                            }
                         }
+                        .padding()
+                        .frame(width: 300, height: 50)
+                        .background(Color.black.opacity(0.05))
+                        .cornerRadius(10)
+                        .border(.red, width: CGFloat(wrongPass))
+                        .offset(y: -65)
+                        
+                        // Remember Password checkbox
+                        Toggle("Remember Me", isOn: $rememberPassword)
+                            .padding().frame(width: 300).offset(y: -45)
+                        
+                        // Enable FaceID checkbox
+                        Toggle("Enable FaceID", isOn: $enableFaceID)
+                            .padding().frame(width: 300).offset(y: -45)
+                        
+                        // Login Button
+                        Button("Login") {
+                            login()
+                        }
+                        .foregroundColor(.white)
+                        .bold()
+                        .frame(width: 300, height: 50)
+                        .background(Color.green)
+                        .cornerRadius(10)
+                        .offset(y: -25)
+                        
+                        
                     }
-                    .padding()
-                    .frame(width: 300, height: 50)
-                    .background(Color.black.opacity(0.05))
-                    .cornerRadius(10)
-                    .border(.red, width: CGFloat(wrongPass))
-                    .offset(y: -65)
-                    
-                    // Remember Password checkbox
-                    Toggle("Remember Me", isOn: $rememberPassword)
-                        .padding().frame(width: 300).offset(y: -45)
-                    
-                    // Enable FaceID checkbox
-                    Toggle("Enable FaceID", isOn: $enableFaceID)
-                        .padding().frame(width: 300).offset(y: -45)
-                    
-                    // Login Button
-                    Button("Login") {
-                        login()
+                    .navigationBarHidden(true).onAppear {
+                        retrieveCredentialsFromKeychain()
                     }
-                    .foregroundColor(.white)
-                    .bold()
-                    .frame(width: 300, height: 50)
-                    .background(Color.green)
-                    .cornerRadius(10)
-                    .offset(y: -25)
-                    
-                    // Navigation after successful login
-                    NavigationLink("", destination: RootView())
-                                            .opacity(0)
-                                        // Navigate to HomeView after successful login
-                                        .navigationDestination(isPresented: $isLoggedIn) {
-                                            RootView()
-                                        }
-
                 }
-                .navigationBarHidden(true).onAppear {
-                    retrieveCredentialsFromKeychain()
+                .alert(item: $alertMessage) { message in
+                    Alert(title: Text("Error"), message: Text(message.message), dismissButton: .default(Text("OK")))
                 }
             }
-            .alert(item: $alertMessage) { message in
-                Alert(title: Text("Error"), message: Text(message.message), dismissButton: .default(Text("OK")))
-            }
+        } else {
+            RootView(isLoggedIn: $isLoggedIn)
         }
     }
 
