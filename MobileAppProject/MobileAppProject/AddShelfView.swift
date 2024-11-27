@@ -45,6 +45,15 @@ struct AddShelfView: View {
         Task {
             do {
                 await addShelf()
+                //update global
+                /*await DBShelvesConnect(username: username.username).getShelves(shelvesGlobal: shelvesGlobal)
+                await DBShelvesConnect(username: username.username).fillShelves(shelvesGlobal: shelvesGlobal)*/
+            }
+        }
+        Task{
+            do{
+                await DBShelvesConnect(username: username.username).getShelves(shelvesGlobal: shelvesGlobal)
+                await DBShelvesConnect(username: username.username).fillShelves(shelvesGlobal: shelvesGlobal)
             }
         }
     }
@@ -60,7 +69,7 @@ struct AddShelfView: View {
                 try await docRef.updateData([
                     "bookShelves": shelfList
                 ])
-                let shelfCollectionRef = db.collection("user").document("username.username").collection("\(shelfTitle)").document("Book")
+                let shelfCollectionRef = db.collection("user").document(username.username).collection("\(shelfTitle)").document("Book")
                 try await shelfCollectionRef.setData(["Title": "bookname"])
                 print("Document successfully updated")
             }else{
@@ -76,6 +85,9 @@ struct AddShelfView: View {
         Task {
             do {
                 await removeShelf()
+                //updates global
+                await DBShelvesConnect(username: username.username).getShelves(shelvesGlobal: shelvesGlobal)
+                await DBShelvesConnect(username: username.username).fillShelves(shelvesGlobal: shelvesGlobal)
             }
         }
     }
@@ -101,9 +113,10 @@ struct AddShelfView: View {
     
     let db = Firestore.firestore()
     @EnvironmentObject var username: Username
+    @EnvironmentObject var shelvesGlobal: ShelvesGlobal
     @State var shelfList: [String] = []  //Holds shelves from firebase
     @State private var shelfTitle = ""  //holds entered title
-    @State private var shelfToRemove = "//Default"
+    @State private var shelfToRemove = "\\Default"
     @State private var num_default_shelves = 2
     @State private var colors = ["Red", "Green", "Blue"]
     //@State private var shelfList = ["Wishlist"]
@@ -168,6 +181,7 @@ struct AddShelfView: View {
 #Preview {
     AddShelfView()
         .environmentObject(Username())
+        .environmentObject(ShelvesGlobal())
 }
 
 

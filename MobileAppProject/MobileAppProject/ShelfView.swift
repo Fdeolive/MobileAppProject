@@ -30,7 +30,7 @@ struct ShelfView: View {
                             .background(.gray)
                             .font(.system(size: 20, weight: .semibold))
                     }
-                    ForEach(0..<books.count){book in
+                    ForEach(0..<books.count, id: \.self){book in
                         BookButtonView(
                             buttonText: books[book].bookTitle,
                             image: books[book].bookImage,
