@@ -16,9 +16,9 @@ import FirebaseFirestore
 struct ContentView: View {
     @State private var username = ""
     @State private var password = ""
-    @State private var wrongUsername = 0  
+    @State private var wrongUsername = 0
     @State private var wrongPass = 0
-
+    
     // State for logging in using biometrics
     @State private var isUnlocked = false
     
@@ -40,7 +40,7 @@ struct ContentView: View {
     
     // Main Color
     private let darkGreen = Color(red: 50/255, green: 150/255, blue: 50/255)
-
+    
     var body: some View {
         if isLoggedIn == false {
             NavigationStack {
@@ -66,7 +66,7 @@ struct ContentView: View {
                             .padding()
                             .offset(y: -100)
                         
-                        HStack {
+                        /*HStack {
                             NavigationLink("Login", destination: ContentView())
                                 .foregroundColor(.blue)
                             
@@ -75,6 +75,19 @@ struct ContentView: View {
                             
                             NavigationLink("Register", destination: RegisterView())
                                 .foregroundColor(.blue)
+                        }*/
+                        HStack {
+                            Button("Login") {
+                                
+                            }
+                            //NavigationLink("Login", destination: ContentView())
+                                //.foregroundColor(.blue)
+                           
+                            Spacer()
+                                .frame(width: 75)
+                            NavigationLink("Register", destination: RegisterView())
+                                .foregroundColor(.blue)                            //NavigationLink("Register", destination: RegisterView())
+                                //.foregroundColor(.blue)
                         }
                         .padding(.bottom, 50).offset(y: -60)
                         
@@ -149,7 +162,7 @@ struct ContentView: View {
             RootView(isLoggedIn: $isLoggedIn)
         }
     }
-
+    
     // Login User Function
     func login() {
         // Validate username and password before proceeding
@@ -166,31 +179,31 @@ struct ContentView: View {
         } else {
             wrongPass = 0
         }
-
+        
         // Check if "Remember Password" checkbox is enabled
         if rememberPassword {
             saveCredentialsToKeychain(username: username, password: password)
         } else {
             clearCredentialsFromKeychain()
         }
-
+        
         if enableFaceID {
             authenticateWithFaceID()
         } else {
             signInWithUsernamePassword()
         }
     }
-
+    
     func saveCredentialsToKeychain(username: String, password: String) {
         KeychainWrapper.standard.set(username, forKey: "userUsername")
         KeychainWrapper.standard.set(password, forKey: "userPassword")
     }
-
+    
     func clearCredentialsFromKeychain() {
         KeychainWrapper.standard.removeObject(forKey: "userUsername")
         KeychainWrapper.standard.removeObject(forKey: "userPassword")
     }
-
+    
     func retrieveCredentialsFromKeychain() {
         if let storedUsername = KeychainWrapper.standard.string(forKey: "userUsername"),
            let storedPassword = KeychainWrapper.standard.string(forKey: "userPassword") {
@@ -199,7 +212,7 @@ struct ContentView: View {
             self.rememberPassword = true
         }
     }
-
+    
     func authenticateWithFaceID() {
         let context = LAContext()
         var error: NSError?
@@ -219,17 +232,17 @@ struct ContentView: View {
             showAlert(message: "FaceID not available")
         }
     }
-
+    
     func hashPassword(_ password: String) -> String {
         let data = Data(password.utf8)
         let hashed = SHA256.hash(data: data)
         return hashed.compactMap { String(format: "%02x", $0) }.joined()
     }
-
+    
     // Connection to Firestore using username
     func signInWithUsernamePassword() {
         // Fetch user's email from Firestore using the username
-        let usersRef = db.collection("user") 
+        let usersRef = db.collection("user")
         let query = usersRef.whereField("username", isEqualTo: username).limit(to: 1)
         
         query.getDocuments { (querySnapshot, error) in
@@ -238,7 +251,7 @@ struct ContentView: View {
                 print("Error fetching user data: \(error.localizedDescription)")
                 return
             }
-
+            
             if let document = querySnapshot?.documents.first {
                 let email = document.data()["email"] as? String
                 // Proceed to sign in with email and password
@@ -264,12 +277,12 @@ struct ContentView: View {
             }
         }
     }
-
-
+    
+    
     func showAlert(message: String) {
         alertMessage = AlertMessage(message: message)
     }
-
+    
     struct AlertMessage: Identifiable {
         let id = UUID()
         let message: String
