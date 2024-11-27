@@ -36,6 +36,7 @@ struct DBFriendConnect {
         Task {
             do {
                 await findUserToFriend(friendStore: friendStore, foundUser: foundUser, friendSearch: friendSearch)
+                
             }
         }
     }

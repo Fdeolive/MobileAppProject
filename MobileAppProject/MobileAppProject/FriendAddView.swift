@@ -10,6 +10,7 @@ struct FriendAddView: View {
     @EnvironmentObject var friendStore: FriendStore
     @EnvironmentObject var username: Username
     @State private var searchEntry = ""
+    @State var pastUserStatus = -1
     @State var userExists = false
     @State var findUser = ""
     private let lighterGreen = Color(red: 225/255, green: 255/255, blue: 230/255)
@@ -31,40 +32,52 @@ struct FriendAddView: View {
                     .overlay(Rectangle()
                         .stroke(Color.green, lineWidth: 2)).padding(.trailing, 20)
                 }
-                if foundUser.userStatus == 2 && findUser != "" {
-                    Text("User found").padding(.top).bold()
-                    List {
-                        VStack {
-                            NavigationLink {
-                                FriendIndividualView(friendUsername: foundUser.username)
-                            } label: {
-                                Text(foundUser.username)
-                                    .font(.title)
+                    if foundUser.username == username.username && searchEntry != "" && findUser != "" {
+                        Text("This is your account")
+                            .padding(.top)
+                            .bold()
+                        Spacer()
+                    } else if foundUser.userStatus == 2 && searchEntry != "" && findUser != "" {
+                        Text("User found").padding(.top).bold()
+                        List {
+                            VStack {
+                                NavigationLink {
+                                    FriendIndividualView(friendUsername: foundUser.username)
+                                } label: {
+                                    Text(foundUser.username)
+                                        .font(.title)
+                                }
                             }
+                            .padding()
+                            .background(lighterGreen)
+                            .listRowSeparatorTint(Color.green)
+                            .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
                         }
-                        .padding()
-                        .background(lighterGreen)
-                        .listRowSeparatorTint(Color.green)
-                        .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
-                    }
-                    .scrollDisabled(true)
-                    .scrollContentBackground(.hidden)
-                    Spacer()
-                } else if foundUser.userStatus == 3 && searchEntry != "" && findUser != "" {
-                    Text("You are already friends with \(foundUser.username)")
-                        .padding(.top)
-                        .bold()
-                    Spacer()
-                } else if foundUser.userStatus == 1 && searchEntry != "" && findUser != "" {
-                    Text("The user you are searching for does not exist")
-                        .padding(.top)
-                        .bold()
-                    Spacer()
-                } else {
-                    Text("Search for a friend to add")
-                        .padding(.top)
-                        .bold()
-                    Spacer()
+                        .scrollDisabled(true)
+                        .scrollContentBackground(.hidden)
+                        Spacer()
+                        
+                    } else if foundUser.userStatus == 3 && searchEntry != "" && findUser != "" {
+                        Text("You are already friends with \(foundUser.username)")
+                            .padding(.top)
+                            .bold()
+                        Spacer()
+                    } else if foundUser.userStatus == 1 && searchEntry != "" && findUser != "" {
+                        Text("The user you are searching for does not exist")
+                            .padding(.top)
+                            .bold()
+                        Spacer()
+                    } else {
+                        Text("Search for a friend to add")
+                            .padding(.top)
+                            .bold()
+                            .onAppear() {
+                                searchEntry = ""
+                                findUser = ""
+                                foundUser.username = ""
+                            }
+                        Spacer()
+                    
                 }
             }
             .frame(height: 225)
