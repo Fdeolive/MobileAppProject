@@ -9,13 +9,13 @@
 import SwiftUI
 
 struct ShelfView: View {
-    @State private var showShelf = false
-    @State private var showBook = false
+    @State private var showShelf = false  //used to navigate to ndividual shelf
+    @State private var showBook = false  //used to navigate to book info
     @State var bookDisplayed = Book("Harry Potter", "1234", "Like New", 5.00, "HP", [""])
     
     //Todo: should it have at state
     var shelfTitle: String = ""
-    @State var books = [Book]()//[Book("Harry Potter", "1234", "Like New", 5.00, "HP"), Book("1984", "1234", "Well Loved", 3.00, ""), Book("Animal Farm", "1234", "Moderately Used", 6.00, ""), Book("Brave New World", "1234", "Good", 1.00, "")]
+    @State var books = [Book]()
     
     var body: some View {
 
@@ -41,12 +41,14 @@ struct ShelfView: View {
                             }
                         )
                     }*/
+                    
+                    //Display all books in shelf
                     ForEach(books, id: \.id){book in
                         BookButtonView(
                             buttonText: book.bookTitle,
                             image: book.bookImage,
                             action: {
-                                print("but")
+                                print("book button")
                                 showBook = true
                                 bookDisplayed = book
                             }

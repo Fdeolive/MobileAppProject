@@ -2,6 +2,7 @@
 //  Shelf.swift
 //  MobileAppProject
 //
+//structure that holds the shelf's title and an array of its books
 
 import Foundation
 import SwiftUICore

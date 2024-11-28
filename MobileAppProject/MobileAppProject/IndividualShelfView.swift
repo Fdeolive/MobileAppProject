@@ -4,14 +4,14 @@
 //
 //  Diplays individual shelves and Allows user to add books
 //  User can also tap books to get book info
-//  No yet set up completely
-//TODO: Remove default books and set up empty 
+//
+//
 
 import SwiftUI
 
 struct IndividualShelfView: View {
-    @State private var showBook = false
-    @State private var showSearchView = false
+    @State private var showBook = false  //used to nav to book info
+    @State private var showSearchView = false  //used to go to book search
     var shelfTitle: String = ""
     @State var books = [Book("Harry Potter", "1234", "Like New", 5.00, "HP", [""]), Book("1984", "1234", "Well Loved", 3.00, "", [""]), Book("Animal Farm", "1234", "Moderately Used", 6.00, "", [""]), Book("Brave New World", "1234", "Good", 1.00, "", [""])]
     @State var bookDisplayed = Book("Harry Potter", "1234", "Like New", 5.00, "HP", [""])
@@ -24,6 +24,7 @@ struct IndividualShelfView: View {
                     .foregroundColor(Color.white)
                     .background(.green)
                     .cornerRadius(10)
+                //Button takes user to search to add books
                 Button("+",action: {showSearchView = true})
                     .font(.title)
                     .bold()
@@ -35,6 +36,7 @@ struct IndividualShelfView: View {
             }.navigationDestination(isPresented: $showSearchView) { fixingShelfView()}
             ScrollView(){
                 VStack(spacing: 5){
+                    //If no books displays helpful graphic information
                     if (books.count == 0){
                         Image(systemName: "arrow.turn.right.up")
                             .resizable()

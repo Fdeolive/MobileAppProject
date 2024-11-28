@@ -4,6 +4,8 @@
 //
 //  Work in progress
 //  Display information about an indivual book
+//Currently author title and image but future iteration should display more
+//and be more asthetic
 
 import SwiftUI
 
@@ -28,6 +30,9 @@ struct IndividualBookView: View {
                     
             }
             Text("Author/s: \(book.bookAuthor)").font(.system(size: 20, weight: .semibold))
+            //Here's some old code
+            //This will be improved in a future iteration
+            //right now it is functional but not great
             //Text("Price: \(book.bookPrice)").font(.system(size: 20, weight: .semibold))
             //Text("condition: \(book.bookCondition)").font(.system(size: 20, weight: .semibold))
             //Text("Rating: Filler").font(.system(size: 20, weight: .semibold))

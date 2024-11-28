@@ -2,14 +2,16 @@
 //  ContentView.swift
 //  BookCaseDesign
 //
-//  Created by user264275 on 10/17/24.
 //
+//Displays a bookcase of all of the shelves
+//User can add or remove shelves
 
 
 import SwiftUI
 
 struct BookCaseView: View {
     
+    //Refreshes the shelves (have to hit twice sometimes tho)
     func refresh() {
         Task {
             do {
@@ -19,31 +21,17 @@ struct BookCaseView: View {
             }
         }
     }
-    func refresh1() {
-        Task {
-            do {
-                await ShelvesGlobal(username: username.username).getShelves(shelvesGlobal: shelvesGlobal)
-            }
-        }
-    }
-    func refresh2() {
-        Task {
-            do {
-                await ShelvesGlobal(username: username.username).fillShelves(shelvesGlobal: shelvesGlobal)
 
-            }
-        }
-    }
     
-    @EnvironmentObject var username: Username
-    @EnvironmentObject var shelvesGlobal: ShelvesGlobal
+    @EnvironmentObject var username: Username  //username for firebase
+    @EnvironmentObject var shelvesGlobal: ShelvesGlobal  //global shelf storage
     @State private var addBook = false
     @State private var shelves = [Shelf]()
-    //@State private var myShelf = Shelf("shelf1",[Book("Harry Potter", "1234", "Like New", 5.00, "HP", ""), Book("Fablehaven", "1234", "Like New", 9.00, "FablehavenCover", "")])
     var body: some View {
         NavigationStack{
             ScrollView {
                 VStack(alignment: .leading) {
+                    //Button for adding books
                     Button(action: {print("Add shelf button"); addBook = true}) {
                         Text("Add +  /  Remove -").padding()
                             .font(.title)
@@ -54,6 +42,7 @@ struct BookCaseView: View {
                             .cornerRadius(10)
                     }.padding()
                     
+                    //Button to refresh
                     Button(action: {
                         print(shelvesGlobal.shelves)
                         refresh()
@@ -94,9 +83,8 @@ struct BookCaseView: View {
             await ShelvesGlobal(username: username.username).fillShelves(shelvesGlobal: shelvesGlobal)
             shelves = shelvesGlobal.shelves
         }.onAppear(){
+            //set shelves to whatever is stored
             shelves = shelvesGlobal.shelves
-            /*DBShelvesConnect(username: username.username).callGetShelves(shelvesGlobal: shelvesGlobal)
-            DBShelvesConnect(username: username.username).callFillShelves(shelvesGlobal: shelvesGlobal)*/
         }
     }
     
