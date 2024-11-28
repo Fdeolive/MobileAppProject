@@ -76,6 +76,7 @@ class ShelvesGlobal: ObservableObject {
                     shelvesGlobal.shelves[increment].shelfBooks.append(
                         Book("\(doc.data()["title"] ?? "NA")", "\(doc.data()["ISBN"] ?? "0000")", "\(doc.data()["condition"] ?? "None")", Float("\(doc.data()["price"] ?? 0)")!, "\(doc.data()["image"] ?? "")", doc.data()["authors"] as? [String] ?? ["NA"]))//["author"]))//doc.data()["author"] ?? ["NA"])))
                 }
+                shelvesGlobal.shelves[increment].shelfBooks.removeFirst()
                 increment += 1
             }
         }catch{

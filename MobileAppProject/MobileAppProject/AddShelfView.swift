@@ -46,8 +46,8 @@ struct AddShelfView: View {
             do {
                 await addShelf()
                 //update global
-                /*await DBShelvesConnect(username: username.username).getShelves(shelvesGlobal: shelvesGlobal)
-                await DBShelvesConnect(username: username.username).fillShelves(shelvesGlobal: shelvesGlobal)*/
+                await ShelvesGlobal(username: username.username).getShelves(shelvesGlobal: shelvesGlobal)
+                await ShelvesGlobal(username: username.username).fillShelves(shelvesGlobal: shelvesGlobal)
             }
         }
         /*Task{
@@ -86,8 +86,8 @@ struct AddShelfView: View {
             do {
                 await removeShelf()
                 //updates global
-                //await DBShelvesConnect(username: username.username).getShelves(shelvesGlobal: shelvesGlobal)
-                //await DBShelvesConnect(username: username.username).fillShelves(shelvesGlobal: shelvesGlobal)
+                await ShelvesGlobal(username: username.username).getShelves(shelvesGlobal: shelvesGlobal)
+                await ShelvesGlobal(username: username.username).fillShelves(shelvesGlobal: shelvesGlobal)
             }
         }
     }
@@ -117,9 +117,7 @@ struct AddShelfView: View {
     @State var shelfList: [String] = []  //Holds shelves from firebase
     @State private var shelfTitle = ""  //holds entered title
     @State private var shelfToRemove = "\\Default"
-    @State private var num_default_shelves = 2
-    @State private var colors = ["Red", "Green", "Blue"]
-    //@State private var shelfList = ["Wishlist"]
+    @State private var NUM_DEFAULT_SHELVES = 2
     var body: some View {
         VStack{
             TextField("Enter Title", text: $shelfTitle)
@@ -140,7 +138,7 @@ struct AddShelfView: View {
             .cornerRadius(10)
             .foregroundStyle(.black)
             .disabled(shelfTitle.count < 1 || shelfList.contains(shelfTitle))
-            Button(action: {
+            /*Button(action: {
                 //callGetShelves()
                 print(shelfList)
                 print(shelfToRemove)
@@ -154,12 +152,12 @@ struct AddShelfView: View {
             .foregroundStyle(.black)
             if (shelfList.count > 0){
                 Text("\(shelfList)")
-            }
-            if (shelfList.count > num_default_shelves){
+            }*/
+            if (shelfList.count > NUM_DEFAULT_SHELVES){
                 HStack{
                     Text("Shelf to Remove")
                     Picker(selection: $shelfToRemove, label: EmptyView()) {
-                        ForEach(num_default_shelves...shelfList.count-1, id: \.self) {title in
+                        ForEach(NUM_DEFAULT_SHELVES...shelfList.count-1, id: \.self) {title in
                             Text(shelfList[title]).tag(shelfList[title])
                         }
                     }

@@ -53,52 +53,13 @@ struct BookCaseView: View {
                             .background(.brown)
                             .cornerRadius(10)
                     }.padding()
-                    Button(action: {
-                        refresh1()
-                        /*DBShelvesConnect(username: username.username).callGetShelves(shelvesGlobal: shelvesGlobal)
-                        DBShelvesConnect(username: username.username).callFillShelves(shelvesGlobal: shelvesGlobal)*/
-                    }) {
-                        Text("Refresh").padding()
-                            .font(.title)
-                            .frame(width: UIScreen.main.bounds.width * 0.68,
-                                   height: 35, alignment: .leading)
-                            .foregroundColor(Color.white)
-                            .background(.brown)
-                            .cornerRadius(10)
-                    }.padding()
-                    Button(action: {
-                        refresh()
-                        /*DBShelvesConnect(username: username.username).callGetShelves(shelvesGlobal: shelvesGlobal)
-                        DBShelvesConnect(username: username.username).callFillShelves(shelvesGlobal: shelvesGlobal)*/
-                    }) {
-                        Text("Refresh1").padding()
-                            .font(.title)
-                            .frame(width: UIScreen.main.bounds.width * 0.68,
-                                   height: 35, alignment: .leading)
-                            .foregroundColor(Color.white)
-                            .background(.brown)
-                            .cornerRadius(10)
-                    }.padding()
-                    Button(action: {
-                        refresh2()
-                        /*DBShelvesConnect(username: username.username).callGetShelves(shelvesGlobal: shelvesGlobal)
-                        DBShelvesConnect(username: username.username).callFillShelves(shelvesGlobal: shelvesGlobal)*/
-                    }) {
-                        Text("Refresh2").padding()
-                            .font(.title)
-                            .frame(width: UIScreen.main.bounds.width * 0.68,
-                                   height: 35, alignment: .leading)
-                            .foregroundColor(Color.white)
-                            .background(.brown)
-                            .cornerRadius(10)
-                    }.padding()
+                    
                     Button(action: {
                         print(shelvesGlobal.shelves)
+                        refresh()
                         shelves = shelvesGlobal.shelves
-                        /*DBShelvesConnect(username: username.username).callGetShelves(shelvesGlobal: shelvesGlobal)
-                        DBShelvesConnect(username: username.username).callFillShelves(shelvesGlobal: shelvesGlobal)*/
                     }) {
-                        Text("Print").padding()
+                        Text("Refresh").padding()
                             .font(.title)
                             .frame(width: UIScreen.main.bounds.width * 0.68,
                                    height: 35, alignment: .leading)
