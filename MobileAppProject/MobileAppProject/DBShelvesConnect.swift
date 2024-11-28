@@ -2,8 +2,9 @@
 //  DBShelvesConnect.swift
 //  MobileAppProject
 //
-//  Created by user264275 on 11/26/24.
-//
+//  This is old unused code left here for reference.  Please ingnore it.
+//  Yeah yeah technically it should be removed
+//   What can I say I horde code
 
 import Foundation
 import FirebaseCore

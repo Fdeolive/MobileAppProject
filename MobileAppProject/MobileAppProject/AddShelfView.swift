@@ -2,7 +2,7 @@
 //  AddShelfView.swift
 //  MobileAppProject
 //
-//  Created by user264275 on 11/14/24.
+//  View that enables user to add and remove shlves
 //
 //Good source of firebase info \/
 //https://firebase.google.com/docs/firestore/manage-data/add-data#swift_9
@@ -50,12 +50,6 @@ struct AddShelfView: View {
                 await ShelvesGlobal(username: username.username).fillShelves(shelvesGlobal: shelvesGlobal)
             }
         }
-        /*Task{
-            do{
-                await DBShelvesConnect(username: username.username).getShelves(shelvesGlobal: shelvesGlobal)
-                await DBShelvesConnect(username: username.username).fillShelves(shelvesGlobal: shelvesGlobal)
-            }
-        }*/
     }
 
     //Calls callGetShelves to update from firebase.  Checks that shelfTitle is not in list
@@ -70,7 +64,7 @@ struct AddShelfView: View {
                     "bookShelves": shelfList
                 ])
                 let shelfCollectionRef = db.collection("user").document(username.username).collection("\(shelfTitle)").document("Book")
-                try await shelfCollectionRef.setData(["Title": "bookname"])
+                try await shelfCollectionRef.setData(["Title": "bookname"])//Filler book must be added to create collection
                 print("Document successfully updated")
             }else{
                 print("Shelf is a repeat")
@@ -80,7 +74,7 @@ struct AddShelfView: View {
         }
     }
     
-    
+    //Calls the function to remove a shelf then calls the functions to sync the global shelves to match
     func callRemoveShelf() {
         Task {
             do {
@@ -92,23 +86,24 @@ struct AddShelfView: View {
         }
     }
     
+    //function removes the shelf selected by picker
     func removeShelf() async {
         let docRef = db.collection("user").document(username.username)
-        shelfList = shelfList.filter{ $0 != shelfToRemove}
+        shelfList = shelfList.filter{ $0 != shelfToRemove}  //filters out shelf to remove
         do {
             try await docRef.updateData([
                 "bookShelves": shelfList
             ])
             let docList = try await db.collection("user").document(username.username).collection(shelfToRemove).getDocuments()
             let collectionRef = db.collection("user").document(username.username).collection(shelfToRemove)
-            for doc in docList.documents {
+            for doc in docList.documents {  //removes ever single doc (book) from shelf thus deleting shelf
                 print("\(doc.documentID)")
                 try await db.collection("user").document(username.username).collection(shelfToRemove).document(doc.documentID).delete()
             }
         } catch {
             print("Error updating document: \(error)")
         }
-        shelfToRemove = "\\Default"
+        shelfToRemove = "\\Default"  //reset picker
     }
     
     let db = Firestore.firestore()
@@ -121,7 +116,7 @@ struct AddShelfView: View {
     var body: some View {
         VStack{
             TextField("Enter Title", text: $shelfTitle)
-                .onChange(of: shelfTitle) {
+                .onChange(of: shelfTitle) {  //prevents use of backspaces and limits to 50 characters
                     shelfTitle = String(shelfTitle.prefix(50)).replacingOccurrences(of: "\\", with: "")//.filter{ !"9\"".contains($0) }
                 }
                 .padding()
@@ -138,24 +133,16 @@ struct AddShelfView: View {
             .cornerRadius(10)
             .foregroundStyle(.black)
             .disabled(shelfTitle.count < 1 || shelfList.contains(shelfTitle))
-            /*Button(action: {
-                //callGetShelves()
-                print(shelfList)
-                print(shelfToRemove)
-            }
-            ){
-                Text("Show Shelves")
-            }.padding()
-            .frame(width: UIScreen.main.bounds.width * 0.7, height: 50)
-            .background(Color.green)
-            .cornerRadius(10)
-            .foregroundStyle(.black)
-            if (shelfList.count > 0){
+            
+            //Comment in if you want shelves visble as an array
+            /*if (shelfList.count > 0){
                 Text("\(shelfList)")
             }*/
-            if (shelfList.count > NUM_DEFAULT_SHELVES){
+            
+            if (shelfList.count > NUM_DEFAULT_SHELVES){  //prevents removal of defaults
                 HStack{
                     Text("Shelf to Remove")
+                    //Picker used to select shelf to remove
                     Picker(selection: $shelfToRemove, label: EmptyView()) {
                         ForEach(NUM_DEFAULT_SHELVES...shelfList.count-1, id: \.self) {title in
                             Text(shelfList[title]).tag(shelfList[title])
@@ -163,6 +150,7 @@ struct AddShelfView: View {
                     }
                 }
             }
+            //Button to remove shelves base off of picker
             Button(action: {print("deleteButton"); callRemoveShelf()}){
                 Text("Remove Shelf")
             }.padding()
@@ -170,7 +158,7 @@ struct AddShelfView: View {
             .background(Color.green)
             .cornerRadius(10)
             .foregroundStyle(.black)
-            .disabled(shelfToRemove == "\\Default")
+            .disabled(shelfToRemove == "\\Default") //Cannot hit remove button if on default
             
         }.onAppear(){callGetShelvesLocal()}
     }
