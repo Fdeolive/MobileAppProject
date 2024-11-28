@@ -30,7 +30,7 @@ struct ShelfView: View {
                             .background(.gray)
                             .font(.system(size: 20, weight: .semibold))
                     }
-                    ForEach(0..<books.count, id: \.self){book in
+                    /*ForEach(0..<books.count, id: \.self){book in
                         BookButtonView(
                             buttonText: books[book].bookTitle,
                             image: books[book].bookImage,
@@ -38,6 +38,17 @@ struct ShelfView: View {
                                 print("but")
                                 showBook = true
                                 bookDisplayed = books[book]
+                            }
+                        )
+                    }*/
+                    ForEach(books, id: \.id){book in
+                        BookButtonView(
+                            buttonText: book.bookTitle,
+                            image: book.bookImage,
+                            action: {
+                                print("but")
+                                showBook = true
+                                bookDisplayed = book
                             }
                         )
                     }

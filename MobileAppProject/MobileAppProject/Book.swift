@@ -5,8 +5,8 @@
 import SwiftUICore
 import SwiftUI
 
-class Book {
-    
+struct Book: Identifiable {
+    let id = UUID()
     var bookTitle = ""
     var bookISBN = ""
     var bookCondition = ""

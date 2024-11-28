@@ -7,8 +7,8 @@ import Foundation
 import SwiftUICore
 import SwiftUI
 
-class Shelf {
-    
+struct Shelf: Identifiable{
+    let id = UUID()
     var shelfTitle = ""
     var shelfBooks = [Book]()
     

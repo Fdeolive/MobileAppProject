@@ -13,8 +13,8 @@ struct BookCaseView: View {
     func refresh() {
         Task {
             do {
-                await DBShelvesConnect(username: username.username).getShelves(shelvesGlobal: shelvesGlobal)
-                await DBShelvesConnect(username: username.username).fillShelves(shelvesGlobal: shelvesGlobal)
+                await ShelvesGlobal(username: username.username).getShelves(shelvesGlobal: shelvesGlobal)
+                await ShelvesGlobal(username: username.username).fillShelves(shelvesGlobal: shelvesGlobal)
 
             }
         }
@@ -22,14 +22,14 @@ struct BookCaseView: View {
     func refresh1() {
         Task {
             do {
-                await DBShelvesConnect(username: username.username).getShelves(shelvesGlobal: shelvesGlobal)
+                await ShelvesGlobal(username: username.username).getShelves(shelvesGlobal: shelvesGlobal)
             }
         }
     }
     func refresh2() {
         Task {
             do {
-                await DBShelvesConnect(username: username.username).fillShelves(shelvesGlobal: shelvesGlobal)
+                await ShelvesGlobal(username: username.username).fillShelves(shelvesGlobal: shelvesGlobal)
 
             }
         }
@@ -38,6 +38,7 @@ struct BookCaseView: View {
     @EnvironmentObject var username: Username
     @EnvironmentObject var shelvesGlobal: ShelvesGlobal
     @State private var addBook = false
+    @State private var shelves = [Shelf]()
     //@State private var myShelf = Shelf("shelf1",[Book("Harry Potter", "1234", "Like New", 5.00, "HP", ""), Book("Fablehaven", "1234", "Like New", 9.00, "FablehavenCover", "")])
     var body: some View {
         NavigationStack{
@@ -91,10 +92,32 @@ struct BookCaseView: View {
                             .background(.brown)
                             .cornerRadius(10)
                     }.padding()
+                    Button(action: {
+                        print(shelvesGlobal.shelves)
+                        shelves = shelvesGlobal.shelves
+                        /*DBShelvesConnect(username: username.username).callGetShelves(shelvesGlobal: shelvesGlobal)
+                        DBShelvesConnect(username: username.username).callFillShelves(shelvesGlobal: shelvesGlobal)*/
+                    }) {
+                        Text("Print").padding()
+                            .font(.title)
+                            .frame(width: UIScreen.main.bounds.width * 0.68,
+                                   height: 35, alignment: .leading)
+                            .foregroundColor(Color.white)
+                            .background(.brown)
+                            .cornerRadius(10)
+                    }.padding()
 
-
-                    ForEach(0..<shelvesGlobal.shelves.count, id: \.self){shelf in
+                    /*ForEach(0..<shelvesGlobal.shelves.count, id: \.self){shelf in
                         ShelfView(shelfTitle: shelvesGlobal.shelves[shelf].shelfTitle, books: shelvesGlobal.shelves[shelf].shelfBooks)
+                    }
+                    ForEach(shelvesGlobal.shelves, id: \.id){shelf in
+                        ShelfView(shelfTitle: shelf.shelfTitle, books: shelf.shelfBooks)
+                    }*/
+                    /*ForEach(0..<shelves.count, id: \.self){shelf in
+                        ShelfView(shelfTitle: shelves[shelf].shelfTitle, books: shelves[shelf].shelfBooks)
+                    }*/
+                    ForEach(shelves, id: \.id){shelf in
+                        ShelfView(shelfTitle: shelf.shelfTitle, books: shelf.shelfBooks)
                     }
 
 
@@ -105,11 +128,17 @@ struct BookCaseView: View {
                     ShelfView(shelfTitle: "empty but also really long title", books: [])*/
                 }
             }.navigationDestination(isPresented: $addBook) {AddShelfView()}
-        }/*.onAppear(){
-            DBShelvesConnect(username: username.username).callGetShelves(shelvesGlobal: shelvesGlobal)
-            DBShelvesConnect(username: username.username).callFillShelves(shelvesGlobal: shelvesGlobal)
-        }*/
+        }.refreshable{
+            await ShelvesGlobal(username: username.username).getShelves(shelvesGlobal: shelvesGlobal)
+            await ShelvesGlobal(username: username.username).fillShelves(shelvesGlobal: shelvesGlobal)
+            shelves = shelvesGlobal.shelves
+        }.onAppear(){
+            shelves = shelvesGlobal.shelves
+            /*DBShelvesConnect(username: username.username).callGetShelves(shelvesGlobal: shelvesGlobal)
+            DBShelvesConnect(username: username.username).callFillShelves(shelvesGlobal: shelvesGlobal)*/
+        }
     }
+    
 }
 
 #Preview {

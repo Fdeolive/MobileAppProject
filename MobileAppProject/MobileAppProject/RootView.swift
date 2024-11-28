@@ -34,8 +34,10 @@ struct RootView: View {
                 await getUserName(username: username)
                 await DBNotificationConnect(username: username.username).getNotifications(notificationStore: notificationStore)
                 await DBFriendConnect(username: username.username).getFriends(friendStore: friendStore)
-                await DBShelvesConnect(username: username.username).getShelves(shelvesGlobal: shelvesGlobal)
-                await DBShelvesConnect(username: username.username).fillShelves(shelvesGlobal: shelvesGlobal)
+                /*await DBShelvesConnect(username: username.username).getShelves(shelvesGlobal: shelvesGlobal)
+                await DBShelvesConnect(username: username.username).fillShelves(shelvesGlobal: shelvesGlobal)*/
+                await ShelvesGlobal(username: username.username).getShelves(shelvesGlobal: shelvesGlobal)
+                await ShelvesGlobal(username: username.username).fillShelves(shelvesGlobal: shelvesGlobal)
                 // Await functions are done so loading is false
                 loading.isLoading = false
             }

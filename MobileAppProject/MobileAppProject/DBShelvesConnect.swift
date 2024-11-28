@@ -10,7 +10,7 @@ import FirebaseCore
 import FirebaseFirestore
 
 struct DBShelvesConnect {
-    
+    /*
     // Get db
     let db = Firestore.firestore()
     private var username = ""
@@ -83,7 +83,7 @@ struct DBShelvesConnect {
                 await fillShelves(shelvesGlobal: shelvesGlobal)
             }
         }
-    }
+    }*/
 
     
     
