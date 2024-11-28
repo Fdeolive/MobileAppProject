@@ -38,7 +38,7 @@ struct isbnSearch: View {
     @State private var selectedConition = "None"
     let conditonOptions = ["None","Worn in","Littly Used","Like New"]
 
-    
+    //Gets current user's username to use for firebase
     func getUserInfo() async
     {
         do{
@@ -156,13 +156,14 @@ struct isbnSearch: View {
                                 }.frame(height:55).onAppear()
                         }.onAppear()
                             {
-                              
+                            //Takes the isbn scanned and uses it to call the google book api  
                             if let searchTerms = searchTerms {
                                         viewModel.searchTerm = searchTerms
                                     }
                                 Task
                                 {
                                     await getUserInfo()
+                                    //Gets the title of the book scanned and searched all user's friends' wishlist
                                     if let firstBook = viewModel.eBooks.first
                                     {
                                                 await inPersonalWishList(bookTitle: firstBook.volumeInfo.title)
@@ -218,12 +219,14 @@ struct barCodeView: View
             }
             .navigationDestination(isPresented: $moveScreen)
                         {
+                            //Shows the book info as soon as it is scanned
                             isbnSearch( searchTerms: $scannedCode)
                            
                                 }
           
         }.onAppear()
         {
+            //Allows the camera to pop up right as the page opens
             isPresentingScanner = true
         }
             }

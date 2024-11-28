@@ -34,6 +34,7 @@ struct fixingShelfView: View{
             viewModel.searchTerm = searchTerms
         }
     }
+    //Modified image link so its https instead of http
     func fixingimageLink(urlBook:String)->String
     {
         let firstPart = urlBook[urlBook.startIndex...urlBook.index(urlBook.startIndex, offsetBy: 3)] + "s"
@@ -47,7 +48,7 @@ struct fixingShelfView: View{
        
         NavigationStack{
             ZStack {
-                
+                //Search box
                 TextField(searchText, text: $searchText).padding(10).background(backgroundColor).cornerRadius(25).overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.green, lineWidth: 2)).padding([.leading, .trailing], 30).padding([.top, .bottom], 10)
                 
                 Button("", systemImage: "magnifyingglass")
@@ -56,6 +57,7 @@ struct fixingShelfView: View{
                     
                 }.foregroundColor(green).padding([.leading], 310)
             }
+            //Result of Api Call
             List(viewModel.eBooks) { eBook in
                 NavigationLink(destination: SearchedBookView(detail: eBook)) {
                     VStack{
