@@ -9,7 +9,6 @@ import FirebaseFirestore
 import FirebaseAuth
 
 struct NotificationView: View {
-    var user: User?
     
     @EnvironmentObject var notificationStore: NotificationStore
     @EnvironmentObject var username: Username

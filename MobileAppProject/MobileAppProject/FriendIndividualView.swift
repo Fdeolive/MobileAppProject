@@ -16,7 +16,7 @@ struct FriendIndividualView: View {
     @State var friendUsername: String
     @State var buttonText = ""
     @State var friendStatus = 0
-
+    
     
     func updateFriendStatus() {
         var friendFound = false
@@ -67,12 +67,12 @@ struct FriendIndividualView: View {
                     Section {
                         // Display the profile picture as a circular image
                         
-                            // Placeholder if there's no profile picture
-                            Circle()
-                                .fill(Color.gray.opacity(0.3))
-                                .frame(width: 150, height: 150)
-                                .overlay(Text("No Image").foregroundColor(.gray))
-                                .padding(.bottom, 20)
+                        // Placeholder if there's no profile picture
+                        Circle()
+                            .fill(Color.gray.opacity(0.3))
+                            .frame(width: 150, height: 150)
+                            .overlay(Text("No Image").foregroundColor(.gray))
+                            .padding(.bottom, 20)
                         
                         Text("Bio")
                             .font(.headline)

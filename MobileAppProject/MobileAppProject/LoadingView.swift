@@ -9,7 +9,7 @@ struct LoadingView: View {
     @State private var isLoading = false
     private let lightGreen = Color(red: 255/255, green: 250/255, blue: 234/255)
     private let darkGreen = Color(red: 80/255, green: 160/255, blue: 89/255)
-
+    
     var body: some View {
         GeometryReader { geometry in
             VStack {

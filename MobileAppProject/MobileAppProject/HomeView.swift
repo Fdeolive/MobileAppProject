@@ -10,7 +10,6 @@ import FirebaseAuth
 
 struct HomeView: View {
     @Binding var isLoggedIn: Bool
-    var user: User?
     
     @State var pageTitle: String = "Shelves"
     @State private var currentTab = 0
@@ -36,7 +35,7 @@ struct HomeView: View {
                         HStack {
                             Spacer()
                             NavigationLink {
-                                NotificationView(user: user)
+                                NotificationView()
                             } label: {
                                 Image(systemName: "bell.fill")
                             }

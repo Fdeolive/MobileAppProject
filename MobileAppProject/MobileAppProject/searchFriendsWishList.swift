@@ -67,7 +67,7 @@ struct searchFriends: View{
                 try await
                 
                 
-                    db.collection("user").document(friendId).updateData(["notifications.\(id).notificationTitle": "Wishlist book found","notifications.\(id).notificationSummary":" \(collectionName) found \(bookTitles) for the price: \(price) in the conditon:\(condition)" ])
+                db.collection("user").document(friendId).updateData(["notifications.\(id).notificationTitle": "Wishlist book found","notifications.\(id).notificationSummary":" \(collectionName) found \(bookTitles) for the price: \(price) in the conditon:\(condition)", "notifications.\(id).friendUsername": ""])
                     print("Notification added successfully")
                 
               

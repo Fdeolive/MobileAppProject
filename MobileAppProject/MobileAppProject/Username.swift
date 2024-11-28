@@ -1,9 +1,7 @@
-//
-//  Username.swift
-//  MobileAppProject
-//
-//  Created by user267577 on 11/26/24.
-//
+// Object to hold a username from an async call
+// Username.swift
+// MobileAppProject
+// Carson J. King
 
 import Foundation
 

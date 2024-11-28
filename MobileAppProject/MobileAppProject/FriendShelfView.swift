@@ -12,12 +12,11 @@ struct FriendShelfView: View {
     @State private var showBook = false
     @State var bookDisplayed = Book("Harry Potter", "1234", "Like New", 5.00, "HP", [""])
     
-    //Todo: should it have at state
     var shelfTitle: String = ""
-    @State var books = [Book]()//[Book("Harry Potter", "1234", "Like New", 5.00, "HP"), Book("1984", "1234", "Well Loved", 3.00, ""), Book("Animal Farm", "1234", "Moderately Used", 6.00, ""), Book("Brave New World", "1234", "Good", 1.00, "")]
+    @State var books = [Book]()
     
     var body: some View {
-
+        
         VStack(spacing: 0){
             ShelfTitleButtonView(buttonText: "\(shelfTitle)", action: {print("title button"); showShelf = true})
             ScrollView(.horizontal){

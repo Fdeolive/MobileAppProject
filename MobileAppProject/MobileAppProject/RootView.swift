@@ -23,7 +23,7 @@ struct RootView: View {
     @EnvironmentObject var shelvesGlobal: ShelvesGlobal
     @State private var startFlag = false
     @State var loadingData = false
-
+    
     
     
     
@@ -35,7 +35,7 @@ struct RootView: View {
                 await DBNotificationConnect(username: username.username).getNotifications(notificationStore: notificationStore)
                 await DBFriendConnect(username: username.username).getFriends(friendStore: friendStore)
                 /*await DBShelvesConnect(username: username.username).getShelves(shelvesGlobal: shelvesGlobal)
-                await DBShelvesConnect(username: username.username).fillShelves(shelvesGlobal: shelvesGlobal)*/
+                 await DBShelvesConnect(username: username.username).fillShelves(shelvesGlobal: shelvesGlobal)*/
                 await ShelvesGlobal(username: username.username).getShelves(shelvesGlobal: shelvesGlobal)
                 await ShelvesGlobal(username: username.username).fillShelves(shelvesGlobal: shelvesGlobal)
                 // Await functions are done so loading is false
@@ -44,6 +44,7 @@ struct RootView: View {
         }
     }
     
+    // Get logged in user's username and save it to an environment object
     func getUserName(username: Username) async {
         let db = Firestore.firestore()
         var userId = ""
@@ -53,12 +54,10 @@ struct RootView: View {
                 let docs = try await db.collection("user").whereField("uid", isEqualTo: userId).getDocuments()
                 for doc in docs.documents {
                     username.username = doc.get("username") as! String
-                    print(1)
                 }
             } else {
-                    username.username = "default"
+                username.username = "default"
             }
-            print(3)
             print(username.username)
         } catch {
             print("Error getting username")
@@ -76,7 +75,6 @@ struct RootView: View {
             }
         }
         .onAppear() {
-            print(2)
             connectDB()
         }
         .onChange(of: scenePhase) { newPhase in
