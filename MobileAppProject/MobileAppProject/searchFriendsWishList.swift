@@ -38,7 +38,7 @@ struct searchFriends: View{
     
     @State private var selectedCondition = "None"
     let conditonOptions = ["None","Worn in","Littly Used","Like New"]
-    
+    //gets information from the user currently logged in to use for firebase queries 
     func getUserInfo() async
     {
         do{
@@ -57,6 +57,7 @@ struct searchFriends: View{
             print("Error getting user information")
         }
     }
+    //Sends all friends who have the book in their wishlist with the specific conditions a notification
     func sendingFriendsNotification(friendID: Array<String>, bookTitle: String, price: Int, condition: String) async
     {
         for friendId in friendID
@@ -77,6 +78,7 @@ struct searchFriends: View{
             }
         }
     }
+    //Finds all the friends with the specific book in their wishlist
     func FriendsWishList(condition: Int, price: Int, bookTitle: String) async
     {
        
@@ -88,7 +90,7 @@ struct searchFriends: View{
                 let friendsList = Array(friendMap.keys)
                 self.friendsList = friendsList
             }
-            print(price)
+            
             for friend in friendsList
             {
                 let docRef = db.collection("user").document(friend).collection("Wishlist")
@@ -101,7 +103,7 @@ struct searchFriends: View{
                     
                         if (docquery.documents.count != 0)
                     {
-                            
+                            //Had to do it like this because firebase doesn't like when multiple inequalities is used for a query 
                             for docs in docquery.documents
                             {
                                 let priceSelected = docs.get("price") ?? 9
