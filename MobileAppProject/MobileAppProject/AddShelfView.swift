@@ -63,7 +63,7 @@ struct AddShelfView: View {
                 try await docRef.updateData([
                     "bookShelves": shelfList
                 ])
-                let shelfCollectionRef = db.collection("user").document(username.username).collection("\(shelfTitle)").document("Book")
+                let shelfCollectionRef = db.collection("user").document(username.username).collection("\(shelfTitle)").document("")
                 try await shelfCollectionRef.setData(["Title": "bookname"])//Filler book must be added to create collection
                 print("Document successfully updated")
             }else{
@@ -112,6 +112,7 @@ struct AddShelfView: View {
     @State var shelfList: [String] = []  //Holds shelves from firebase
     @State private var shelfTitle = ""  //holds entered title
     @State private var shelfToRemove = "\\Default"
+    @State private var addedMessage = false
     @State private var NUM_DEFAULT_SHELVES = 2
     var body: some View {
         VStack{
@@ -125,7 +126,7 @@ struct AddShelfView: View {
                 .cornerRadius(10)
                 .offset(y: -15)
                 .textInputAutocapitalization(.never)
-            Button(action: {callAddShelf()}){  //calls funtion to add title to firebase.  Only active if input and not in list already
+            Button(action: {callAddShelf(); addedMessage = true}){  //calls funtion to add title to firebase.  Only active if input and not in list already
                 Text("Add Shelf")
             }.padding()
             .frame(width: UIScreen.main.bounds.width * 0.7, height: 50)
@@ -133,6 +134,10 @@ struct AddShelfView: View {
             .cornerRadius(10)
             .foregroundStyle(.black)
             .disabled(shelfTitle.count < 1 || shelfList.contains(shelfTitle))
+            .alert(isPresented: $addedMessage) {
+                return Alert(title: Text("Shelf Added"),
+                dismissButton: .default(Text("Great!")))
+            }
             
             //Comment in if you want shelves visble as an array
             /*if (shelfList.count > 0){

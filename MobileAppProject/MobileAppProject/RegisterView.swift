@@ -34,9 +34,9 @@ struct RegisterView: View {
             try await docRef.updateData([
                 "bookShelves": ["Favorites", "Wishlist"]
             ])
-            let shelfCollectionRef1 = db.collection("user").document(username).collection("Favorites").document("Book")
+            let shelfCollectionRef1 = db.collection("user").document(username).collection("Favorites").document("A")
             try await shelfCollectionRef1.setData(["Title": "bookname"])
-            let shelfCollectionRef2 = db.collection("user").document(username).collection("Wishlist").document("Book")
+            let shelfCollectionRef2 = db.collection("user").document(username).collection("Wishlist").document("A")
             try await shelfCollectionRef2.setData(["Title": "bookname"])
                 print("Document successfully updated")
         } catch {
