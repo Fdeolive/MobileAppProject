@@ -33,7 +33,7 @@ struct SearchedBookView: View {
     let db = Firestore.firestore()
 
     
-    
+    //Gets the current user's username used for firebase queries
     func getUserInfo() async
     {
         do{
@@ -52,6 +52,7 @@ struct SearchedBookView: View {
             print("Error getting user information")
         }
     }
+    //Gets all the bookshelves' name from firebase
     func getBookShelves() async {
         let docRef = db.collection("user").document(collectionName)
         
@@ -67,7 +68,7 @@ struct SearchedBookView: View {
         }
     }
     
-    
+    //Adds book to specifc bookshelf in firebase
     func addToBookShelf(shelf:String, title:String, authors:[String]?, image:String, condition:String, price:Int) async
     {
         var conditionValue = 0
@@ -142,14 +143,13 @@ struct SearchedBookView: View {
                             Button("Add")
                             {
                                
-                                
                                 Task{
                                     await
                                     addToBookShelf(shelf: selectedBookShelf,title: detail.volumeInfo.title, authors: detail.volumeInfo.authors ?? ["NA"], image: modifiedText, condition:selectedConition, price:selectedPrice)
                                    
                                 }
                                 addedMessage = true
-                                
+                             //Alert once the book is added to the shelf   
                             } .alert(isPresented: $addedMessage) {
                                 
                                 return Alert(title: Text("Book Added"),
