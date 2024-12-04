@@ -49,6 +49,7 @@ struct MobileAppProjectApp: App {
                     .environmentObject(Loading())
                     .environmentObject(Username())
                     .environmentObject(ShelvesGlobal())
+                    .environmentObject(FriendShelvesGlobal())
             
         }
     }

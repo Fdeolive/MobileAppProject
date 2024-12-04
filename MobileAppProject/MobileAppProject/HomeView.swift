@@ -47,7 +47,6 @@ struct HomeView: View {
                     .font(.title)
                     .foregroundColor(Color.white)
                     .bold()
-                    .padding(.bottom)
                     TabView(selection: $currentTab) {
                         Group () {
                             BookCaseView().tabItem() { Image(systemName: "book")
@@ -128,4 +127,6 @@ struct HomeView: View {
         .environmentObject(FriendStore())
         .environmentObject(FoundUser())
         .environmentObject(Username())
+        .environmentObject(ShelvesGlobal())
+        .environmentObject(FriendShelvesGlobal())
 }

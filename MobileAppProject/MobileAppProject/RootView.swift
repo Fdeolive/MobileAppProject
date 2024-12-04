@@ -38,7 +38,9 @@ struct RootView: View {
                 await ShelvesGlobal(username: username.username).getShelves(shelvesGlobal: shelvesGlobal)
                 await ShelvesGlobal(username: username.username).fillShelves(shelvesGlobal: shelvesGlobal)
                 // Await functions are done so loading is false
-                loading.isLoading = false
+                DispatchQueue.main.async {
+                    loading.isLoading = false
+                }
             }
         }
     }
@@ -74,6 +76,7 @@ struct RootView: View {
             }
         }
         .onAppear() {
+            loading.isLoading = true
             connectDB()
         }
         .onChange(of: scenePhase) { newPhase in
@@ -98,4 +101,5 @@ struct RootView: View {
         .environmentObject(Loading())
         .environmentObject(Username())
         .environmentObject(ShelvesGlobal())
+        .environmentObject(FriendShelvesGlobal())
 }

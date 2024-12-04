@@ -98,7 +98,7 @@ struct FriendIndividualView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center) // Center horizontally and vertically
                 
                 .navigationDestination(isPresented: $showBookshelfView) {
-                    FriendShelfView()
+                    FriendBookCaseView(friendUsername: friendUsername)
                 }
             }.onAppear {
                 var friendFound = false
@@ -129,4 +129,5 @@ struct FriendIndividualView: View {
     FriendIndividualView(friendUsername: "Joe")
         .environmentObject(FriendStore())
         .environmentObject(Username())
+        .environmentObject(FriendShelvesGlobal())
 }

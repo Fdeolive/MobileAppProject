@@ -96,4 +96,5 @@ struct FriendView: View {
         .environmentObject(FriendStore())
         .environmentObject(FoundUser())
         .environmentObject(Username())
+        .environmentObject(FriendShelvesGlobal())
 }

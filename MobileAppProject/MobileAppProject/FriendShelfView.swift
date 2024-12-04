@@ -1,22 +1,25 @@
+
 //
-//  FriendShelfView.swift
-//  MobileAppProject
+//  ShelfView.swift
+//  BookCaseDesign
 //
-//  Created by user267577 on 11/27/24.
+//  Displays a shelf title as a button to access that shelf
+//  Displays books on the shelf as a horizontal scroll of buttons that allow more book info
 //
 
 import SwiftUI
 
 struct FriendShelfView: View {
-    @State private var showShelf = false
-    @State private var showBook = false
+    @State private var showShelf = false  //used to navigate to ndividual shelf
+    @State private var showBook = false  //used to navigate to book info
     @State var bookDisplayed = Book("Harry Potter", "1234", "Like New", 5.00, "HP", [""])
     
+    //Todo: should it have at state
     var shelfTitle: String = ""
     @State var books = [Book]()
     
     var body: some View {
-        
+
         VStack(spacing: 0){
             ShelfTitleButtonView(buttonText: "\(shelfTitle)", action: {print("title button"); showShelf = true})
             ScrollView(.horizontal){
@@ -28,25 +31,26 @@ struct FriendShelfView: View {
                             .background(.gray)
                             .font(.system(size: 20, weight: .semibold))
                     }
-                    ForEach(0..<books.count){book in
+                    
+                    //Display all books in shelf
+                    ForEach(books, id: \.id){book in
                         BookButtonView(
-                            buttonText: books[book].bookTitle,
-                            image: books[book].bookImage,
+                            buttonText: book.bookTitle,
+                            image: book.bookImage,
                             action: {
-                                print("but")
+                                print("book button")
                                 showBook = true
-                                bookDisplayed = books[book]
+                                bookDisplayed = book
                             }
                         )
                     }
                 }.padding()
-            }
+            }.navigationDestination(isPresented: $showShelf) { FriendIndividualShelfView(shelfTitle: shelfTitle, books: books) }
             Spacer()
-        }
+        }.navigationDestination(isPresented: $showBook) { IndividualBookView(book: bookDisplayed)}
     }
 }
 
 #Preview {
     FriendShelfView(shelfTitle: "title", books: [Book("Harry Potter", "1234", "Like New", 5.00, "HP", [""]), Book("1984", "1234", "Well Loved", 3.00, "", [""]), Book("Animal Farm", "1234", "Moderately Used", 6.00, "", [""]), Book("Brave New World", "1234", "Good", 1.00, "", [""])])
 }
-
