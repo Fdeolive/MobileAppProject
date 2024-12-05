@@ -51,17 +51,27 @@ struct DBFriendConnect {
             let document = try await docRef.getDocument()
             if let friends = document.get("friends") as? [String:Bool] {
                 for (id, value) in friends {
-                    DispatchQueue.main.async {
-                        if value {
-                            friendStore.allFriends.append(Friend(id, 2))
+                    do {
+                        let docRefTwo = db.collection("user").document("\(id)")
+                        let documentTwo = try await docRefTwo.getDocument()
+                        if let bio = documentTwo.get("bio") as? String {
+                            DispatchQueue.main.async {
+                                if value {
+                                    friendStore.allFriends.append(Friend(id, 2, bio))
+                                } else {
+                                    friendStore.allFriends.append(Friend(id, 1, bio))
+                                }
+                            }
                         } else {
-                            friendStore.allFriends.append(Friend(id, 1))
+                            print("Nope")
+                        }
+                        } catch {
+                            print("Error getting a friend's bio")
                         }
                     }
+                } else {
+                    print("Nope")
                 }
-            } else {
-                print("Nope")
-            }
         } catch {
             print("Error retrieving document")
         }
@@ -114,6 +124,19 @@ struct DBFriendConnect {
                         foundUser.userStatus = 2
                         foundUser.username = friendSearch
                     }
+                }
+                do {
+                    let docRefTwo = db.collection("user").document("\(friendSearch)")
+                    let documentTwo = try await docRefTwo.getDocument()
+                    if let bio = documentTwo.get("bio") as? String {
+                        DispatchQueue.main.async {
+                            foundUser.bio = bio
+                        }
+                    } else {
+                        print("nope")
+                    }
+                } catch {
+                    print("Error getting found user bio")
                 }
             } else {
                 DispatchQueue.main.async {

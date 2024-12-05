@@ -13,7 +13,9 @@ struct FriendIndividualView: View {
     
     @EnvironmentObject var friendStore: FriendStore
     @EnvironmentObject var username: Username
+    @EnvironmentObject var foundUser: FoundUser
     @State var friendUsername: String
+    @State var friendBio = ""
     @State var buttonText = ""
     @State var friendStatus = 0
     
@@ -31,7 +33,7 @@ struct FriendIndividualView: View {
             }
         }
         if friendFound == false {
-            friendStore.allFriends.append(Friend(friendUsername, 1))
+            friendStore.allFriends.append(Friend(friendUsername, 1, foundUser.bio))
             friendStatus = 1
             buttonText = "Cancel Request"
         }
@@ -76,7 +78,7 @@ struct FriendIndividualView: View {
                         
                         Text("Bio")
                             .font(.headline)
-                        Text("Under development")
+                        Text("\(friendBio)")
                             .padding(8)
                             .background(Color.gray.opacity(0.1))
                             .cornerRadius(8)
@@ -106,11 +108,14 @@ struct FriendIndividualView: View {
                     if friend.friendUsername == friendUsername {
                         friendStatus = friend.friendStatus
                         friendFound = true
+                        friendBio = friend.friendBio
                     }
                 }
                 if friendFound == false {
                     friendStatus = 0
+                    friendBio = foundUser.bio
                 }
+                
                 switch friendStatus {
                 case 0:
                     buttonText = "Add Friend"
@@ -130,4 +135,5 @@ struct FriendIndividualView: View {
         .environmentObject(FriendStore())
         .environmentObject(Username())
         .environmentObject(FriendShelvesGlobal())
+        .environmentObject(FoundUser())
 }

@@ -8,10 +8,12 @@ import Foundation
 class FoundUser: ObservableObject {
     @Published var userStatus = 0
     @Published var username = ""
+    @Published var bio = ""
     
     init() {
         self.userStatus = 0
         self.username = ""
+        self.bio = ""
     }
 }
 
