@@ -82,7 +82,7 @@ class ShelvesGlobal: ObservableObject {
                     //print("\(doc.data()["title"] ?? "NA")")  //testingh code you can comment in
                     //print("increment= \(increment)")
                     shelvesGlobal.shelves[increment].shelfBooks.append(
-                        Book("\(doc.data()["title"] ?? "NA")", "\(doc.data()["ISBN"] ?? "0000")", "\(doc.data()["condition"] ?? "None")", Float("\(doc.data()["price"] ?? 0)")!, "\(doc.data()["image"] ?? "")", doc.data()["authors"] as? [String] ?? ["NA"]))//["author"]))//doc.data()["author"] ?? ["NA"])))
+                        Book("\(doc.data()["title"] ?? "NA")", "\(doc.data()["ISBN"] ?? "0000")", "\(doc.data()["condition"] ?? "None")", Float("\(doc.data()["Price"] ?? 0)")!, "\(doc.data()["image"] ?? "")", doc.data()["authors"] as? [String] ?? ["NA"]))//["author"]))//doc.data()["author"] ?? ["NA"])))
                 }
                 shelvesGlobal.shelves[increment].shelfBooks.removeFirst() //Removes the filler book used to create collection
                 increment += 1

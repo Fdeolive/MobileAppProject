@@ -28,7 +28,7 @@ struct ProfileView: View {
     @State private var username: String?
 
     var body: some View {
-        NavigationStack {
+        NavigationView {
             GeometryReader { geometry in
                 VStack {
                     // Display the username above the profile picture with adjusted font size
@@ -138,7 +138,9 @@ struct ProfileView: View {
                     ChangePasswordView()
                 }
                 .navigationDestination(isPresented: $showBookshelfView) {
-                    ShelfView()
+                    
+                        BookCaseView()
+                    
                 }
             }
         }

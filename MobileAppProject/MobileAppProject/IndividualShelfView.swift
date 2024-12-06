@@ -98,7 +98,13 @@ struct IndividualShelfView: View {
                 }.padding()
             }
             Spacer()
-        }.navigationDestination(isPresented: $showBook) { IndividualBookView(book: bookDisplayed)}
+        }.navigationDestination(isPresented: $showBook) {
+            if shelfTitle == "Wishlist" {
+                IndividualBookView(book: bookDisplayed, wishlist: true)
+            } else {
+                IndividualBookView(book: bookDisplayed)
+            }
+        }
     }
 }
 

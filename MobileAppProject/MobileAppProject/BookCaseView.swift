@@ -31,7 +31,7 @@ struct BookCaseView: View {
     @State private var shelves = [Shelf]()
     var body: some View {
         VStack {
-                NavigationStack{
+                NavigationView{
                     ScrollView {
                         VStack(alignment: .leading) {
                             //Button for adding books

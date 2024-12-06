@@ -63,7 +63,7 @@ struct AddShelfView: View {
                 try await docRef.updateData([
                     "bookShelves": shelfList
                 ])
-                let shelfCollectionRef = db.collection("user").document(username.username).collection("\(shelfTitle)").document("A")
+                let shelfCollectionRef = db.collection("user").document(username.username).collection("\(shelfTitle)").document("0")
                 try await shelfCollectionRef.setData(["Title": "bookname"])//Filler book must be added to create collection
                 print("Document successfully updated")
             }else{

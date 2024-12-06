@@ -34,9 +34,9 @@ struct RegisterView: View {
             try await docRef.updateData([
                 "bookShelves": ["Favorites", "Wishlist"]
             ])
-            let shelfCollectionRef1 = db.collection("user").document(username).collection("Favorites").document("A")
+            let shelfCollectionRef1 = db.collection("user").document(username).collection("Favorites").document("0")
             try await shelfCollectionRef1.setData(["Title": "bookname"])
-            let shelfCollectionRef2 = db.collection("user").document(username).collection("Wishlist").document("A")
+            let shelfCollectionRef2 = db.collection("user").document(username).collection("Wishlist").document("0")
             try await shelfCollectionRef2.setData(["Title": "bookname"])
                 print("Document successfully updated")
         } catch {
@@ -276,7 +276,7 @@ struct RegisterView: View {
                 let hashedPassword = hashPassword(password)
                 
                 // Save user data to Firestore
-                let registerNotification = Notification("Welcome to Book Hunting!", "Thanks for joining our book hunting app. What are you waiting for? Go explore the app and it's features!")
+                let registerNotification = Notification("Welcome to Book Quest!", "Thanks for joining our book questing app. What are you waiting for? Go explore the app and it's features!")
                 let userData: [String: Any] = [
                     "email": email,
                     "username": username,
